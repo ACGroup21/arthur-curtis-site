@@ -1,0 +1,6 @@
+# Unused raw logo exports (site uses the cropped -tight versions)
+assets/logo-gradient.png
+assets/logo-white.png
+
+# Internal roadmap - kept local, not published
+project-map.html
