@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JD Matcher (lite) — Arthur Curtis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="lite.css">
+<style>
+  textarea{width:100%;min-height:150px;background:var(--glass);border:1px solid var(--line);border-radius:12px;padding:14px;color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.5;resize:vertical}
+  textarea:focus{outline:none;border-color:var(--cyan)}
+  .matches{margin-top:8px;display:flex;flex-direction:column;gap:10px}
+  .mrow{padding:15px 16px;border:1px solid var(--line);border-radius:14px;background:var(--glass)}
+  .mrow .mtop{display:flex;justify-content:space-between;gap:10px;align-items:baseline;flex-wrap:wrap}
+  .mrow .rank{font-family:var(--mono);font-size:12px;color:var(--cyan);margin-right:8px}
+  .mrow .mn{font-weight:700;font-size:16px}
+  .mrow .mn a{color:var(--ink)} .mrow .mn a:hover{color:var(--cyan)}
+  .mrow .meta{font-family:var(--mono);font-size:11px;color:var(--muted-2);white-space:nowrap}
+  .mbar{height:8px;border-radius:99px;background:rgba(255,255,255,.06);border:1px solid var(--line);overflow:hidden;margin-top:11px}
+  .mbar .f{height:100%;background:linear-gradient(90deg,var(--cyan),var(--blue));border-radius:99px;transition:width .5s}
+  .mrow .terms{font-size:12.5px;color:var(--muted);margin-top:8px}
+  .mrow .terms b{color:var(--cyan-soft);font-weight:600}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="lite-head">
+    <div class="brand"><span class="mark">ac</span>arthur curtis <span class="by">· Fundable Lite</span></div>
+    <a class="home" href="../tools.html">All tools →</a>
+  </div>
+
+  <span class="eyebrow"><span class="dot"></span>JD Matcher · lite</span>
+  <h1 class="title">Which apprenticeship fits this role?</h1>
+  <p class="subtitle">Paste a job description and see the closest apprenticeship standards — matched on the actual role requirements across all 322 standards.</p>
+
+  <div class="card">
+    <h2>Paste the job description</h2>
+    <textarea id="jd" placeholder="Paste the JD here — responsibilities, skills, the day-to-day…"></textarea>
+    <div class="funnel" style="margin-top:14px">
+      <button class="btn btn-primary" id="go">Find matching standards →</button>
+      <button class="btn btn-ghost" id="demo">Try an example</button>
+    </div>
+
+    <div class="matches" id="matches" style="margin-top:20px"></div>
+    <p class="note" id="hint">Top 3 matches appear here.</p>
+  </div>
+
+  <p class="note">This is a fast keyword match on the published standards — great for a shortlist. Our full JD Matcher (used with clients) maps your JD against each standard's actual Knowledge, Skills &amp; Behaviours for a precise coverage score and a development-gap plan. <a href="https://acgroup21.github.io/arthur-curtis-site/" target="_blank" rel="noopener">Talk to us</a> for that. Standards data accurate as of 28 June 2026.</p>
+</div>
+
+<script src="engine.js?v=2"></script>
+<script src="spine.js?v=1"></script>
+<script>
+  var $=function(id){return document.getElementById(id);};
+  if(window.AC&&AC.spine) AC.spine.mount();
+  var STD=[];
+
+  /* SAME tokenizer/stemmer as the index generator, so terms line up */
+  var STOP=new Set(("the a an and or of to in for on with at by from as is are be this that these those your you our their his her its it they we i he she them us into over under out up down off above below can may will shall must should would could not no nor but if then than so such which who whom whose what when where why how all any both each few more most other some own same too very just also about across after against between during before while within without through per via using use used based including include includes required require requires able ensure ensuring appropriate relevant apply applying applied work working works role standard apprentice apprenticeship level end point assessment knowledge skill skills behaviour behaviours").split(" "));
+  var SUF=["ational","ation","ings","ing","edly","edness","ements","ement","ers","er","ies","ied","es","ed","ly","s"];
+  function toks(t){
+    var out=[], ws=(t.toLowerCase().match(/[a-z]{3,}/g))||[];
+    for(var i=0;i<ws.length;i++){
+      var w=ws[i]; if(STOP.has(w)) continue;
+      for(var j=0;j<SUF.length;j++){ var s=SUF[j]; if(w.length-s.length>=3 && w.slice(-s.length)===s){ w=w.slice(0,-s.length); break; } }
+      if(w.length>=3 && !STOP.has(w)) out.push(w);
+    }
+    return out;
+  }
+
+  var N=0, DF={};
+  fetch('data/standards-match.json?v=2').then(function(r){return r.json();}).then(function(d){
+    STD=Object.keys(d.standards).map(function(k){var s=d.standards[k]; s._kw=new Set(s.kw); s._nm=new Set(toks((s.name||'')+' '+(s.route||''))); return s;});
+    N=STD.length;
+    STD.forEach(function(s){ s.kw.forEach(function(w){ DF[w]=(DF[w]||0)+1; }); });
+    $('hint').textContent=STD.length+' standards indexed · paste a JD and hit match.';
+  }).catch(function(){ $('hint').textContent='Could not load standards data.'; });
+  function idf(w){ var d=DF[w]||0; return d? Math.log(1+N/d) : 0; }  /* rare term = higher weight */
+
+  function run(){
+    var jd=$('jd').value.trim();
+    var box=$('matches');
+    if(jd.length<40){ box.innerHTML=''; $('hint').textContent='Paste a bit more of the JD (a sentence or two) for a good match.'; return; }
+    var jt=toks(jd), jset={}; jt.forEach(function(w){jset[w]=1;});
+    var jkeys=Object.keys(jset), total=Math.max(1,jkeys.length);
+    var scored=[];
+    STD.forEach(function(s){
+      var m=0, base=0, nameHits=0;
+      for(var i=0;i<jkeys.length;i++){ var w=jkeys[i]; if(s._kw.has(w)){ m++; base+=idf(w); if(s._nm.has(w)) nameHits++; } }
+      if(m<2) return;                                   /* need >=2 shared terms */
+      var nameFrac = s._nm.size ? nameHits/s._nm.size : 0;  /* how much of the ROLE TITLE the JD actually covers */
+      scored.push({s:s, m:m, sc: base*(1 + 2.5*nameFrac)});
+    });
+    scored.sort(function(a,b){return b.sc-a.sc || b.m-a.m;});
+    var top=scored.slice(0,3);
+    if(!top.length){ box.innerHTML=''; $('hint').textContent='No clear match — try pasting more of the role detail.'; return; }
+    var best=top[0].sc||1;
+    $('hint').textContent='Top matches from '+STD.length+' standards, on '+total+' key terms in your JD:';
+    box.innerHTML=top.map(function(x,i){
+      var s=x.s, bar=Math.round(x.sc/best*100), cov=Math.round(100*x.m/total);
+      return '<div class="mrow"><div class="mtop"><span class="mn"><span class="rank">#'+(i+1)+'</span>'+
+        '<a href="status-checker.html?ref='+s.ref+'">'+s.name+'</a></span>'+
+        '<span class="meta">Level '+(s.level||'?')+(s.band?' · £'+AC.fmt(s.band):'')+'</span></div>'+
+        '<div class="mbar"><div class="f" style="width:'+bar+'%"></div></div>'+
+        '<div class="terms">Matched <b>'+x.m+'</b> of your '+total+' key terms · '+cov+'% overlap · '+s.route+'</div></div>';
+    }).join('');
+    if(AC.scenario){ AC.scenario.set({jdTopStandard:top[0].s.ref}); if(AC.spine)AC.spine.refresh(); }
+  }
+
+  $('go').addEventListener('click',run);
+  $('jd').addEventListener('input',function(){ if(this.value.length>60) run(); });
+  $('demo').addEventListener('click',function(){
+    $('jd').value="We are hiring a Data Analyst to collect, clean and analyse large datasets, build dashboards and reports, and turn data into insight for the business. You will work with SQL and Python, ensure data quality and security, and present findings to stakeholders to support decisions.";
+    run();
+  });
+</script>
+</body>
+</html>

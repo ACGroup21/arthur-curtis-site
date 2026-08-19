@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Is your levy working? — Arthur Curtis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="lite.css">
+<style>
+  .q{margin-top:22px}
+  .q .ql{font-size:16px;font-weight:600;margin-bottom:12px}
+  .q .ql .n{font-family:var(--mono);font-size:12px;color:var(--cyan);margin-right:8px}
+  .opts{display:flex;flex-direction:column;gap:8px}
+  .opt{text-align:left;background:var(--glass);border:1px solid var(--line);border-radius:11px;padding:12px 14px;color:var(--ink);
+    font-family:var(--sans);font-size:14.5px;cursor:pointer;transition:border-color .15s,background .15s}
+  .opt:hover{border-color:rgba(34,211,238,.5)}
+  .opt.sel{border-color:var(--cyan);background:rgba(34,211,238,.1);color:var(--cyan-soft)}
+  .meter{height:12px;border-radius:99px;background:rgba(255,255,255,.06);border:1px solid var(--line);overflow:hidden;margin-top:6px}
+  .meter .fill{height:100%;width:0;border-radius:99px;transition:width .6s cubic-bezier(.2,.7,.2,1)}
+  #result{display:none}
+  .band{font-size:clamp(26px,5vw,38px);font-weight:800;letter-spacing:-.02em}
+  .progress-note{font-family:var(--mono);font-size:11px;color:var(--muted-2);margin-top:18px;text-align:center}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="lite-head">
+    <div class="brand"><span class="mark">ac</span>arthur curtis <span class="by">· Fundable Lite</span></div>
+    <a class="home" href="../tools.html">All tools →</a>
+  </div>
+
+  <span class="eyebrow"><span class="dot"></span>2-minute check</span>
+  <h1 class="title">Is your levy actually working?</h1>
+  <p class="subtitle">Five quick questions. You'll get an honest read on whether your apprenticeship levy is pulling its weight — and the one thing to do next.</p>
+
+  <div class="card">
+    <div id="questions"></div>
+    <div class="progress-note" id="prog">0 of 5 answered</div>
+  </div>
+
+  <div class="card" id="result">
+    <span class="eyebrow" style="margin-bottom:8px"><span class="dot"></span>Your result</span>
+    <div class="band" id="bandTitle">—</div>
+    <div class="meter"><div class="fill" id="meterFill"></div></div>
+    <p class="prose" id="bandText" style="margin-top:16px"></p>
+    <div id="nonlevy" class="callout cool" style="display:none;margin-top:16px"></div>
+    <div class="funnel">
+      <a class="btn btn-primary" href="https://acgroup21.github.io/arthur-curtis-site/contact.html" target="_blank" rel="noopener" id="cta">Get a plan →</a>
+      <a class="btn btn-ghost" href="expiry-clock.html">See what you're risking →</a>
+    </div>
+    <p class="note">Indicative self-check, not advice. Your answers stay in your browser. For a plan on your real numbers, <a href="https://acgroup21.github.io/arthur-curtis-site/" target="_blank" rel="noopener">talk to us</a>.</p>
+  </div>
+</div>
+
+<script src="engine.js?v=2"></script>
+<script src="spine.js?v=1"></script>
+<script>
+  var $=function(id){return document.getElementById(id);};
+  if(window.AC&&AC.spine) AC.spine.mount();
+
+  var QUESTIONS=[
+    {q:'Do you pay the apprenticeship levy?', opts:[
+      {t:'Yes — we\'re a levy payer', s:2},
+      {t:'No — under £3m pay bill (non-levy)', s:1, nonlevy:true},
+      {t:'Not sure', s:0}]},
+    {q:'Is there an active plan for this year\'s levy?', opts:[
+      {t:'Yes — a live, owned plan', s:2},
+      {t:'Roughly — it\'s in someone\'s head', s:1},
+      {t:'No real plan', s:0}]},
+    {q:'Last year, did you spend what you accrued?', opts:[
+      {t:'Most or all of it', s:2},
+      {t:'Some of it', s:1},
+      {t:'Little or none', s:0},
+      {t:'No idea', s:0}]},
+    {q:'Do you know when your funds expire?', opts:[
+      {t:'Yes — we track the 12-month clock', s:2},
+      {t:'Vaguely', s:1},
+      {t:'No', s:0}]},
+    {q:'Using transfers / gifting for unspent levy?', opts:[
+      {t:'Yes', s:2},
+      {t:'No, but we could', s:1},
+      {t:'Didn\'t know that was possible', s:0}]}
+  ];
+
+  var answers=new Array(QUESTIONS.length).fill(null);
+  var isNonLevy=false;
+  var qWrap=$('questions');
+
+  QUESTIONS.forEach(function(item,qi){
+    var d=document.createElement('div'); d.className='q';
+    var lab=document.createElement('div'); lab.className='ql';
+    lab.innerHTML='<span class="n">Q'+(qi+1)+'</span>'+item.q; d.appendChild(lab);
+    var opts=document.createElement('div'); opts.className='opts';
+    item.opts.forEach(function(o,oi){
+      var b=document.createElement('button'); b.className='opt'; b.textContent=o.t;
+      b.onclick=function(){
+        answers[qi]={s:o.s, nonlevy:!!o.nonlevy};
+        [].forEach.call(opts.children,function(c){c.classList.remove('sel');});
+        b.classList.add('sel');
+        update();
+      };
+      opts.appendChild(b);
+    });
+    d.appendChild(opts); qWrap.appendChild(d);
+  });
+
+  function update(){
+    var done=answers.filter(Boolean).length;
+    $('prog').textContent=done+' of '+QUESTIONS.length+' answered';
+    if(done<QUESTIONS.length){ $('result').style.display='none'; return; }
+
+    var score=answers.reduce(function(a,x){return a+x.s;},0);
+    var max=QUESTIONS.length*2;
+    isNonLevy=answers[0].nonlevy;
+    var pct=Math.round(score/max*100);
+
+    var band, colour, text;
+    if(score>=8){ band='On top of it'; colour='var(--cyan)';
+      text='Your levy is largely pulling its weight. The gains left are at the margin — squeezing the <b>NI exemption</b> on under-25s, moving <b>unspent funds via transfers</b>, and proving <b>ROI</b> to leadership. Worth a second opinion to catch the last few percent.'; }
+    else if(score>=4){ band='Getting by'; colour='var(--warm)';
+      text='You\'re using some of it, but there\'s clear headroom — and with expiry now at <b>12 months</b>, drift costs more than it used to. A tighter, owned plan would turn "some" into "most".'; }
+    else { band='At risk'; colour='#e0607a';
+      text='You\'re likely forfeiting levy every month. On the new <b>12-month clock</b>, that adds up fast. The priority is simple: a real spend plan, mapped to roles, before more expires.'; }
+
+    $('bandTitle').textContent=band; $('bandTitle').style.color=colour;
+    $('meterFill').style.background=colour;
+    $('bandText').innerHTML=text;
+
+    var nl=$('nonlevy');
+    if(isNonLevy){ nl.style.display='block';
+      nl.innerHTML='<div class="lab" style="margin:0"><b style="color:var(--cyan)">Non-levy?</b> You\'re still in scope — the government covers the large majority of training costs through co-investment (and 100% for some 16–21s). Worth modelling what that means for your headcount.</div>'; }
+    else { nl.style.display='none'; }
+
+    $('result').style.display='block';
+    setTimeout(function(){ $('meterFill').style.width=pct+'%'; },60);
+    AC.scenario.set({diagnosticScore:score, diagnosticBand:band, nonLevy:isNonLevy});
+    $('result').scrollIntoView({behavior:'smooth', block:'nearest'});
+  }
+</script>
+</body>
+</html>

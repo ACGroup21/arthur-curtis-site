@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What can you claim? — Arthur Curtis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="lite.css">
+<style>
+  .toggles{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+  .tg{display:flex;align-items:center;gap:10px;background:var(--glass);border:1px solid var(--line);border-radius:11px;padding:11px 13px;cursor:pointer;font-size:14px}
+  .tg input{accent-color:var(--cyan);width:17px;height:17px;cursor:pointer}
+  .tg.on{border-color:var(--cyan);background:rgba(34,211,238,.08)}
+  .levers{margin-top:8px;display:flex;flex-direction:column;gap:9px}
+  .lev{display:flex;gap:12px;align-items:flex-start;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--glass)}
+  .lev.no{opacity:.5}
+  .lev .mk{flex:0 0 auto;width:24px;height:24px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;margin-top:1px}
+  .lev.yes .mk{background:rgba(34,211,238,.14);border:1px solid rgba(34,211,238,.5);color:var(--cyan)}
+  .lev.no .mk{background:rgba(255,255,255,.04);border:1px solid var(--line);color:var(--muted-2)}
+  .lev .body{flex:1;min-width:0}
+  .lev .top{display:flex;justify-content:space-between;gap:10px;align-items:baseline;flex-wrap:wrap}
+  .lev .nm{font-weight:700;font-size:15px}
+  .lev .val{font-family:var(--mono);font-weight:700;font-size:15px;color:var(--cyan);white-space:nowrap}
+  .lev.no .val{color:var(--muted-2)}
+  .lev .who{font-family:var(--mono);font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted-2);border:1px solid var(--line);border-radius:5px;padding:1px 6px;margin-left:6px}
+  .lev .cond{font-size:12.5px;color:var(--muted);line-height:1.5;margin-top:5px}
+  .lev .src{font-size:11px;color:var(--muted-2)}
+  .lev .src a{color:var(--muted)}
+  .packs{margin-top:26px;border-top:1px solid var(--line)}
+  .packs details{border-bottom:1px solid var(--line)}
+  .packs summary{list-style:none;cursor:pointer;padding:15px 2px;font-weight:600;font-size:15px;display:flex;justify-content:space-between;gap:12px}
+  .packs summary::-webkit-details-marker{display:none}
+  .packs summary .pl{color:var(--cyan);font-weight:400}
+  .packs details[open] summary .pl{transform:rotate(45deg)}
+  .packs .a{padding:0 2px 16px;font-size:14px;color:var(--muted);line-height:1.6}
+  .packs .a a{color:var(--cyan)}
+  .verified{font-family:var(--mono);font-size:11px;color:var(--muted-2);margin-top:20px;display:flex;align-items:center;gap:7px}
+  .verified .d{width:6px;height:6px;border-radius:50%;background:var(--cyan)}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="lite-head">
+    <div class="brand"><span class="mark">ac</span>arthur curtis <span class="by">· Fundable Lite</span></div>
+    <a class="home" href="../tools.html">All tools →</a>
+  </div>
+
+  <span class="eyebrow"><span class="dot"></span>Funding &amp; incentives</span>
+  <h1 class="title">What can you claim?</h1>
+  <p class="subtitle">Every apprenticeship grant, incentive and saving in one place. Set the details of your hire and watch what you could unlock — with the eligibility rules shown, so you can check them.</p>
+
+  <div class="card">
+    <h2>About the hire</h2>
+
+    <div class="field">
+      <label for="salary">Apprentice salary</label>
+      <div class="bigval"><span class="cur">£</span><span id="salOut">22,000</span></div>
+      <input type="range" id="salary" min="14000" max="60000" step="500" value="22000">
+      <div class="ticks"><span>£14k</span><span>£37k</span><span>£60k</span></div>
+    </div>
+
+    <div class="field">
+      <label for="age">Age at start</label>
+      <select id="age"><option value="16-18">16–18</option><option value="19-21">19–21</option><option value="22-24" selected>22–24</option><option value="25+">25 or over</option></select>
+    </div>
+
+    <div class="toggles">
+      <label class="tg"><input type="checkbox" id="newHire" checked> New hire (not existing staff)</label>
+      <label class="tg"><input type="checkbox" id="small"> Under 50 employees</label>
+      <label class="tg"><input type="checkbox" id="levy"> We pay the levy</label>
+      <label class="tg"><input type="checkbox" id="level7"> Level 7 programme</label>
+      <label class="tg"><input type="checkbox" id="careLeaver"> Care leaver</label>
+      <label class="tg"><input type="checkbox" id="ehcp"> Has an EHC plan</label>
+    </div>
+
+    <div class="callout cool" id="callout">
+      <div class="big" id="oneoffOut">£0</div>
+      <div class="lab" id="oneoffLab">in one-off payments to you</div>
+    </div>
+
+    <div class="tiles" style="margin-top:14px">
+      <div class="tile good"><div class="k"><span class="dot-ico" style="background:var(--cyan)"></span>Employer NI saving</div><div class="v" id="niTile">—</div></div>
+      <div class="tile"><div class="k"><span class="dot-ico" style="background:var(--blue)"></span>Training cost</div><div class="v" id="trainTile" style="font-size:18px">—</div></div>
+    </div>
+
+    <h2 style="margin-top:24px">Every lever, and whether you qualify</h2>
+    <div class="levers" id="levers"></div>
+
+    <div class="funnel">
+      <a class="btn btn-primary" href="https://acgroup21.github.io/arthur-curtis-site/contact.html" target="_blank" rel="noopener">Get a plan →</a>
+      <a class="btn btn-ghost" href="ni-calculator.html">NI detail →</a>
+    </div>
+
+    <div class="verified"><span class="d"></span><span id="verified">Funding rules verified: —</span></div>
+  </div>
+
+  <div class="packs">
+    <details><summary>Hiring a care leaver — what it means <span class="pl">+</span></summary><div class="a">A care leaver is someone who's been in local-authority care (an 'eligible', 'relevant' or 'former relevant' child). If they're under 25 at the start, <b style="color:var(--ink)">they</b> receive a £3,000 bursary (paid in three instalments over the first year, and it's tax- and NI-free for them) — and as the employer you may get the £1,000 incentive, extended eligibility to 100% funded training, and the NI relief. Beyond the money: care-experienced young people are one of the most under-represented groups in work, so it's a genuine social-value hire. Confirm status is evidenced by the local authority. <a href="https://www.gov.uk/government/publications/apprenticeships-bursary-for-care-leavers/apprenticeships-care-leavers-bursary-policy-summary" target="_blank" rel="noopener">gov.uk guidance →</a></div></details>
+    <details><summary>Apprentices with an EHC plan <span class="pl">+</span></summary><div class="a">An Education, Health and Care (EHC) plan is a legal document for a young person with special educational needs or a disability. A 19–24 apprentice with an EHCP unlocks the same extended eligibility as a care leaver: the £1,000 incentive, small-employer 100% funding, and (for Level 7) funding up to age 24. Learning Support funding of £150/month is also available where reasonable adjustments are needed to complete the training. <a href="https://www.gov.uk/government/publications/support-for-apprentices-with-a-learning-difficulty-or-disability/support-for-apprentices-with-learning-difficulties-and-disabilities" target="_blank" rel="noopener">gov.uk guidance →</a></div></details>
+    <details><summary>Small employer (under 50 staff) <span class="pl">+</span></summary><div class="a">If you employ fewer than 50 people, the government fully funds the training (100% up to the band maximum) for a 16–18 apprentice, or a 19–24 care leaver / EHCP apprentice. For everyone else, non-levy employers co-invest 5% and the government pays 95%. <a href="https://www.gov.uk/guidance/apprenticeship-funding-rules" target="_blank" rel="noopener">gov.uk funding rules →</a></div></details>
+  </div>
+
+  <p class="note">Indicative eligibility guide — not financial advice, and eligibility must be confirmed with your provider / gov.uk. Amounts and rules change; the "verified" date above shows when we last checked. One-off payments (£1,000 incentive, £2,000 hiring payment) go to the employer; the £3,000 bursary goes to the apprentice. <a href="https://acgroup21.github.io/arthur-curtis-site/" target="_blank" rel="noopener">Talk to us</a> for a plan on your real numbers.</p>
+</div>
+
+<script src="engine.js?v=2"></script>
+<script src="spine.js?v=1"></script>
+<script>
+  var $=function(id){return document.getElementById(id);};
+  $('verified').textContent='Funding rules verified: '+AC.RULES.verifiedOn;
+
+  function prefill(){
+    var s=AC.scenario.get();
+    if(s.salary) $('salary').value=s.salary;
+    if(s.ageBand) $('age').value=s.ageBand;
+    [['careLeaver','careLeaver'],['ehcp','ehcp'],['smallEmployer','small'],['levyPayer','levy'],['newHire','newHire'],['level7','level7']].forEach(function(p){
+      if(typeof s[p[0]]==='boolean') $(p[1]).checked=s[p[0]];
+    });
+  }
+  prefill();
+
+  function criteria(){
+    return {
+      ageBand:$('age').value,
+      salary:+$('salary').value,
+      newHire:$('newHire').checked,
+      smallEmployer:$('small').checked,
+      levyPayer:$('levy').checked,
+      level7:$('level7').checked,
+      careLeaver:$('careLeaver').checked,
+      ehcp:$('ehcp').checked
+    };
+  }
+
+  function render(){
+    var c=criteria();
+    $('salOut').textContent=AC.fmt(c.salary);
+    var levers=AC.assess(c);
+
+    // summary
+    var oneoff=0, ni=0, train=null;
+    levers.forEach(function(l){
+      if(l.eligible && l.kind==='oneoff' && l.who==='employer') oneoff+=l.value;
+      if(l.key==='ni' && l.eligible) ni=l.value;
+      if(l.key==='fund100' && l.eligible) train='100% funded';
+      if(l.key==='coinv' && l.eligible && !train) train='95% govt / 5% you';
+    });
+    if(!train) train = c.levyPayer ? 'Levy-funded' : '—';
+    // L7 override
+    var l7=levers.filter(function(l){return l.key==='l7';})[0];
+    if(l7 && !l7.eligible) train='Self-funded (L7 22+)';
+
+    $('oneoffOut').textContent='£'+AC.fmt(oneoff);
+    $('oneoffLab').textContent = oneoff>0 ? 'in one-off payments to you' : 'in one-off payments — adjust the details above';
+    $('niTile').innerHTML = ni>0 ? '<span style="color:var(--muted);font-size:15px">£</span>'+AC.fmt(ni)+'<span style="color:var(--muted);font-size:13px">/yr</span>' : '<span style="color:var(--muted-2);font-size:18px">none</span>';
+    $('trainTile').textContent=train;
+
+    // lever list
+    var wrap=$('levers'); wrap.innerHTML='';
+    levers.forEach(function(l){
+      var row=document.createElement('div'); row.className='lev '+(l.eligible?'yes':'no');
+      var whoLab = l.who==='employer'?'to you' : l.who==='apprentice'?'to apprentice' : 'training';
+      var valStr='';
+      if(l.kind==='saving') valStr = l.eligible ? AC.fmtMoney(l.value)+(l.unit||'') : '—';
+      else if(l.kind==='oneoff') valStr = l.eligible ? AC.fmtMoney(l.value) : '—';
+      else valStr = l.eligible ? 'Yes' : 'No';
+      row.innerHTML='<div class="mk">'+(l.eligible?'✓':'—')+'</div>'+
+        '<div class="body"><div class="top"><span class="nm">'+l.name+'<span class="who">'+whoLab+'</span></span>'+
+        '<span class="val">'+valStr+'</span></div>'+
+        '<div class="cond">'+l.cond+(l.from?' <b style="color:var(--warm)">(from '+l.from+')</b>':'')+' <span class="src">· <a href="'+l.src+'" target="_blank" rel="noopener">source</a></span></div></div>';
+      wrap.appendChild(row);
+    });
+
+    AC.scenario.set({salary:c.salary, ageBand:c.ageBand, careLeaver:c.careLeaver, ehcp:c.ehcp, smallEmployer:c.smallEmployer, levyPayer:c.levyPayer, newHire:c.newHire, level7:c.level7});
+    if(AC.spine) AC.spine.refresh();
+  }
+
+  function syncToggles(){ document.querySelectorAll('.tg input').forEach(function(cb){ cb.closest('.tg').classList.toggle('on',cb.checked); }); }
+  ['salary','age','newHire','small','levy','level7','careLeaver','ehcp'].forEach(function(id){
+    $(id).addEventListener('input',render); $(id).addEventListener('change',render);
+  });
+  document.querySelectorAll('.tg input').forEach(function(cb){ cb.addEventListener('change',syncToggles); });
+  syncToggles();
+  render();
+  if(AC.spine) AC.spine.mount();
+  addEventListener('scenario:change',function(){ prefill(); syncToggles(); render(); });
+</script>
+</body>
+</html>

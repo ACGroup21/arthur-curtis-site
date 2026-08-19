@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Levy Expiry Clock — Arthur Curtis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="lite.css">
+</head>
+<body>
+<div class="app">
+
+  <div class="lite-head">
+    <div class="brand"><span class="mark">ac</span>arthur curtis <span class="by">· Fundable Lite</span></div>
+    <a class="home" href="../tools.html">All tools →</a>
+  </div>
+
+  <span class="eyebrow"><span class="dot"></span>Levy Expiry Clock</span>
+  <h1 class="title">Your levy is now on a <span id="clockTitle">12</span>-month clock.</h1>
+  <p class="subtitle" id="subtitle">As of August 2026, new levy funds expire just 12 months after they land — down from 24. Here's how much walks out the door each year if you don't spend it.</p>
+
+  <div class="card">
+    <h2>Your annual pay bill</h2>
+    <div class="bigval"><span class="cur">£</span><span id="pbOut">25,000,000</span></div>
+    <input type="range" id="paybill" min="3000000" max="120000000" step="500000" value="25000000">
+    <div class="ticks"><span>£3m</span><span>£60m</span><span>£120m</span></div>
+
+    <div class="field">
+      <label for="maturity">How long have you been paying the levy?</label>
+      <select id="maturity">
+        <option value="building">Under a year — still building</option>
+        <option value="mature" selected>A year or more — account is mature</option>
+      </select>
+    </div>
+
+    <div class="callout" id="callout">
+      <div class="big" id="riskOut">£0</div>
+      <div class="lab" id="riskLab">could expire every year if left unspent</div>
+    </div>
+
+    <div class="runway" id="runway"></div>
+    <div class="runway-axis"><span>funds landing now</span><span id="axisRight">← older · expiring at 12 mo →</span></div>
+
+    <div class="tiles" style="margin-top:20px">
+      <div class="tile good"><div class="k"><span class="dot-ico" style="background:var(--cyan)"></span>Levy in per month</div><div class="v"><span style="color:var(--muted);font-size:16px">£</span><span id="monthOut">0</span></div></div>
+      <div class="tile good"><div class="k"><span class="dot-ico" style="background:var(--blue)"></span>Levy in per year</div><div class="v"><span style="color:var(--muted);font-size:16px">£</span><span id="yearOut">0</span></div></div>
+    </div>
+
+    <div class="funnel">
+      <a class="btn btn-primary" href="https://acgroup21.github.io/arthur-curtis-site/contact.html" target="_blank" rel="noopener">Get a plan →</a>
+      <a class="btn btn-ghost" href="ni-calculator.html">Check your NI savings →</a>
+    </div>
+    <p class="note" id="note"></p>
+  </div>
+
+  <p class="note" id="foot"></p>
+</div>
+
+<script src="engine.js?v=2"></script>
+<script src="spine.js?v=1"></script>
+<script>
+  var $=function(id){return document.getElementById(id);};
+  var EM=AC.RULES.expiryMonths;            // 12 (single source of truth)
+  var EMprev=AC.RULES.expiryMonthsPrev;    // 24
+
+  /* prefill from shared scenario / URL */
+  AC.scenario.fromUrl();
+  var saved=AC.scenario.get();
+  if(saved.payBill) $('paybill').value=saved.payBill;
+
+  /* static copy driven by the rule */
+  $('clockTitle').textContent=EM;
+  $('subtitle').textContent='As of '+AC.RULES.expiryChanged+', new levy funds expire just '+EM+' months after they land — down from '+EMprev+'. Here\'s how much walks out the door each year if you don\'t spend it.';
+  $('axisRight').textContent='← older · expiring at '+EM+' mo →';
+  $('foot').innerHTML='Indicative only. 0.5% of pay bill, less the £15,000 allowance, plus the 10% government top-up. From '+AC.RULES.expiryChanged+' new levy funds expire '+EM+' months after they enter your apprenticeship service account, oldest first; funds banked before then keep the previous '+EMprev+'-month clock. Figures for guidance — <a href="https://acgroup21.github.io/arthur-curtis-site/" target="_blank" rel="noopener">talk to us</a> for a plan on your real numbers.';
+
+  /* build the runway (EM months) once */
+  var runway=$('runway'), segs=[];
+  for(var i=0;i<EM;i++){ var s=document.createElement('div'); s.className='seg'; runway.appendChild(s); segs.push(s); }
+
+  function render(){
+    var pb=+$('paybill').value;
+    var mat=$('maturity').value;
+    var m=AC.levy(pb);
+    $('pbOut').textContent=AC.fmt(pb);
+    $('monthOut').textContent=AC.fmt(m.monthly);
+    $('yearOut').textContent=AC.fmt(m.annual);
+    $('riskOut').textContent='£'+AC.fmt(m.annual);
+
+    var callout=$('callout'), riskLab=$('riskLab'), note=$('note');
+    if(mat==='mature'){
+      riskLab.textContent='could expire every year if left unspent';
+      callout.classList.remove('cool');
+      note.textContent='Your account is mature — a full month of levy now rolls off the far end every month. That\'s £'+AC.fmt(m.monthly)+' a month, £'+AC.fmt(m.annual)+' a year, unless you\'re spending it. The '+EM+'-month clock makes that faster than it used to be.';
+    } else {
+      riskLab.textContent='a year is building — the '+EM+'-month clock has started';
+      callout.classList.add('cool');
+      note.textContent='Nothing has expired yet — but the '+EM+'-month clock started with your first payment, so your earliest funds are already close to the cliff. Build a plan now and none of this £'+AC.fmt(m.annual)+'/year needs to be lost.';
+    }
+
+    /* runway: EM equal monthly-accrual bars; oldest (right) expiring soonest */
+    var expiring = mat==='mature' ? 2 : 1;
+    for(var i=0;i<EM;i++){
+      segs[i].style.height=(48 + (i%2?6:0))+'%';
+      segs[i].classList.toggle('expiring', i >= (EM-expiring));
+    }
+
+    AC.scenario.set({payBill:pb, levyMaturity:mat}); if(AC.spine) AC.spine.refresh();
+  }
+  /* (no internal-app link — lite apps funnel to a plan / sibling tools only) */
+
+  $('paybill').addEventListener('input',render);
+  $('maturity').addEventListener('change',render);
+  render();
+  if(AC.spine) AC.spine.mount();
+  addEventListener('scenario:change',function(){ var s=AC.scenario.get(); if(s.payBill) $('paybill').value=s.payBill; render(); });
+</script>
+</body>
+</html>

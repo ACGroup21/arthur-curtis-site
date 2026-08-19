@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apprentice NI Savings — Arthur Curtis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="lite.css">
+</head>
+<body>
+<div class="app">
+
+  <div class="lite-head">
+    <div class="brand"><span class="mark">ac</span>arthur curtis <span class="by">· Fundable Lite</span></div>
+    <a class="home" href="../tools.html">All tools →</a>
+  </div>
+
+  <span class="eyebrow"><span class="dot"></span>Apprentice NI Savings</span>
+  <h1 class="title">Hire an under-25 apprentice, pay <span class="grad" style="background:linear-gradient(110deg,var(--cyan-soft),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent">0% employer NI.</span></h1>
+  <p class="subtitle">Employers pay no secondary National Insurance on apprentices under 25, up to £50,270 of salary. Here's what that's worth — a saving most employers never claim on purpose.</p>
+
+  <div class="card">
+    <h2>Your apprentice</h2>
+
+    <div class="field">
+      <label for="salary">Apprentice salary</label>
+      <div class="bigval"><span class="cur">£</span><span id="salOut">22,000</span></div>
+      <input type="range" id="salary" min="14000" max="60000" step="500" value="22000">
+      <div class="ticks"><span>£14k</span><span>£37k</span><span>£60k</span></div>
+    </div>
+
+    <div class="field">
+      <label for="age">Age at start</label>
+      <select id="age">
+        <option value="16-18">16–18</option>
+        <option value="19-21">19–21</option>
+        <option value="22-24" selected>22–24</option>
+        <option value="25+">25 or over</option>
+      </select>
+    </div>
+
+    <div class="tiles" style="margin-top:16px">
+      <div class="field" style="margin:0"><label for="count">How many</label><input type="number" id="count" min="1" max="500" value="1"></div>
+      <div class="field" style="margin:0"><label for="dur">Programme length (months)</label><input type="number" id="dur" min="12" max="60" step="1" value="18"></div>
+    </div>
+
+    <div class="callout cool" id="callout">
+      <div class="big" id="totalOut">£0</div>
+      <div class="lab" id="totalLab">saved in employer NI across the programme</div>
+    </div>
+
+    <div class="tiles" style="margin-top:16px">
+      <div class="tile good"><div class="k"><span class="dot-ico" style="background:var(--cyan)"></span>Per apprentice / year</div><div class="v"><span style="color:var(--muted);font-size:16px">£</span><span id="perYearOut">0</span></div></div>
+      <div class="tile good"><div class="k"><span class="dot-ico" style="background:var(--blue)"></span>All apprentices / year</div><div class="v"><span style="color:var(--muted);font-size:16px">£</span><span id="allYearOut">0</span></div></div>
+    </div>
+
+    <div id="flag" class="callout" style="display:none"></div>
+
+    <div class="funnel">
+      <a class="btn btn-primary" href="https://acgroup21.github.io/arthur-curtis-site/contact.html" target="_blank" rel="noopener">Get a plan →</a>
+      <a class="btn btn-ghost" href="expiry-clock.html">See what your levy risks →</a>
+    </div>
+    <p class="note" id="note"></p>
+  </div>
+
+  <p class="note">Indicative only. Employer (secondary Class 1) NI is 0% for apprentices under 25 on earnings up to the £50,270 Upper Secondary Threshold; above that the standard employer rate applies. Relief stops the pay period after the 25th birthday. This saving is <b style="color:var(--ink)">in addition to</b> the Employment Allowance. Figures for guidance — <a href="https://acgroup21.github.io/arthur-curtis-site/" target="_blank" rel="noopener">talk to us</a> for the full picture.</p>
+</div>
+
+<script src="engine.js?v=2"></script>
+<script src="spine.js?v=1"></script>
+<script>
+  var $=function(id){return document.getElementById(id);};
+  function prefill(){ var s=AC.scenario.get(); if(s.salary) $('salary').value=s.salary; if(s.ageBand) $('age').value=s.ageBand; }
+
+  function under25(band){ return band==='16-18'||band==='19-21'||band==='22-24'; }
+
+  function render(){
+    var salary=+$('salary').value;
+    var band=$('age').value;
+    var count=Math.max(1, +$('count').value||1);
+    var months=Math.max(12, +$('dur').value||12);
+    var years=months/12;
+
+    $('salOut').textContent=AC.fmt(salary);
+
+    var perYear = under25(band) ? AC.niSaving(salary) : 0;
+    var allYear = perYear*count;
+    var total = allYear*years;
+
+    $('perYearOut').textContent=AC.fmt(perYear);
+    $('allYearOut').textContent=AC.fmt(allYear);
+    $('totalOut').textContent='£'+AC.fmt(total);
+
+    var callout=$('callout'), flag=$('flag'), note=$('note');
+    if(!under25(band)){
+      callout.classList.remove('cool');
+      $('totalLab').textContent='— the NI exemption only applies to apprentices under 25';
+      note.textContent='At 25 or over there\'s no employer-NI relief. If the role could suit a younger apprentice, that\'s ' + AC.fmtMoney(AC.niSaving(salary)) + '/year each in saving you\'d otherwise miss.';
+    } else {
+      callout.classList.add('cool');
+      $('totalLab').textContent='saved in employer NI across the programme ('+months+' months, '+count+' apprentice'+(count>1?'s':'')+')';
+      note.textContent='That\'s '+AC.fmtMoney(perYear)+' a year per apprentice — money off your NI bill, on top of your Employment Allowance.';
+    }
+
+    /* 22–24 money-insight: L7 defunded but NI still applies */
+    if(band==='22-24'){
+      flag.style.display='block';
+      flag.className='callout';
+      flag.innerHTML='<div class="lab" style="margin:0"><b style="color:var(--warm)">The 22–24 catch worth knowing:</b> Level 7 training for this age is no longer levy-funded (you self-fund it) — <b style="color:var(--ink)">but they\'re still under 25, so you keep this '+AC.fmtMoney(perYear)+'/year NI saving.</b> It softens the blow.</div>';
+    } else if(band==='16-18'){
+      flag.style.display='block';
+      flag.className='callout cool';
+      flag.innerHTML='<div class="lab" style="margin:0"><b style="color:var(--cyan)">16–18 bonus:</b> on top of the NI saving, you may qualify for the <b style="color:var(--ink)">£1,000 employer incentive</b>, and small employers often get 100% of training funded.</div>';
+    } else {
+      flag.style.display='none';
+    }
+
+    AC.scenario.set({salary:salary, ageBand:band}); if(AC.spine) AC.spine.refresh();
+  }
+
+  prefill();
+  ['salary','age','count','dur'].forEach(function(id){
+    $(id).addEventListener('input',render); $(id).addEventListener('change',render);
+  });
+  render();
+  if(AC.spine) AC.spine.mount();
+  addEventListener('scenario:change',function(){ prefill(); render(); });
+</script>
+</body>
+</html>
