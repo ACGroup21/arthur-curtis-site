@@ -10,6 +10,11 @@
   if(!window.AC){ return; }
   var S = AC.scenario;
 
+  /* lead capture endpoint — FormSubmit: no account/key needed. The FIRST submission
+     triggers a one-time confirmation email to this address; click it to activate.
+     Swap for a Formspree/Web3Forms URL or a different inbox any time. */
+  var FORM_ENDPOINT = 'https://formsubmit.co/ajax/hello@arthurcurtis.com';
+
   /* read a shared ?s= link into localStorage as early as possible */
   try { S.fromUrl(); } catch(e){}
 
@@ -37,6 +42,23 @@
   .spine-btn{font-family:var(--sans);font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--muted);border-radius:8px;padding:6px 10px;transition:border-color .15s,color .15s}\
   .spine-btn:hover{border-color:var(--cyan);color:var(--cyan)}\
   .spine-btn.primary{background:linear-gradient(120deg,var(--blue),var(--cyan));color:#02101e;border-color:transparent}\
+  .lead-modal{position:fixed;inset:0;z-index:100;background:rgba(3,9,18,.72);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:20px}\
+  .lead-box{position:relative;width:100%;max-width:420px;background:#0a1626;border:1px solid var(--line);border-radius:18px;padding:26px;box-shadow:0 30px 80px rgba(0,0,0,.6)}\
+  .lead-box h3{font-size:20px;font-weight:800;margin-bottom:6px}\
+  .lead-sub{font-size:14px;color:var(--muted);line-height:1.5}\
+  .lead-sum{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0}\
+  .lead-sum span{font-size:12px;background:rgba(34,211,238,.09);border:1px solid rgba(34,211,238,.28);color:var(--cyan-soft);border-radius:99px;padding:3px 10px}\
+  .lead-in{width:100%;margin-top:10px;background:var(--glass);border:1px solid var(--line);border-radius:10px;padding:12px 13px;color:var(--ink);font-family:var(--sans);font-size:14.5px}\
+  .lead-in:focus{outline:none;border-color:var(--cyan)}\
+  textarea.lead-in{min-height:70px;resize:vertical}\
+  .lead-send{width:100%;margin-top:14px;background:linear-gradient(120deg,var(--blue),var(--cyan));color:#02101e;font-weight:700;font-size:15px;border:none;border-radius:10px;padding:12px;cursor:pointer}\
+  .lead-send:disabled{opacity:.6;cursor:default}\
+  .lead-status{font-size:13px;margin-top:10px;color:var(--muted)}\
+  .lead-status.err{color:#e0607a}\
+  .lead-fall{font-size:12px;color:var(--muted-2);margin-top:14px}\
+  .lead-fall a{color:var(--cyan)}\
+  .lead-x{position:absolute;top:12px;right:14px;background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer;line-height:1}\
+  .lead-x:hover{color:var(--ink)}\
   ';
 
   function injectStyle(){
@@ -81,12 +103,7 @@
         navigator.clipboard.writeText(url).then(function(){ flash(btn,'Copied!'); }, function(){ prompt('Copy this link:', url); });
       } else { prompt('Copy this link:', url); }
     } else if(a==='email'){
-      var s=S.get(), lines=summary();
-      var tool=(document.title||'Arthur Curtis lite tool').split('—')[0].trim();
-      var body='Hi Arthur Curtis team,%0D%0A%0D%0AI used the "'+tool+'" tool. My details:%0D%0A- '+
-        (lines.length?lines.join('%0D%0A- '):'(none entered)')+
-        '%0D%0A%0D%0APlease come back with a plan on my real numbers.%0D%0A';
-      window.location.href='mailto:hello@arthurcurtis.com?subject='+encodeURIComponent('Levy enquiry — '+tool)+'&body='+body;
+      openCapture();
     } else if(a==='clear'){
       try{ localStorage.removeItem('ac_scenario'); }catch(e){}
       refresh();
@@ -111,5 +128,50 @@
   }
   function refresh(){ if(HOST) render(HOST); }
 
-  AC.spine = { mount:mount, refresh:refresh, summary:summary };
+  /* ---- lead capture modal ("Email my results") ---- */
+  function submitLead(fields){
+    var body=Object.assign({ _subject:'New Fundable Lite enquiry — '+(fields.tool||''), _captcha:'false', _template:'table', _replyto:fields.email }, fields);
+    return fetch(FORM_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(body)})
+      .then(function(r){return r.json();}).then(function(j){ return !!(j && (j.success==='true'||j.success===true)); })
+      .catch(function(){ return false; });
+  }
+  function openCapture(){
+    var lines=summary();
+    var host=document.createElement('div'); host.className='lead-modal';
+    host.innerHTML='<div class="lead-box">'+
+      '<button class="lead-x" aria-label="Close">&times;</button>'+
+      '<h3>Get a plan on your numbers</h3>'+
+      '<p class="lead-sub">Leave your email and we\'ll come back — usually within two working days. Your details below come with it.</p>'+
+      (lines.length?'<div class="lead-sum">'+lines.map(function(t){return '<span>'+t+'</span>';}).join('')+'</div>':'')+
+      '<input class="lead-in" id="lead-email" type="email" placeholder="Work email *" required>'+
+      '<input class="lead-in" id="lead-name" type="text" placeholder="Your name (optional)">'+
+      '<textarea class="lead-in" id="lead-msg" placeholder="Anything to add? (optional)"></textarea>'+
+      '<input type="text" id="lead-hp" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">'+
+      '<button class="lead-send" id="lead-send">Send &rarr;</button>'+
+      '<div class="lead-status" id="lead-status"></div>'+
+      '<p class="lead-fall">Prefer to write? <a href="mailto:hello@arthurcurtis.com">hello@arthurcurtis.com</a></p>'+
+      '</div>';
+    document.body.appendChild(host);
+    var close=function(){ host.remove(); };
+    host.addEventListener('click',function(e){ if(e.target===host) close(); });
+    host.querySelector('.lead-x').addEventListener('click',close);
+    var send=host.querySelector('#lead-send'), status=host.querySelector('#lead-status');
+    send.addEventListener('click',function(){
+      if(host.querySelector('#lead-hp').value){ close(); return; }
+      var email=(host.querySelector('#lead-email').value||'').trim();
+      if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ status.textContent='Please enter a valid email.'; status.className='lead-status err'; return; }
+      send.disabled=true; send.textContent='Sending…'; status.textContent=''; status.className='lead-status';
+      var tool=(document.title||'Fundable Lite').split('—')[0].trim();
+      submitLead({ email:email, name:(host.querySelector('#lead-name').value||'').trim()||'(not given)',
+        message:(host.querySelector('#lead-msg').value||'').trim()||'(none)', tool:tool,
+        your_details:lines.length?lines.join(' · '):'(none entered)', page:location.href
+      }).then(function(ok){
+        if(ok){ host.querySelector('.lead-box').innerHTML='<button class="lead-x" aria-label="Close">&times;</button><h3>Sent &#10003;</h3><p class="lead-sub">Thanks — we\'ll be in touch shortly. Your details went with it.</p>'; host.querySelector('.lead-x').addEventListener('click',close); }
+        else { status.textContent='Something went wrong — please email hello@arthurcurtis.com.'; status.className='lead-status err'; send.disabled=false; send.textContent='Send →'; }
+      });
+    });
+    setTimeout(function(){ var e=host.querySelector('#lead-email'); if(e) e.focus(); },30);
+  }
+
+  AC.spine = { mount:mount, refresh:refresh, summary:summary, capture:openCapture };
 })();

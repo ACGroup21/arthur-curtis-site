@@ -39,7 +39,7 @@
       <div class="contact-card reveal">
         <h3>Send us the basics</h3>
         <p>No obligation. The more you tell us, the sharper the first read.</p>
-        <form action="mailto:hello@arthurcurtis.com" method="post" enctype="text/plain">
+        <form id="contactForm" novalidate>
           <div class="field"><label for="name">Your name</label><input id="name" name="name" type="text" placeholder="Jane Smith" required></div>
           <div class="field"><label for="company">Company</label><input id="company" name="company" type="text" placeholder="Acme Ltd"></div>
           <div class="field"><label for="email">Work email</label><input id="email" name="email" type="email" placeholder="jane@acme.co.uk" required></div>
@@ -54,8 +54,10 @@
             </select>
           </div>
           <div class="field"><label for="goal">What are you trying to do?</label><textarea id="goal" name="goal" placeholder="e.g. we've £400k of levy expiring and no plan for it"></textarea></div>
+          <input type="text" name="_hp" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">
           <button class="btn btn-primary btn-lg" type="submit" style="margin-top:18px;width:100%">Send it over →</button>
-          <p class="form-note">This opens your email app with the details filled in — nothing is stored on this site. Prefer to write yourself? Email <a href="mailto:hello@arthurcurtis.com" style="color:var(--cyan)">hello@arthurcurtis.com</a>.</p>
+          <div class="form-note" id="contactStatus" aria-live="polite"></div>
+          <p class="form-note">We'll reply within two working days. Prefer to write yourself? Email <a href="mailto:hello@arthurcurtis.com" style="color:var(--cyan)">hello@arthurcurtis.com</a>.</p>
         </form>
       </div>
 
@@ -87,5 +89,30 @@
 </footer>
 
 <script src="site.js"></script>
+<script>
+/* Lead capture — FormSubmit (no account/key). First submit sends a one-time
+   confirmation email to hello@arthurcurtis.com; click it to activate delivery. */
+(function(){
+  var f=document.getElementById('contactForm'); if(!f) return;
+  var status=document.getElementById('contactStatus');
+  f.addEventListener('submit',function(e){
+    e.preventDefault();
+    if(f.querySelector('[name="_hp"]').value) return;
+    var email=(f.querySelector('#email').value||'').trim();
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ status.textContent='Please enter a valid work email.'; status.style.color='#e0607a'; return; }
+    var btn=f.querySelector('button[type=submit]'), ot=btn.textContent;
+    btn.disabled=true; btn.textContent='Sending…'; status.textContent='';
+    fetch('https://formsubmit.co/ajax/hello@arthurcurtis.com',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},
+      body:JSON.stringify({ _subject:'New enquiry — arthurcurtis.com', _captcha:'false', _template:'table', _replyto:email,
+        name:(f.querySelector('#name').value||'').trim(), company:(f.querySelector('#company').value||'').trim(),
+        email:email, pay_bill:f.querySelector('#paybill').value, message:(f.querySelector('#goal').value||'').trim() })
+    }).then(function(r){return r.json();}).then(function(j){
+      if(j && (j.success==='true'||j.success===true)){
+        f.innerHTML='<h3 style="font-size:20px;font-weight:700;margin-bottom:8px">Thanks — got it ✓</h3><p style="color:var(--muted)">We\'ll come back to you within two working days.</p>';
+      } else { status.textContent='Something went wrong — please email hello@arthurcurtis.com.'; status.style.color='#e0607a'; btn.disabled=false; btn.textContent=ot; }
+    }).catch(function(){ status.textContent='Network error — please email hello@arthurcurtis.com.'; status.style.color='#e0607a'; btn.disabled=false; btn.textContent=ot; });
+  });
+})();
+</script>
 </body>
 </html>
