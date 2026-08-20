@@ -182,35 +182,21 @@
   .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease}
   .reveal.in{opacity:1;transform:none}
 
-  /* ---------- SPLASH / TYPE-IN + CLICK TO ENTER ---------- */
-  #splash{position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:38px;
-    background:radial-gradient(95% 95% at 50% 42%,#0e2c46,#06121f 72%);cursor:pointer;transition:opacity .6s ease}
+  /* ---------- SPLASH / PARTICLE ASSEMBLY + CLICK TO ENTER ---------- */
+  #splash{position:fixed;inset:0;z-index:9999;cursor:pointer;transition:opacity .6s ease;
+    background:radial-gradient(95% 95% at 50% 42%,#0e2c46,#06121f 72%)}
   #splash.gone{opacity:0;pointer-events:none}
-  .sp-logo{position:relative;display:inline-block}
-  .sp-logo img{display:block;width:min(74vw,540px);height:auto;
-    clip-path:inset(0 100% 0 0);animation:sp-type 1.7s steps(26,end) .35s forwards}
-  .sp-caret{position:absolute;right:-16px;top:14%;height:30%;width:4px;background:var(--cyan);opacity:0;
-    animation:sp-caretin 0s 2.05s forwards, sp-blink .9s step-end 2.05s infinite}
-  .sp-enter{font-size:12.5px;letter-spacing:.3em;text-transform:uppercase;color:rgba(226,240,255,.62);
-    opacity:0;animation:sp-fade .8s ease 2.2s forwards}
-  @keyframes sp-type{to{clip-path:inset(0 0 0 0)}}
-  @keyframes sp-caretin{to{opacity:1}}
-  @keyframes sp-blink{50%{opacity:0}}
+  #sp-canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+  .sp-enter{position:absolute;bottom:12%;left:50%;transform:translateX(-50%);z-index:2;
+    font-size:12.5px;letter-spacing:.3em;text-transform:uppercase;color:rgba(226,240,255,.62);opacity:0}
+  .sp-enter.show{animation:sp-fade .9s ease forwards}
   @keyframes sp-fade{to{opacity:1}}
-  @media (prefers-reduced-motion: reduce){
-    .sp-logo img{animation:none;clip-path:none}
-    .sp-caret{animation:sp-blink .9s step-end infinite;opacity:1}
-    .sp-enter{animation:none;opacity:1}
-  }
 </style>
 </head>
 <body>
 
 <div id="splash">
-  <div class="sp-logo">
-    <img src="assets/wordmark-white.svg" alt="Arthur Curtis Education">
-    <span class="sp-caret"></span>
-  </div>
+  <canvas id="sp-canvas"></canvas>
   <div class="sp-enter">click to enter</div>
 </div>
 <script>
@@ -218,8 +204,31 @@
     var sp=document.getElementById('splash');if(!sp)return;
     if(sessionStorage.getItem('ac_entered')){sp.parentNode.removeChild(sp);return;}
     document.documentElement.style.overflow='hidden';
-    function enter(){
-      sp.classList.add('gone');document.documentElement.style.overflow='';
+    var cv=document.getElementById('sp-canvas'), ctx=cv.getContext('2d'), enterEl=sp.querySelector('.sp-enter');
+    var DPR=Math.min(1.75,devicePixelRatio||1), W,H, raf=0, entered=false;
+    var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+    W=cv.width=Math.floor(innerWidth*DPR); H=cv.height=Math.floor(innerHeight*DPR);
+    var wm=new Image();
+    wm.onload=start; wm.src='assets/wordmark-white.svg';
+    function start(){
+      var off=document.createElement('canvas'); off.width=W; off.height=H; var ox=off.getContext('2d');
+      var s=Math.min(W*0.66/wm.naturalWidth, H*0.30/wm.naturalHeight);
+      var dw=wm.naturalWidth*s, dh=wm.naturalHeight*s;
+      ox.drawImage(wm,(W-dw)/2,(H-dh)/2,dw,dh);
+      var d=ox.getImageData(0,0,W,H).data, P=[], step=Math.max(3,Math.round(dw/220));
+      for(var y=0;y<H;y+=step)for(var x=0;x<W;x+=step){ var i=(y*W+x)*4;
+        if(d[i+3]>120){ var r=d[i],g=d[i+1],b=d[i+2]; var teal=(g>120&&g>=r&&b>r-10&&r<170);
+          P.push({x:Math.random()*W,y:Math.random()*H,tx:x,ty:y,teal:teal,dl:Math.random()*0.22}); } }
+      var rad=Math.max(1.3,step*0.42);
+      function draw(u){ ctx.clearRect(0,0,W,H);
+        for(var k=0;k<P.length;k++){ var p=P[k], t=(u-p.dl)/(1-p.dl); t=t<0?0:t>1?1:t; var e=1-Math.pow(1-t,3);
+          ctx.fillStyle=p.teal?'#16C8C3':'#eaf2fb'; ctx.beginPath(); ctx.arc(p.x+(p.tx-p.x)*e,p.y+(p.ty-p.y)*e,rad,0,7); ctx.fill(); } }
+      if(reduce){ draw(1); enterEl.classList.add('show'); return; }
+      var T=2100, t0=performance.now();
+      (function fr(now){ var u=Math.min(1,(now-t0)/T); draw(u); if(u<1)raf=requestAnimationFrame(fr); else enterEl.classList.add('show'); })(t0);
+    }
+    function enter(){ if(entered)return; entered=true; cancelAnimationFrame(raf);
+      sp.classList.add('gone'); document.documentElement.style.overflow='';
       try{sessionStorage.setItem('ac_entered','1');}catch(e){}
       setTimeout(function(){if(sp.parentNode)sp.parentNode.removeChild(sp);},650);
     }
