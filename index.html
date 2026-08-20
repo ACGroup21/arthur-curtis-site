@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Arthur Curtis — Make your levy work</title>
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -163,13 +164,56 @@
   .mock-flag{position:fixed;bottom:16px;left:16px;z-index:99;background:rgba(34,211,238,.12);border:1px solid rgba(34,211,238,.4);color:var(--cyan-soft);font-family:var(--mono);font-size:11px;padding:7px 12px;border-radius:8px;backdrop-filter:blur(8px)}
   .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease}
   .reveal.in{opacity:1;transform:none}
+
+  /* ---------- SPLASH / TYPE-IN + CLICK TO ENTER ---------- */
+  #splash{position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:38px;
+    background:radial-gradient(95% 95% at 50% 42%,#0e2c46,#06121f 72%);cursor:pointer;transition:opacity .6s ease}
+  #splash.gone{opacity:0;pointer-events:none}
+  .sp-logo{position:relative;display:inline-block}
+  .sp-logo img{display:block;width:min(74vw,540px);height:auto;
+    clip-path:inset(0 100% 0 0);animation:sp-type 1.7s steps(26,end) .35s forwards}
+  .sp-caret{position:absolute;right:-16px;top:14%;height:30%;width:4px;background:var(--cyan);opacity:0;
+    animation:sp-caretin 0s 2.05s forwards, sp-blink .9s step-end 2.05s infinite}
+  .sp-enter{font-size:12.5px;letter-spacing:.3em;text-transform:uppercase;color:rgba(226,240,255,.62);
+    opacity:0;animation:sp-fade .8s ease 2.2s forwards}
+  @keyframes sp-type{to{clip-path:inset(0 0 0 0)}}
+  @keyframes sp-caretin{to{opacity:1}}
+  @keyframes sp-blink{50%{opacity:0}}
+  @keyframes sp-fade{to{opacity:1}}
+  @media (prefers-reduced-motion: reduce){
+    .sp-logo img{animation:none;clip-path:none}
+    .sp-caret{animation:sp-blink .9s step-end infinite;opacity:1}
+    .sp-enter{animation:none;opacity:1}
+  }
 </style>
 </head>
 <body>
 
+<div id="splash">
+  <div class="sp-logo">
+    <img src="assets/wordmark-white.svg" alt="Arthur Curtis Education">
+    <span class="sp-caret"></span>
+  </div>
+  <div class="sp-enter">click to enter</div>
+</div>
+<script>
+  (function(){
+    var sp=document.getElementById('splash');if(!sp)return;
+    if(sessionStorage.getItem('ac_entered')){sp.parentNode.removeChild(sp);return;}
+    document.documentElement.style.overflow='hidden';
+    function enter(){
+      sp.classList.add('gone');document.documentElement.style.overflow='';
+      try{sessionStorage.setItem('ac_entered','1');}catch(e){}
+      setTimeout(function(){if(sp.parentNode)sp.parentNode.removeChild(sp);},650);
+    }
+    sp.addEventListener('click',enter);
+    window.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key==='Escape'||e.key===' ')enter();},{once:true});
+  })();
+</script>
+
 <div class="grain"></div>
 <nav id="nav">
-  <a href="index.html" aria-label="Arthur Curtis home"></a>
+  <a href="index.html"><img src="assets/ac-education-mark.svg" class="logo" alt="Arthur Curtis Education"></a>
   <div class="links">
     <a href="approach.html">Approach</a>
     <a href="tools.html">Tools</a>
@@ -287,7 +331,7 @@
 
 <footer>
   <div class="wrap row">
-    <img src="assets/logo-white-tight.png" alt="Arthur Curtis">
+    <img src="assets/viral-white-accent.svg" alt="VIRAL by Arthur Curtis" style="height:44px">
     <span>© 2026 Arthur Curtis · Making people better</span>
     <span><a href="mailto:hello@arthurcurtis.com">hello@arthurcurtis.com</a> · <a href="#">LinkedIn</a></span>
   </div>
