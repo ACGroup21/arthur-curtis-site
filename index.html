@@ -182,11 +182,14 @@
   .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease}
   .reveal.in{opacity:1;transform:none}
 
-  /* ---------- SPLASH / PARTICLE ASSEMBLY + CLICK TO ENTER ---------- */
+  /* ---------- SPLASH / PARTICLES -> LOGO + CLICK TO ENTER ---------- */
   #splash{position:fixed;inset:0;z-index:9999;cursor:pointer;transition:opacity .6s ease;
     background:radial-gradient(95% 95% at 50% 42%,#0e2c46,#06121f 72%)}
   #splash.gone{opacity:0;pointer-events:none}
-  #sp-canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+  #sp-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:0;transition:opacity .5s ease}
+  #sp-wm{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:min(66vw,720px);height:auto;z-index:1;
+    opacity:0;transition:opacity .5s ease;filter:drop-shadow(0 6px 30px rgba(4,12,28,.5))}
+  #sp-wm.show{opacity:1}
   .sp-enter{position:absolute;bottom:12%;left:50%;transform:translateX(-50%);z-index:2;
     font-size:12.5px;letter-spacing:.3em;text-transform:uppercase;color:rgba(226,240,255,.62);opacity:0}
   .sp-enter.show{animation:sp-fade .9s ease forwards}
@@ -197,6 +200,7 @@
 
 <div id="splash">
   <canvas id="sp-canvas"></canvas>
+  <img id="sp-wm" src="assets/wordmark-white.svg" alt="Arthur Curtis Education">
   <div class="sp-enter">click to enter</div>
 </div>
 <script>
@@ -204,18 +208,17 @@
     var sp=document.getElementById('splash');if(!sp)return;
     if(sessionStorage.getItem('ac_entered')){sp.parentNode.removeChild(sp);return;}
     document.documentElement.style.overflow='hidden';
-    var cv=document.getElementById('sp-canvas'), ctx=cv.getContext('2d'), enterEl=sp.querySelector('.sp-enter');
+    var cv=document.getElementById('sp-canvas'), ctx=cv.getContext('2d'), img=document.getElementById('sp-wm'), enterEl=sp.querySelector('.sp-enter');
     var DPR=Math.min(1.75,devicePixelRatio||1), W,H, raf=0, entered=false;
     var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
     W=cv.width=Math.floor(innerWidth*DPR); H=cv.height=Math.floor(innerHeight*DPR);
-    var wm=new Image();
-    wm.onload=start; wm.src='assets/wordmark-white.svg';
-    function start(){
+    function begin(){
+      var bcr=img.getBoundingClientRect();
+      if(!bcr.width){ setTimeout(begin,30); return; }
+      // sample the wordmark exactly where the crisp logo sits, so particles land on it
       var off=document.createElement('canvas'); off.width=W; off.height=H; var ox=off.getContext('2d');
-      var s=Math.min(W*0.66/wm.naturalWidth, H*0.30/wm.naturalHeight);
-      var dw=wm.naturalWidth*s, dh=wm.naturalHeight*s;
-      ox.drawImage(wm,(W-dw)/2,(H-dh)/2,dw,dh);
-      var d=ox.getImageData(0,0,W,H).data, P=[], step=Math.max(3,Math.round(dw/220));
+      ox.drawImage(img, bcr.left*DPR, bcr.top*DPR, bcr.width*DPR, bcr.height*DPR);
+      var d=ox.getImageData(0,0,W,H).data, P=[], step=Math.max(3,Math.round(bcr.width*DPR/220));
       for(var y=0;y<H;y+=step)for(var x=0;x<W;x+=step){ var i=(y*W+x)*4;
         if(d[i+3]>120){ var r=d[i],g=d[i+1],b=d[i+2]; var teal=(g>120&&g>=r&&b>r-10&&r<170);
           P.push({x:Math.random()*W,y:Math.random()*H,tx:x,ty:y,teal:teal,dl:Math.random()*0.22}); } }
@@ -223,10 +226,12 @@
       function draw(u){ ctx.clearRect(0,0,W,H);
         for(var k=0;k<P.length;k++){ var p=P[k], t=(u-p.dl)/(1-p.dl); t=t<0?0:t>1?1:t; var e=1-Math.pow(1-t,3);
           ctx.fillStyle=p.teal?'#16C8C3':'#eaf2fb'; ctx.beginPath(); ctx.arc(p.x+(p.tx-p.x)*e,p.y+(p.ty-p.y)*e,rad,0,7); ctx.fill(); } }
-      if(reduce){ draw(1); enterEl.classList.add('show'); return; }
+      function settle(){ img.classList.add('show'); cv.style.opacity='0'; setTimeout(function(){enterEl.classList.add('show');},480); } // particles resolve into the crisp logo
+      if(reduce){ draw(1); settle(); return; }
       var T=2100, t0=performance.now();
-      (function fr(now){ var u=Math.min(1,(now-t0)/T); draw(u); if(u<1)raf=requestAnimationFrame(fr); else enterEl.classList.add('show'); })(t0);
+      (function fr(now){ var u=Math.min(1,(now-t0)/T); draw(u); if(u<1)raf=requestAnimationFrame(fr); else settle(); })(t0);
     }
+    if(img.complete && img.naturalWidth) requestAnimationFrame(begin); else img.onload=function(){requestAnimationFrame(begin);};
     function enter(){ if(entered)return; entered=true; cancelAnimationFrame(raf);
       sp.classList.add('gone'); document.documentElement.style.overflow='';
       try{sessionStorage.setItem('ac_entered','1');}catch(e){}
@@ -239,7 +244,7 @@
 
 <div class="grain"></div>
 <nav id="nav">
-  <a href="index.html"><img src="assets/ac-education-mark.svg" class="logo" alt="Arthur Curtis Education"></a>
+  <a href="index.html"><img src="assets/hummingbird-white.png" class="logo" alt="Arthur Curtis Education"></a>
   <div class="links">
     <a href="approach.html">Approach</a>
     <a href="tools.html">Tools</a>
