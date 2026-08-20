@@ -23,7 +23,7 @@
   var STYLE='\
   .lnav{position:relative;display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:26px}\
   .lnav-brand{display:flex;align-items:center;gap:9px;font-weight:700;font-size:15px;color:var(--ink);letter-spacing:-.01em}\
-  .lnav-brand .mark{width:26px;height:26px;border-radius:7px;background:linear-gradient(130deg,var(--blue),var(--cyan));display:flex;align-items:center;justify-content:center;color:#02101e;font-weight:800;font-size:13px}\
+  .lnav-brand .mark{height:26px;width:auto;display:block}\
   .lnav-brand .by{color:var(--muted-2);font-weight:500;font-size:12px}\
   .lnav-right{display:flex;gap:8px}\
   .lnav-btn{font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--ink);border-radius:9px;padding:8px 13px;display:flex;align-items:center;gap:7px}\
@@ -47,7 +47,7 @@
     head.classList.add('lnav'); head.innerHTML='';
 
     var brand=el('a','lnav-brand'); brand.href=SITE;
-    brand.innerHTML='<span class="mark">ac</span><span class="bt">arthur curtis</span><span class="by">· Fundable Lite</span>';
+    brand.innerHTML='<img class="mark" src="../assets/hummingbird-white.png" alt=""><span class="bt">arthur curtis</span><span class="by">· Fundable Lite</span>';
     head.appendChild(brand);
 
     var right=el('div','lnav-right',
