@@ -119,31 +119,48 @@
 
   /* ---------- SECTION SHELL ---------- */
   section.block{position:relative;z-index:3;padding:120px 0;border-top:1px solid var(--line);background:var(--bg)}
-  .kicker{font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan);font-weight:600;margin-bottom:16px}
+  /* glowing cyan hairline at every section seam — threads the accent through, softens the cliff below the hero */
+  section.block::before,.proof::before,.cta-band::before{content:"";position:absolute;top:-1px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(34,211,238,.42),transparent);z-index:4}
+  .kicker{display:inline-flex;align-items:center;gap:9px;font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan);font-weight:600;margin-bottom:16px}
+  .kicker::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan);animation:pulse 2.4s infinite}
   .h2{font-size:clamp(30px,3.6vw,46px);font-weight:800;letter-spacing:-.02em;line-height:1.08;max-width:680px}
   .lead{color:var(--muted);font-size:18px;max-width:620px;margin-top:18px}
 
   /* proof strip */
   .proof{position:relative;z-index:3;padding:38px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--bg-2)}
   .proof .row{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;text-align:center}
-  .proof .stat .n{font-size:34px;font-weight:800;font-family:var(--mono);background:linear-gradient(110deg,var(--cyan),var(--blue));-webkit-background-clip:text;background-clip:text;color:transparent}
-  .proof .stat .l{font-size:13px;color:var(--muted);margin-top:4px}
+  .proof .row{position:relative}
+  .proof .stat{position:relative;flex:1;min-width:150px}
+  .proof .stat + .stat::before{content:"";position:absolute;left:-12px;top:20%;height:60%;width:1px;background:linear-gradient(180deg,transparent,rgba(120,160,210,.22),transparent)}
+  .proof .stat .n{font-size:clamp(30px,3.4vw,38px);font-weight:800;font-family:var(--mono);letter-spacing:-.01em;background:linear-gradient(110deg,var(--cyan),var(--blue));-webkit-background-clip:text;background-clip:text;color:transparent;font-variant-numeric:tabular-nums}
+  .proof .stat .l{font-size:13px;color:var(--muted);margin-top:6px}
 
-  /* the loop */
+  /* the loop — connected stages, node/edge motif with a pulse travelling the loop */
   .loop{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:56px}
-  .loop .step{background:linear-gradient(180deg,var(--glass),transparent);border:1px solid var(--line);border-radius:16px;padding:26px 22px;position:relative;transition:transform .25s,border-color .25s}
-  .loop .step:hover{transform:translateY(-6px);border-color:rgba(34,211,238,.4)}
-  .loop .step .num{font-family:var(--mono);font-size:13px;color:var(--cyan)}
+  .loop .step{background:linear-gradient(180deg,var(--glass),transparent);border:1px solid var(--line);border-radius:16px;padding:26px 22px;position:relative;
+    transition:opacity .6s ease,transform .5s cubic-bezier(.2,.7,.2,1),border-color .3s,box-shadow .3s}
+  .loop .step:nth-child(2){transition-delay:.07s}
+  .loop .step:nth-child(3){transition-delay:.14s}
+  .loop .step:nth-child(4){transition-delay:.21s}
+  .loop .step:hover{transform:translateY(-6px);border-color:rgba(34,211,238,.45);box-shadow:0 22px 50px rgba(2,10,26,.5);transition-delay:0s}
+  .loop .step .num{font-family:var(--mono);font-size:13px;color:var(--cyan);display:inline-flex;align-items:center;gap:8px}
+  .loop .step .num::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan)}
   .loop .step h3{font-size:19px;margin:14px 0 8px;font-weight:700}
   .loop .step p{font-size:14px;color:var(--muted);line-height:1.55}
-  .loop .step .arrow{position:absolute;right:-13px;top:50%;transform:translateY(-50%);color:var(--cyan);font-size:18px;z-index:2}
+  .loop .step .arrow{position:absolute;right:-17px;top:50%;transform:translateY(-50%);width:24px;height:2px;background:linear-gradient(90deg,rgba(34,211,238,.75),rgba(34,211,238,.12));z-index:2}
+  .loop .step .arrow::after{content:"";position:absolute;top:50%;left:-1px;width:5px;height:5px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan);transform:translateY(-50%);animation:loopPulse 2.6s linear infinite}
+  .loop .step:nth-child(2) .arrow::after{animation-delay:.4s}
+  .loop .step:nth-child(3) .arrow::after{animation-delay:.8s}
   .loop .step:last-child .arrow{display:none}
+  @keyframes loopPulse{0%{left:-1px;opacity:0}12%{opacity:1}82%{opacity:1}100%{left:23px;opacity:0}}
   @media(max-width:860px){.loop{grid-template-columns:1fr 1fr}.loop .step .arrow{display:none}}
+  @media (prefers-reduced-motion: reduce){.loop .step .arrow::after{animation:none;opacity:.8}}
 
   /* tools */
   .tools{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:54px}
-  .tool{background:linear-gradient(160deg,rgba(16,30,54,.6),rgba(8,18,34,.4));border:1px solid var(--line);border-radius:18px;padding:30px;position:relative;overflow:hidden;transition:transform .25s,border-color .25s}
-  .tool:hover{transform:translateY(-6px);border-color:rgba(34,211,238,.4)}
+  .tool{background:linear-gradient(160deg,rgba(16,30,54,.6),rgba(8,18,34,.4));border:1px solid var(--line);border-radius:18px;padding:30px;position:relative;overflow:hidden;transition:opacity .6s ease,transform .45s cubic-bezier(.2,.7,.2,1),border-color .3s,box-shadow .3s}
+  .tools .tool:nth-child(2){transition-delay:.1s}
+  .tool:hover{transform:translateY(-6px);border-color:rgba(34,211,238,.45);box-shadow:0 22px 50px rgba(2,10,26,.5);transition-delay:0s}
   .tool .tag{font-family:var(--mono);font-size:11px;color:var(--cyan);border:1px solid var(--line);border-radius:20px;padding:4px 11px;display:inline-block;margin-bottom:18px}
   .tool h3{font-size:23px;font-weight:700;margin-bottom:10px}
   .tool p{color:var(--muted);font-size:15px;line-height:1.6;margin-bottom:20px}
@@ -280,10 +297,10 @@
 <!-- ============ PROOF STRIP ============ -->
 <div class="proof">
   <div class="wrap row">
-    <div class="stat"><div class="n">£3.5bn+</div><div class="l">levy unspent each year</div></div>
-    <div class="stat"><div class="n">98%</div><div class="l">of plans we build get funded</div></div>
-    <div class="stat"><div class="n">4</div><div class="l">stages, one clear loop</div></div>
-    <div class="stat"><div class="n">100%</div><div class="l">levy visibility, month by month</div></div>
+    <div class="stat"><div class="n" data-to="3.5" data-pre="£" data-suf="bn+" data-dec="1">£0bn+</div><div class="l">levy unspent each year</div></div>
+    <div class="stat"><div class="n" data-to="98" data-suf="%">0%</div><div class="l">of plans we build get funded</div></div>
+    <div class="stat"><div class="n" data-to="4">0</div><div class="l">stages, one clear loop</div></div>
+    <div class="stat"><div class="n" data-to="100" data-suf="%">0%</div><div class="l">levy visibility, month by month</div></div>
   </div>
 </div>
 
@@ -296,9 +313,9 @@
       <p class="lead">We run every engagement through the same four stages — so spend is deliberate, funded, and provable.</p>
     </div>
     <div class="loop">
-      <div class="step reveal"><div class="num">01</div><h3>Goal</h3><p>Define the people outcomes the business actually needs — not a catalogue of courses.</p><span class="arrow">→</span></div>
-      <div class="step reveal"><div class="num">02</div><h3>Map</h3><p>Match roles to standards and providers, and map the path for every learner.</p><span class="arrow">→</span></div>
-      <div class="step reveal"><div class="num">03</div><h3>Fund</h3><p>Engineer the spend so the levy covers it — month by month, before it expires.</p><span class="arrow">→</span></div>
+      <div class="step reveal"><div class="num">01</div><h3>Goal</h3><p>Define the people outcomes the business actually needs — not a catalogue of courses.</p><span class="arrow"></span></div>
+      <div class="step reveal"><div class="num">02</div><h3>Map</h3><p>Match roles to standards and providers, and map the path for every learner.</p><span class="arrow"></span></div>
+      <div class="step reveal"><div class="num">03</div><h3>Fund</h3><p>Engineer the spend so the levy covers it — month by month, before it expires.</p><span class="arrow"></span></div>
       <div class="step reveal"><div class="num">04</div><h3>Report</h3><p>Prove impact with clear reporting leadership can trust and act on.</p></div>
     </div>
   </div>
@@ -337,7 +354,6 @@
   </div>
 </footer>
 
-<div class="mock-flag">PROTOTYPE · living-gradient hero</div>
 
 <script>
 /* ---------- NAV scroll ---------- */
@@ -347,6 +363,18 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>30));
 /* ---------- reveal on scroll ---------- */
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')}),{threshold:.15});
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+/* ---------- proof stats count up when they scroll into view ---------- */
+const reduceMo=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function countUp(el){
+  const to=parseFloat(el.dataset.to),pre=el.dataset.pre||'',suf=el.dataset.suf||'',dec=+(el.dataset.dec||0);
+  const set=v=>el.textContent=pre+v.toFixed(dec).replace(/\B(?=(\d{3})+(?!\d))/g,',')+suf;
+  if(reduceMo){set(to);return;}
+  const t0=performance.now(),dur=1300;
+  (function step(t){const p=Math.min(1,(t-t0)/dur),e=1-Math.pow(1-p,3);set(to*e);if(p<1)requestAnimationFrame(step);})(t0);
+}
+const pio=new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){countUp(e.target);o.unobserve(e.target);}}),{threshold:.6});
+document.querySelectorAll('.proof .n[data-to]').forEach(el=>pio.observe(el));
 
 /* ---------- LEVY MATH + animated counters ---------- */
 const $=id=>document.getElementById(id);
