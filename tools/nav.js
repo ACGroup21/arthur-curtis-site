@@ -39,7 +39,14 @@
   .lnav-panel a:hover{background:rgba(34,211,238,.09);color:var(--cyan)}\
   .lnav-panel a.on{color:var(--cyan);background:rgba(34,211,238,.07)}\
   .lnav-panel a.on::after{content:" ·";color:var(--cyan)}\
-  @media(max-width:520px){.lnav-brand .bt,.lnav-brand .by{display:none}.lnav-panel{right:0;left:0;min-width:0}}\
+  @media(max-width:520px){.lnav-brand .by{display:none}.lnav-panel{right:0;left:0;min-width:0}}\
+  .lite-foot{margin-top:48px;padding:26px 2px 8px;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}\
+  .lite-foot .ff-brand{display:flex;align-items:center;gap:12px}\
+  .lite-foot .ff-logo{height:22px;width:auto;display:block;opacity:.9}\
+  .lite-foot .ff-by{font-size:11px;color:var(--muted-2)}\
+  .lite-foot .ff-by b{color:var(--muted);font-weight:600}\
+  .lite-foot .ff-links a{font-size:12.5px;color:var(--muted);text-decoration:none}\
+  .lite-foot .ff-links a:hover{color:var(--cyan)}\
   ';
 
   function here(){ return (window.__acTool || location.pathname.split('/').pop()||'').toLowerCase(); }
@@ -83,11 +90,21 @@
   }
   function closeAll(){ document.querySelectorAll('.lnav-panel').forEach(function(p){ p.classList.remove('open'); }); }
 
+  function buildFooter(){
+    if(document.querySelector('.lite-foot')) return;
+    var app=document.querySelector('.app'); if(!app) return;
+    var f=el('footer','lite-foot');
+    f.innerHTML='<div class="ff-brand"><img class="ff-logo" src="../assets/fundable-logo.svg" alt="Fundable"><span class="ff-by">built by <b>AC Digital</b></span></div>'+
+      '<div class="ff-links"><a href="'+SITE+'">arthurcurtis.com &rarr;</a></div>';
+    app.appendChild(f);
+  }
+
   function mount(){
     if(document.getElementById('lnav-style')===null || !document.getElementById('lnav-style')){
       var st=el('style'); st.id='lnav-style'; st.textContent=STYLE; document.head.appendChild(st);
     }
     build();
+    buildFooter();
   }
   window.ACnav={ mount:mount };
   if(document.readyState!=='loading') mount(); else document.addEventListener('DOMContentLoaded', mount);
