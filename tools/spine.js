@@ -10,16 +10,24 @@
   if(!window.AC){ return; }
   var S = AC.scenario;
 
-  /* the guided journey — the order the tools flow in; each tool's spine offers the next step.
+  /* the journey is a web, not a rail — each tool recommends the most relevant next steps.
      The scenario carries forward automatically via localStorage (same origin), no URL needed. */
-  var JOURNEY = [
-    ['what-can-you-claim.html','What you can claim'],
-    ['jd-matcher.html','JD Matcher'],
-    ['status-checker.html','Status check'],
-    ['ni-calculator.html','NI savings'],
-    ['expiry-clock.html','Expiry clock'],
-    ['is-levy-working.html','Levy health']
-  ];
+  var TOOLMETA = {
+    'what-can-you-claim.html':{label:'What you can claim', blurb:'Every grant & saving on a hire', prev:'£5,558 unlocked'},
+    'jd-matcher.html':        {label:'JD Matcher',         blurb:'Role → closest standards',      prev:'92% match'},
+    'status-checker.html':    {label:'Status Checker',     blurb:'Funded? Band? Duration?',       prev:'✅ funded · £15k'},
+    'ni-calculator.html':     {label:'NI Savings',         blurb:'0% NI on an under-25',          prev:'£4,558 / yr'},
+    'expiry-clock.html':      {label:'Expiry Clock',       blurb:'What expires if unspent',       prev:'£27,500 at risk'},
+    'is-levy-working.html':   {label:'Levy health',        blurb:'Honest 2-minute diagnostic',   prev:'Score 6/10'}
+  };
+  var NEXT = {
+    'what-can-you-claim.html':['jd-matcher.html','ni-calculator.html','is-levy-working.html'],
+    'jd-matcher.html':        ['status-checker.html','what-can-you-claim.html'],
+    'status-checker.html':    ['what-can-you-claim.html','jd-matcher.html'],
+    'ni-calculator.html':     ['what-can-you-claim.html','expiry-clock.html'],
+    'expiry-clock.html':      ['what-can-you-claim.html','is-levy-working.html'],
+    'is-levy-working.html':   ['what-can-you-claim.html','expiry-clock.html']
+  };
 
   /* lead capture endpoint — FormSubmit: no account/key needed. The FIRST submission
      triggers a one-time confirmation email to this address; click it to activate.
@@ -70,6 +78,18 @@
   .lead-fall a{color:var(--cyan)}\
   .lead-x{position:absolute;top:12px;right:14px;background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer;line-height:1}\
   .lead-x:hover{color:var(--ink)}\
+  .spine-next{display:none;margin-top:10px}\
+  .spine-next.open{display:block;animation:sn-in .22s ease}\
+  @keyframes sn-in{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}\
+  .sn-head{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-2);margin-bottom:8px}\
+  .sn-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:9px}\
+  .sn-card{display:block;text-decoration:none;background:rgba(16,30,54,.55);border:1px solid var(--line);border-radius:12px;padding:12px 13px;transition:border-color .2s,transform .2s,background .2s}\
+  .sn-card:hover{border-color:rgba(34,211,238,.45);transform:translateY(-2px);background:rgba(16,30,54,.78)}\
+  .sn-t{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:3px}\
+  .sn-b{font-size:12px;color:var(--muted);line-height:1.4}\
+  .sn-p{font-family:var(--mono);font-size:11.5px;color:var(--cyan);margin-top:7px}\
+  .sn-talk{background:linear-gradient(160deg,rgba(37,99,235,.2),rgba(34,211,238,.08));border-color:rgba(34,211,238,.32)}\
+  .sn-talk .sn-t{color:var(--cyan-soft)}\
   ';
 
   function injectStyle(){
@@ -92,22 +112,24 @@
     var chips = parts.length
       ? parts.map(function(t){return '<span class="spine-chip">'+t+'</span>';}).join('')
       : '<span class="spine-empty">No details yet — they\'ll carry across as you use the tools.</span>';
-    var cur=(location.pathname.split('/').pop()||'').toLowerCase(), idx=-1;
-    for(var i=0;i<JOURNEY.length;i++){ if(JOURNEY[i][0].toLowerCase()===cur){ idx=i; break; } }
-    var nextHtml='';
-    if(idx>-1 && idx<JOURNEY.length-1){ var nx=JOURNEY[idx+1]; nextHtml='<a class="spine-btn primary" href="'+nx[0]+'">Next: '+nx[1]+' &rarr;</a>'; }
-    else if(idx===JOURNEY.length-1){ nextHtml='<button class="spine-btn primary" data-act="email">Get your plan &rarr;</button>'; }
+    var cur=(location.pathname.split('/').pop()||'').toLowerCase();
+    var inTool = TOOLMETA.hasOwnProperty(cur);
+    var recs = NEXT[cur] || Object.keys(TOOLMETA).filter(function(f){return f!==cur;}).slice(0,3);
+    var recCards = recs.map(function(f){ var m=TOOLMETA[f]; if(!m) return '';
+      return '<a class="sn-card" href="'+f+'"><div class="sn-t">'+m.label+' &rarr;</div><div class="sn-b">'+m.blurb+'</div><div class="sn-p">'+m.prev+'</div></a>'; }).join('');
+    recCards += '<a class="sn-card sn-talk" href="../contact.html"><div class="sn-t">Talk to us &rarr;</div><div class="sn-b">Turn this into a funded, provable plan.</div></a>';
     host.innerHTML =
       '<div class="spine-bar">'+
         '<span class="lbl">Your details</span>'+
         '<div class="spine-chips">'+chips+'</div>'+
         '<div class="spine-acts">'+
-          nextHtml+
-          (idx===JOURNEY.length-1?'':'<button class="spine-btn" data-act="email">Email my results</button>')+
+          (inTool?'<button class="spine-btn primary" data-act="next">Where to next? &rarr;</button>':'')+
+          '<button class="spine-btn" data-act="email">Email my results</button>'+
           '<button class="spine-btn" data-act="link">Copy link</button>'+
           (parts.length?'<button class="spine-btn" data-act="clear">Clear</button>':'')+
         '</div>'+
-      '</div>';
+      '</div>'+
+      (inTool?'<div class="spine-next"><div class="sn-head">Where to next?</div><div class="sn-cards">'+recCards+'</div></div>':'');
     host.querySelectorAll('.spine-btn').forEach(function(b){
       if(b.getAttribute('data-act')) b.addEventListener('click', function(){ act(b.getAttribute('data-act'), b); });
     });
@@ -125,6 +147,8 @@
       try{ localStorage.removeItem('ac_scenario'); }catch(e){}
       refresh();
       dispatchEvent(new Event('scenario:change'));
+    } else if(a==='next'){
+      var p=document.querySelector('.spine-next'); if(p) p.classList.toggle('open');
     }
   }
 
@@ -142,6 +166,9 @@
       else { document.body.insertBefore(HOST, document.body.firstChild); }
     }
     render(HOST);
+    if(!mount._bound){ mount._bound=true;
+      document.addEventListener('click', function(e){ var p=document.querySelector('.spine-next.open'); if(p && !(e.target.closest && e.target.closest('#spine'))) p.classList.remove('open'); });
+    }
   }
   function refresh(){ if(HOST) render(HOST); }
 
