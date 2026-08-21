@@ -495,7 +495,7 @@ requestAnimationFrame(()=>{
     cx.restore();
     cx.strokeStyle='rgba(240,198,90,.5)'; cx.lineWidth=1.4*DPR; roundRect(potL,l.topY,l.potW,ph,7*DPR); cx.stroke();
     // TAP (rigid, flush to the pot) → HOSE in an L to the pool bottom, coupled at both ends (fire-hose style)
-    var tapEndX=potR+(l.poolX0-potR)*0.30, hoseY=l.botY-ph*0.10, poolConnX=l.poolX0+pw*0.04, hoseMidX=(tapEndX+poolConnX)/2;
+    var tapEndX=potR+(l.poolX0-potR)*0.30, hoseY=l.botY-ph*0.10, poolConnX=l.poolX0, hoseMidX=(tapEndX+poolConnX)/2;
     function line3(){ cx.beginPath(); cx.moveTo(potR,l.tubeY); cx.lineTo(tapEndX,l.tubeY); cx.lineTo(tapEndX,hoseY); cx.lineTo(poolConnX,hoseY); }
     cx.lineJoin='round'; cx.lineCap='butt';
     line3(); cx.strokeStyle='rgba(240,198,90,.5)'; cx.lineWidth=th; cx.stroke();                   // wall
