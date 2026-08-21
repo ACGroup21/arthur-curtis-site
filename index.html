@@ -444,12 +444,13 @@ const FS=[
 'vec2 sp=vec2((xN-0.5)*ar*1.7, docY/max(uHero,1.0)*1.05 - iTime*0.045);', // full-width, drifting down
 'float warp=fbm(sp+iTime*0.02);',
 'float n=fbm(sp*1.5+vec2(warp,warp*0.6));',
-'n=smoothstep(0.16,0.96,n);',
-'float pres=mix(0.14,1.0,smoothstep(0.02,0.5,ny));',   // starts sparse at the top, fills in as you scroll down
-'float smoke=n*pres;',
-'vec3 navy=vec3(0.02,0.06,0.15),teal=vec3(0.03,0.42,0.60),cyan=vec3(0.50,0.86,0.96);',
-'vec3 col=mix(navy,teal,smoke);',
-'col=mix(col,cyan,smoothstep(0.62,1.0,smoke)*0.5*pres);',
+'n=smoothstep(0.05,0.9,n);',
+'float fill=smoothstep(0.0,0.62,ny);',                 // continuous vertical fill: sparse top -> filled lower
+'vec3 navy=vec3(0.02,0.06,0.15),teal=vec3(0.04,0.40,0.58),cyan=vec3(0.50,0.86,0.96);',
+'vec3 base=mix(navy, teal*0.55, fill);',               // base gradient never a black void
+'float cloud=n*mix(0.35,1.0,fill);',                   // cloud texture strengthens as you descend
+'vec3 col=mix(base, teal, cloud*0.7);',
+'col=mix(col,cyan,smoothstep(0.6,1.0,cloud)*0.45*fill);',
 'gl_FragColor=vec4(col,1.0);}'
 ].join('\n');
 (function(){
