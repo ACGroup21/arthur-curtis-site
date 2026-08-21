@@ -47,7 +47,7 @@
     head.classList.add('lnav'); head.innerHTML='';
 
     var brand=el('a','lnav-brand'); brand.href=SITE;
-    brand.innerHTML='<img class="mark" src="../assets/hummingbird-white.png" alt=""><span class="bt">arthur curtis</span><span class="by">· Fundable Lite</span>';
+    brand.innerHTML='<img class="mark" src="../assets/ac-education-mark.svg" alt=""><span class="bt">arthur curtis</span><span class="by">· Fundable Lite</span>';
     head.appendChild(brand);
 
     var right=el('div','lnav-right',

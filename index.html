@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Arthur Curtis — Make your levy work</title>
-<link rel="icon" type="image/png" href="assets/favicon-hummingbird.png">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -66,8 +66,8 @@
 
   /* ---------- HERO ---------- */
   .hero{position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden}
-  /* living-gradient background canvas, scoped to the hero */
-  #bgCanvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+  /* all-pervasive atmosphere — fixed behind the whole page */
+  #bgCanvas{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
   .hero::after{ /* vignette to seat the copy + seam into the dark page below */
     content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
     background:linear-gradient(90deg,rgba(5,16,31,.55),transparent 42%),
@@ -118,7 +118,7 @@
   @media(max-width:900px){.hero .wrap{grid-template-columns:1fr;gap:34px}.levy-card{order:2}}
 
   /* ---------- SECTION SHELL ---------- */
-  section.block{position:relative;z-index:3;padding:120px 0;border-top:1px solid var(--line);background:var(--bg)}
+  section.block{position:relative;z-index:3;padding:120px 0;border-top:1px solid var(--line);background:rgba(6,16,31,.4)}
   /* glowing cyan hairline at every section seam — threads the accent through, softens the cliff below the hero */
   section.block::before,.proof::before,.cta-band::before{content:"";position:absolute;top:-1px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(34,211,238,.42),transparent);z-index:4}
   .kicker{display:inline-flex;align-items:center;gap:9px;font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan);font-weight:600;margin-bottom:16px}
@@ -127,7 +127,7 @@
   .lead{color:var(--muted);font-size:18px;max-width:620px;margin-top:18px}
 
   /* proof strip */
-  .proof{position:relative;z-index:3;padding:38px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--bg-2)}
+  .proof{position:relative;z-index:3;padding:38px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:rgba(4,11,22,.5)}
   .proof .row{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;text-align:center}
   .proof .row{position:relative}
   .proof .stat{position:relative;flex:1;min-width:150px}
@@ -170,11 +170,11 @@
   @media(max-width:760px){.tools{grid-template-columns:1fr}}
 
   /* CTA band */
-  .cta-band{position:relative;z-index:3;text-align:center;padding:110px 0;background:radial-gradient(80% 130% at 50% 0%,rgba(37,99,235,.18),transparent 60%),var(--bg)}
+  .cta-band{position:relative;z-index:3;text-align:center;padding:110px 0;background:radial-gradient(80% 130% at 50% 0%,rgba(37,99,235,.18),transparent 60%),rgba(6,16,31,.4)}
   .cta-band h2{font-size:clamp(32px,4.4vw,52px);font-weight:800;letter-spacing:-.02em;max-width:720px;margin:0 auto 22px}
   .cta-band p{color:var(--muted);font-size:18px;max-width:520px;margin:0 auto 34px}
 
-  footer{position:relative;z-index:3;border-top:1px solid var(--line);padding:50px 0 40px;color:var(--muted);font-size:13.5px;background:var(--bg)}
+  footer{position:relative;z-index:3;border-top:1px solid var(--line);padding:50px 0 40px;color:var(--muted);font-size:13.5px;background:rgba(4,11,22,.5)}
   footer .row{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:center}
   footer img{height:30px;opacity:.9}
 
@@ -243,8 +243,9 @@
 </script>
 
 <div class="grain"></div>
+<canvas id="bgCanvas"></canvas>
 <nav id="nav">
-  <a href="index.html"><img src="assets/hummingbird-white.png" class="logo" alt="Arthur Curtis Education"></a>
+  <a href="index.html"><img src="assets/ac-education-mark.svg" class="logo" alt="Arthur Curtis Education"></a>
   <div class="links">
     <a href="approach.html">Approach</a>
     <a href="tools.html">Tools</a>
@@ -256,7 +257,6 @@
 
 <!-- ============ HERO ============ -->
 <header class="hero">
-  <canvas id="bgCanvas"></canvas>
   <div class="wrap">
     <div class="hero-copy">
       <span class="eyebrow"><span class="dot"></span>Apprenticeship levy, made to work</span>
@@ -431,23 +431,25 @@ requestAnimationFrame(()=>{
 const VS='attribute vec2 p;void main(){gl_Position=vec4(p,0.0,1.0);}';
 const FS=[
 'precision highp float;',
-'uniform vec2 iResolution;uniform float iTime;',
+'uniform vec2 iResolution;uniform float iTime,uScroll,uHero,uDoc;',
 'float hash(vec2 p){p=fract(p*vec2(123.34,345.45));p+=dot(p,p+34.345);return fract(p.x*p.y);}',
 'float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.0-2.0*f);',
 'float a=hash(i),b=hash(i+vec2(1.0,0.0)),c=hash(i+vec2(0.0,1.0)),d=hash(i+vec2(1.0,1.0));',
 'return mix(mix(a,b,f.x),mix(c,d,f.x),f.y);}',
 'float fbm(vec2 p){float v=0.0,a=0.5;for(int i=0;i<5;i++){v+=a*noise(p);p*=2.02;a*=0.5;}return v;}',
-'void main(){vec2 uv=gl_FragCoord.xy/iResolution.xy;float ar=iResolution.x/iResolution.y;vec2 p=uv;p.x*=ar;',
-'float t=iTime*0.045;',
-'vec2 q=vec2(fbm(p*1.5+vec2(0.0,t)),fbm(p*1.5+vec2(5.2,-t)));',
-'float n=fbm(p*1.7+q*1.5+t*0.5);',
-'vec2 hs=vec2((0.60+0.12*sin(t*1.3))*ar,0.44+0.12*cos(t*1.05));',
-'float glow=smoothstep(0.95,0.0,length(p-hs));',
-'vec3 navy=vec3(0.015,0.055,0.14),teal=vec3(0.03,0.40,0.58),cyan=vec3(0.52,0.85,0.96);',
-'vec3 col=mix(navy,teal,smoothstep(0.18,0.82,n));',
-'col=mix(col,cyan,glow*0.5*smoothstep(0.30,0.92,n));',
-'col+=cyan*glow*0.12;',
-'col*=1.0-0.46*length(uv-vec2(0.5));',                 // vignette -> seats copy, seams into page
+'void main(){vec2 fc=gl_FragCoord.xy;float xN=fc.x/iResolution.x;',
+'float docY=uScroll+(iResolution.y-fc.y);',            // pixels from the top of the document
+'float ny=docY/max(uDoc,1.0);',
+'float ar=iResolution.x/iResolution.y;',
+'vec2 sp=vec2((xN-0.5)*ar*1.7, docY/max(uHero,1.0)*1.05 - iTime*0.045);', // full-width, drifting down
+'float warp=fbm(sp+iTime*0.02);',
+'float n=fbm(sp*1.5+vec2(warp,warp*0.6));',
+'n=smoothstep(0.16,0.96,n);',
+'float pres=mix(1.0,0.8,smoothstep(0.0,0.6,ny));',     // all-pervasive: everywhere, a touch calmer lower
+'float smoke=n*pres;',
+'vec3 navy=vec3(0.02,0.06,0.15),teal=vec3(0.03,0.42,0.60),cyan=vec3(0.50,0.86,0.96);',
+'vec3 col=mix(navy,teal,smoke);',
+'col=mix(col,cyan,smoothstep(0.62,1.0,smoke)*0.5*pres);',
 'gl_FragColor=vec4(col,1.0);}'
 ].join('\n');
 (function(){
@@ -461,13 +463,14 @@ const FS=[
   gl.useProgram(pr);
   const b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
   const lo=gl.getAttribLocation(pr,'p');gl.enableVertexAttribArray(lo);gl.vertexAttribPointer(lo,2,gl.FLOAT,false,0,0);
-  const uR=gl.getUniformLocation(pr,'iResolution'),uT=gl.getUniformLocation(pr,'iTime');
+  const uR=gl.getUniformLocation(pr,'iResolution'),uT=gl.getUniformLocation(pr,'iTime'),uS=gl.getUniformLocation(pr,'uScroll'),uH=gl.getUniformLocation(pr,'uHero'),uD=gl.getUniformLocation(pr,'uDoc');
   const DPR=Math.min(1.5,devicePixelRatio||1);
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  function draw(t){gl.uniform2f(uR,cvs.width,cvs.height);gl.uniform1f(uT,t);gl.drawArrays(gl.TRIANGLES,0,3);}
-  function rs(){const w=cvs.clientWidth||innerWidth,h=cvs.clientHeight||innerHeight;cvs.width=Math.floor(w*DPR);cvs.height=Math.floor(h*DPR);gl.viewport(0,0,cvs.width,cvs.height);if(reduced)draw(6.0);}
+  function draw(t){gl.uniform2f(uR,cvs.width,cvs.height);gl.uniform1f(uT,t);gl.uniform1f(uS,(scrollY||0)*DPR);gl.uniform1f(uH,innerHeight*DPR);gl.uniform1f(uD,Math.max(document.body.scrollHeight,innerHeight*2)*DPR);gl.drawArrays(gl.TRIANGLES,0,3);}
+  function rs(){cvs.width=Math.floor(innerWidth*DPR);cvs.height=Math.floor(innerHeight*DPR);gl.viewport(0,0,cvs.width,cvs.height);if(reduced)draw(6.0);}
   addEventListener('resize',rs);rs();
   addEventListener('load',()=>setTimeout(rs,60));
+  if(reduced)addEventListener('scroll',()=>draw(6.0),{passive:true});
   if(!reduced){const t0=performance.now();(function fr(){draw((performance.now()-t0)/1000);requestAnimationFrame(fr);})();}
 })();
 </script>
