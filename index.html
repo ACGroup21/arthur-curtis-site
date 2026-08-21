@@ -459,10 +459,11 @@ requestAnimationFrame(()=>{
   function drop(anim){
     targetA=appN(); var show=Math.min(targetA,cap); people=[];
     for(var i=0;i<show;i++){ people.push({slot:i, pop:anim?0:1, delay:anim?260+i*70:0, anointed:false}); }
-    // anoint a random cohort of 5
+    // first cohort scales with the pool (~40%): 5 in pool -> 2 selected, 13 -> 5
+    var selN=Math.round(show*0.4);
     var idx=[]; for(var i=0;i<show;i++) idx.push(i);
     for(var i=idx.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)), t=idx[i]; idx[i]=idx[j]; idx[j]=t; }
-    for(var i=0;i<Math.min(5,show);i++) people[idx[i]].anointed=true;
+    for(var i=0;i<Math.min(selN,show);i++) people[idx[i]].anointed=true;
   }
   function roundRect(x,y,w,h,r){ cx.beginPath();cx.moveTo(x+r,y);cx.arcTo(x+w,y,x+w,y+h,r);cx.arcTo(x+w,y+h,x,y+h,r);cx.arcTo(x,y+h,x,y,r);cx.arcTo(x,y,x+w,y,r);cx.closePath(); }
   function person(x,y,s,a){ cx.globalAlpha=a;
@@ -493,40 +494,37 @@ requestAnimationFrame(()=>{
     for(var xx=potL; xx<=potR; xx+=5*DPR){ var wy=l.topY+ph*0.40+Math.sin(xx*0.08+flowPhase*0.005)*1.2*DPR; if(xx<=potL)cx.moveTo(xx,wy);else cx.lineTo(xx,wy); } cx.stroke();
     cx.restore();
     cx.strokeStyle='rgba(240,198,90,.5)'; cx.lineWidth=1.4*DPR; roundRect(potL,l.topY,l.potW,ph,7*DPR); cx.stroke();
-    // feeder pipe: attaches flush to the pot, runs out, bends DOWN in the gap (well before the pool)
-    var bendX=potR+(l.poolX0-potR)*0.5, spoutY=l.tubeY+ph*0.16;
+    // TAP (rigid, flush to the pot) → HOSE in an L to the pool bottom, coupled at both ends (fire-hose style)
+    var tapEndX=potR+(l.poolX0-potR)*0.30, hoseY=l.botY-ph*0.10, poolConnX=l.poolX0+pw*0.04, hoseMidX=(tapEndX+poolConnX)/2;
+    function line3(){ cx.beginPath(); cx.moveTo(potR,l.tubeY); cx.lineTo(tapEndX,l.tubeY); cx.lineTo(tapEndX,hoseY); cx.lineTo(poolConnX,hoseY); }
     cx.lineJoin='round'; cx.lineCap='butt';
-    cx.beginPath(); cx.moveTo(potR,l.tubeY); cx.lineTo(bendX,l.tubeY); cx.lineTo(bendX,spoutY);
-    cx.strokeStyle='rgba(240,198,90,.5)'; cx.lineWidth=th; cx.stroke();                 // pipe wall
-    cx.strokeStyle='rgba(240,198,90,.32)'; cx.lineWidth=Math.max(2*DPR,th-4*DPR); cx.stroke(); // liquid
-    cx.strokeStyle='rgba(250,224,150,.55)'; cx.lineWidth=Math.max(1.5*DPR,th-8*DPR);   // flowing highlight
+    line3(); cx.strokeStyle='rgba(240,198,90,.5)'; cx.lineWidth=th; cx.stroke();                   // wall
+    line3(); cx.strokeStyle='rgba(240,198,90,.32)'; cx.lineWidth=Math.max(2*DPR,th-4*DPR); cx.stroke(); // liquid
+    line3(); cx.strokeStyle='rgba(250,224,150,.55)'; cx.lineWidth=Math.max(1.5*DPR,th-8*DPR);    // flow
     cx.setLineDash([5*DPR,18*DPR]); cx.lineDashOffset=-flowPhase*0.12; cx.stroke(); cx.setLineDash([]);
-    // pour: liquid arcs from the spout, across the gap, into the pool
-    var landX=l.poolX0+pw*0.06, landY=poolLiqY, ctrlX=(bendX+landX)/2, ctrlY=Math.max(spoutY,landY)+ph*0.05;
-    cx.lineCap='round';
-    cx.beginPath(); cx.moveTo(bendX,spoutY); cx.quadraticCurveTo(ctrlX,ctrlY,landX,landY);
-    cx.strokeStyle='rgba(240,198,90,.45)'; cx.lineWidth=Math.max(3*DPR,th*0.4); cx.stroke();
-    cx.strokeStyle='rgba(250,224,150,.6)'; cx.lineWidth=Math.max(1.5*DPR,th*0.2);
-    cx.setLineDash([4*DPR,13*DPR]); cx.lineDashOffset=-flowPhase*0.14; cx.stroke(); cx.setLineDash([]);
-    cx.lineJoin='miter'; cx.lineCap='butt';
+    cx.lineJoin='miter';
+    // brass couplings where the hose connects at each end (like a fire hose)
+    cx.fillStyle='rgba(255,228,150,.95)'; cx.strokeStyle='rgba(170,130,45,.8)'; cx.lineWidth=1*DPR;
+    var cw=th+5*DPR, cl=Math.max(4*DPR,th*0.55);
+    cx.fillRect(tapEndX-cw/2, l.tubeY+th*0.7, cw, cl); cx.strokeRect(tapEndX-cw/2, l.tubeY+th*0.7, cw, cl);      // tap ↔ hose
+    cx.fillRect(poolConnX-th*0.7-cl, hoseY-cw/2, cl, cw); cx.strokeRect(poolConnX-th*0.7-cl, hoseY-cw/2, cl, cw); // hose ↔ pool
     // people appearing in the pool — 5 anointed (gold + halo)
     for(var i=0;i<people.length;i++){ var pp=people[i];
       if(pp.delay>0){ pp.delay-=dt; continue; }
       pp.pop=Math.min(1,pp.pop+dt*0.006);
       var sp=slot(pp.slot,l), e=1-Math.pow(1-pp.pop,3);
-      if(pp.anointed){ cx.strokeStyle='rgba(240,198,90,'+(0.95*e)+')'; cx.lineWidth=1.6*DPR;
-        cx.beginPath(); cx.ellipse(sp.x, sp.y-s*1.02, s*0.34, s*0.13, 0, 0, 7); cx.stroke(); }
-      cx.fillStyle = pp.anointed ? '#f0c65a' : '#22d3ee';
+      cx.fillStyle = pp.anointed ? '#f0c65a' : '#22d3ee';   // selected = tank-gold, rest cyan (no halo)
       cx.shadowColor = pp.anointed ? 'rgba(240,198,90,.7)' : 'rgba(34,211,238,.55)'; cx.shadowBlur=6*DPR;
       person(sp.x,sp.y,s*(0.55+0.45*e),e); cx.shadowBlur=0; }
     // labels
     cx.textAlign='center';
     cx.fillStyle='rgba(240,198,90,.9)'; cx.font='600 '+(10.5*DPR)+'px '+MONO; cx.fillText('levy pot', l.potX, l.botY+14*DPR);
+    cx.fillText('levy spend', hoseMidX, l.botY+14*DPR);
     cx.fillStyle='#7fdbe8'; cx.font='600 '+(11*DPR)+'px '+MONO;
     cx.fillText((targetA||0)+' in your talent pool'+(targetA>cap?' · each ≈'+Math.ceil(targetA/cap):''), (l.poolX0+l.poolX1)/2, l.botY+14*DPR);
-    var anN=Math.min(5, people.length);
-    if(anN>0){ cx.fillStyle='rgba(240,198,90,.95)'; cx.font='600 '+(9.5*DPR)+'px '+MONO;
-      cx.fillText('✦ '+anN+' anointed · first cohort selected', (l.poolX0+l.poolX1)/2, l.botY+27*DPR); }
+    var selN=0; for(var i=0;i<people.length;i++) if(people[i].anointed) selN++;
+    if(selN>0){ cx.fillStyle='rgba(240,198,90,.95)'; cx.font='600 '+(9.5*DPR)+'px '+MONO;
+      cx.fillText('✦ first cohort: '+selN+' selected · ~£'+fmt(selN*9000)+' (avg £9k each)', (l.poolX0+l.poolX1)/2, l.botY+27*DPR); }
   }
   function init(){ if(inited) return; inited=true; fit(); drop(!reduced); }
   fit(); addEventListener('resize',fit); addEventListener('load',function(){ setTimeout(init,80); }); setTimeout(init,350);
