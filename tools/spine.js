@@ -10,6 +10,17 @@
   if(!window.AC){ return; }
   var S = AC.scenario;
 
+  /* the guided journey — the order the tools flow in; each tool's spine offers the next step.
+     The scenario carries forward automatically via localStorage (same origin), no URL needed. */
+  var JOURNEY = [
+    ['what-can-you-claim.html','What you can claim'],
+    ['jd-matcher.html','JD Matcher'],
+    ['status-checker.html','Status check'],
+    ['ni-calculator.html','NI savings'],
+    ['expiry-clock.html','Expiry clock'],
+    ['is-levy-working.html','Levy health']
+  ];
+
   /* lead capture endpoint — FormSubmit: no account/key needed. The FIRST submission
      triggers a one-time confirmation email to this address; click it to activate.
      Swap for a Formspree/Web3Forms URL or a different inbox any time. */
@@ -81,18 +92,24 @@
     var chips = parts.length
       ? parts.map(function(t){return '<span class="spine-chip">'+t+'</span>';}).join('')
       : '<span class="spine-empty">No details yet — they\'ll carry across as you use the tools.</span>';
+    var cur=(location.pathname.split('/').pop()||'').toLowerCase(), idx=-1;
+    for(var i=0;i<JOURNEY.length;i++){ if(JOURNEY[i][0].toLowerCase()===cur){ idx=i; break; } }
+    var nextHtml='';
+    if(idx>-1 && idx<JOURNEY.length-1){ var nx=JOURNEY[idx+1]; nextHtml='<a class="spine-btn primary" href="'+nx[0]+'">Next: '+nx[1]+' &rarr;</a>'; }
+    else if(idx===JOURNEY.length-1){ nextHtml='<button class="spine-btn primary" data-act="email">Get your plan &rarr;</button>'; }
     host.innerHTML =
       '<div class="spine-bar">'+
         '<span class="lbl">Your details</span>'+
         '<div class="spine-chips">'+chips+'</div>'+
         '<div class="spine-acts">'+
+          nextHtml+
+          (idx===JOURNEY.length-1?'':'<button class="spine-btn" data-act="email">Email my results</button>')+
           '<button class="spine-btn" data-act="link">Copy link</button>'+
-          '<button class="spine-btn primary" data-act="email">Email my results</button>'+
           (parts.length?'<button class="spine-btn" data-act="clear">Clear</button>':'')+
         '</div>'+
       '</div>';
     host.querySelectorAll('.spine-btn').forEach(function(b){
-      b.addEventListener('click', function(){ act(b.getAttribute('data-act'), b); });
+      if(b.getAttribute('data-act')) b.addEventListener('click', function(){ act(b.getAttribute('data-act'), b); });
     });
   }
 

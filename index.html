@@ -302,7 +302,7 @@
 
       <div class="lc-foot">
         <span class="note">Indicative. 0.5% of pay bill, less £15k allowance, +10% government top-up. Apprenticeships at ~£9k avg.</span>
-        <a href="tools.html">See the tools →</a>
+        <a href="tools/what-can-you-claim.html">See what you can claim →</a>
       </div>
     </div>
   </div>
@@ -369,6 +369,7 @@
 </footer>
 
 
+<script src="tools/engine.js"></script>
 <script>
 /* ---------- NAV scroll ---------- */
 const nav=document.getElementById('nav');
@@ -405,15 +406,13 @@ function animateTo(el,target,suffix=''){
 }
 function compute(){
   const paybill=+$('paybill').value;
-  const pot=Math.max(0,paybill*0.005-15000);
-  const funds=pot*1.10;
-  const people=Math.floor(funds/9000);
-  const month=funds/12;
+  const r=AC.levy(paybill);                          // shared engine — one source of truth
   $('paybillOut').textContent=fmt(paybill);
-  animateTo($('potOut'),pot);
-  animateTo($('fundsOut'),funds);
-  animateTo($('peopleOut'),people);
-  animateTo($('monthOut'),month);
+  animateTo($('potOut'),r.pot);
+  animateTo($('fundsOut'),r.funds);
+  animateTo($('peopleOut'),r.apprentices);
+  animateTo($('monthOut'),r.monthly);
+  try{ AC.scenario.set({payBill:paybill}); }catch(e){} // carry it into the tools journey
 }
 $('paybill').addEventListener('input',compute);
 

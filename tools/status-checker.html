@@ -93,9 +93,10 @@
     Object.keys(s).forEach(function(k){ STD.push(s[k]); byRef[k]=s[k]; });
     STD.sort(function(a,b){return (a.name||'').localeCompare(b.name||'');});
     $('count').textContent=STD.length+' standards · data accurate as of '+data.meta.accurate;
-    // deep link ?ref=ST0119
+    // deep link ?ref=ST0119, else pre-fill from the JD Matcher handoff (scenario.jdTopStandard)
     var m=/[?&]ref=([A-Za-z0-9]+)/.exec(location.search);
     if(m && byRef[m[1].toUpperCase()]) select(byRef[m[1].toUpperCase()]);
+    else { try{ var jd=(AC.scenario.get().jdTopStandard||'').toString().toUpperCase(); if(jd && byRef[jd]) select(byRef[jd]); }catch(e){} }
   }).catch(function(){ $('count').textContent='Could not load standards data.'; });
 
   function search(q){
