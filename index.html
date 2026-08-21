@@ -108,7 +108,7 @@
   input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:#fff;cursor:pointer;box-shadow:0 0 0 5px rgba(34,211,238,.25),0 4px 12px rgba(0,0,0,.4)}
   input[type=range]::-moz-range-thumb{width:22px;height:22px;border:none;border-radius:50%;background:#fff;cursor:pointer;box-shadow:0 0 0 5px rgba(34,211,238,.25)}
   .range-ticks{display:flex;justify-content:space-between;font-size:11px;color:var(--muted-2);font-family:var(--mono);margin-bottom:12px}
-  .lc-stream{display:block;width:100%;height:130px;margin:2px 0 14px}
+  .lc-stream{display:block;width:100%;height:190px;margin:6px 0 18px}
   .outcomes{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px}
   .oc{background:var(--glass);border:1px solid var(--line);border-radius:13px;padding:14px 15px}
   .oc .k{font-size:11.5px;color:var(--muted);letter-spacing:.05em;margin-bottom:7px;display:flex;align-items:center;gap:7px}
@@ -516,15 +516,16 @@ requestAnimationFrame(()=>{
       cx.fillStyle = pp.anointed ? '#f0c65a' : '#22d3ee';   // selected = tank-gold, rest cyan (no halo)
       cx.shadowColor = pp.anointed ? 'rgba(240,198,90,.7)' : 'rgba(34,211,238,.55)'; cx.shadowBlur=6*DPR;
       person(sp.x,sp.y,s*(0.55+0.45*e),e); cx.shadowBlur=0; }
-    // labels
-    cx.textAlign='center';
-    cx.fillStyle='rgba(240,198,90,.9)'; cx.font='600 '+(10.5*DPR)+'px '+MONO; cx.fillText('levy pot', l.potX, l.botY+14*DPR);
-    cx.fillText('levy spend', hoseMidX, l.botY+14*DPR);
+    // labels — titles at the top of each shape, figures below
+    cx.textAlign='center'; cx.font='600 '+(10.5*DPR)+'px '+MONO;
+    cx.fillStyle='rgba(240,198,90,.9)'; cx.fillText('Levy Pot', l.potX, l.topY-5*DPR);
+    cx.fillStyle='#7fdbe8'; cx.fillText('Talent Pool', (l.poolX0+l.poolX1)/2, l.topY-5*DPR);
+    cx.fillStyle='rgba(240,198,90,.9)'; cx.fillText('Levy Spend', hoseMidX, l.botY+14*DPR);
     cx.fillStyle='#7fdbe8'; cx.font='600 '+(11*DPR)+'px '+MONO;
-    cx.fillText((targetA||0)+' in your talent pool'+(targetA>cap?' · each ≈'+Math.ceil(targetA/cap):''), (l.poolX0+l.poolX1)/2, l.botY+14*DPR);
+    cx.fillText((targetA||0)+' funded'+(targetA>cap?' · each ≈'+Math.ceil(targetA/cap):''), (l.poolX0+l.poolX1)/2, l.botY+14*DPR);
     var selN=0; for(var i=0;i<people.length;i++) if(people[i].anointed) selN++;
     if(selN>0){ cx.fillStyle='rgba(240,198,90,.95)'; cx.font='600 '+(9.5*DPR)+'px '+MONO;
-      cx.fillText('✦ first cohort: '+selN+' selected · ~£'+fmt(selN*9000)+' (avg £9k each)', (l.poolX0+l.poolX1)/2, l.botY+27*DPR); }
+      cx.fillText('✦ First Cohort: '+selN+' selected · ~£'+fmt(selN*9000)+' (avg £9k each)', (l.poolX0+l.poolX1)/2, l.botY+27*DPR); }
   }
   function init(){ if(inited) return; inited=true; fit(); drop(!reduced); }
   fit(); addEventListener('resize',fit); addEventListener('load',function(){ setTimeout(init,80); }); setTimeout(init,350);
