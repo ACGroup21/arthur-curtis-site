@@ -101,10 +101,14 @@
   .levy-card .lc-live .dot{width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan);animation:pulse 1.8s infinite}
   .paybill-val{font-size:34px;font-weight:800;letter-spacing:-.02em;margin:8px 0 2px;font-family:var(--mono)}
   .paybill-val .cur{color:var(--muted);font-weight:500}
+  .paybill-val #paybillOut{outline:none;cursor:text;border-bottom:1.5px dashed rgba(34,211,238,.3);padding-bottom:1px;transition:border-color .2s}
+  .paybill-val #paybillOut:hover{border-bottom-color:rgba(34,211,238,.6)}
+  .paybill-val #paybillOut:focus{border-bottom-color:var(--cyan)}
   input[type=range]{-webkit-appearance:none;width:100%;height:6px;border-radius:6px;background:linear-gradient(90deg,var(--cyan),var(--blue));outline:none;margin:18px 0 4px}
   input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:#fff;cursor:pointer;box-shadow:0 0 0 5px rgba(34,211,238,.25),0 4px 12px rgba(0,0,0,.4)}
   input[type=range]::-moz-range-thumb{width:22px;height:22px;border:none;border-radius:50%;background:#fff;cursor:pointer;box-shadow:0 0 0 5px rgba(34,211,238,.25)}
-  .range-ticks{display:flex;justify-content:space-between;font-size:11px;color:var(--muted-2);font-family:var(--mono);margin-bottom:18px}
+  .range-ticks{display:flex;justify-content:space-between;font-size:11px;color:var(--muted-2);font-family:var(--mono);margin-bottom:12px}
+  .lc-stream{display:block;width:100%;height:130px;margin:2px 0 14px}
   .outcomes{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px}
   .oc{background:var(--glass);border:1px solid var(--line);border-radius:13px;padding:14px 15px}
   .oc .k{font-size:11.5px;color:var(--muted);letter-spacing:.05em;margin-bottom:7px;display:flex;align-items:center;gap:7px}
@@ -278,28 +282,22 @@
         <span class="lc-label">Your annual pay bill</span>
         <span class="lc-live"><span class="dot"></span>LIVE ESTIMATE</span>
       </div>
-      <div class="paybill-val"><span class="cur">£</span><span id="paybillOut">25,000,000</span></div>
-      <input type="range" id="paybill" min="3000000" max="120000000" step="500000" value="25000000">
-      <div class="range-ticks"><span>£3m</span><span>£60m</span><span>£120m</span></div>
+      <div class="paybill-val"><span class="cur">£</span><span id="paybillOut" contenteditable="true" inputmode="numeric" spellcheck="false" title="Click to type your exact pay bill">25,000,000</span></div>
+      <input type="range" id="paybill" min="0" max="1000" step="1" value="326">
+      <div class="range-ticks"><span>£3m</span><span>£75m</span><span>£2bn</span></div>
 
+      <canvas id="heroStream" class="lc-stream" aria-hidden="true"></canvas>
       <div class="outcomes">
         <div class="oc accent">
           <div class="k"><span class="ico" style="background:var(--cyan)"></span>Annual levy pot</div>
           <div class="v"><span class="cur" style="color:var(--muted);font-size:18px">£</span><span id="potOut">0</span></div>
         </div>
         <div class="oc">
-          <div class="k"><span class="ico" style="background:var(--blue)"></span>With 10% top-up</div>
-          <div class="v" style="font-size:24px"><span style="color:var(--muted);font-size:16px">£</span><span id="fundsOut">0</span></div>
-        </div>
-        <div class="oc">
           <div class="k"><span class="ico" style="background:var(--cyan-soft)"></span>Apprenticeships fundable</div>
-          <div class="v" style="font-size:24px"><span id="peopleOut">0</span></div>
-        </div>
-        <div class="oc">
-          <div class="k"><span class="ico" style="background:#7c93ff"></span>Monthly funding flow</div>
-          <div class="v" style="font-size:24px"><span style="color:var(--muted);font-size:16px">£</span><span id="monthOut">0</span></div>
+          <div class="v"><span id="peopleOut">0</span></div>
         </div>
       </div>
+      <span style="display:none"><span id="fundsOut">0</span><span id="monthOut">0</span></span>
 
       <div class="lc-foot">
         <span class="note">Indicative. 0.5% of pay bill, less £15k allowance, +10% government top-up. Apprenticeships at ~£9k avg.</span>
@@ -395,6 +393,12 @@ document.querySelectorAll('.proof .n[data-to]').forEach(el=>pio.observe(el));
 /* ---------- LEVY MATH + animated counters ---------- */
 const $=id=>document.getElementById(id);
 const fmt=n=>Math.round(n).toLocaleString('en-GB');
+/* log-scale slider: £3m → £2bn (a £2bn pay bill ≈ a £10m levy pot) so the largest employers fit,
+   while the common £3–100m range stays usable. Slider value is a 0–1000 position, not the £ itself. */
+var PB_MIN=3e6, PB_MAX=2e9, PB_LMIN=Math.log(PB_MIN), PB_LSPAN=Math.log(PB_MAX)-Math.log(PB_MIN);
+var currentPB=25e6;                                  // source of truth, so a typed figure stays exact (not slider-snapped)
+function posToPB(pos){ return Math.round(Math.exp(PB_LMIN+PB_LSPAN*(pos/1000))/1e5)*1e5; }
+function pbToPos(pb){ return Math.max(0,Math.min(1000, Math.round(1000*(Math.log(pb)-PB_LMIN)/PB_LSPAN))); }
 function animateTo(el,target,suffix=''){
   const start=parseFloat((el.textContent||'0').replace(/,/g,''))||0;
   const t0=performance.now(),dur=550;
@@ -406,7 +410,7 @@ function animateTo(el,target,suffix=''){
   requestAnimationFrame(step);
 }
 function compute(){
-  const paybill=+$('paybill').value;
+  const paybill=currentPB;                           // source of truth (slider or typed figure both write it)
   const r=AC.levy(paybill);                          // shared engine — one source of truth
   $('paybillOut').textContent=fmt(paybill);
   animateTo($('potOut'),r.pot);
@@ -415,7 +419,21 @@ function compute(){
   animateTo($('monthOut'),r.monthly);
   try{ AC.scenario.set({payBill:paybill}); }catch(e){} // carry it into the tools journey
 }
-$('paybill').addEventListener('input',compute);
+$('paybill').addEventListener('input',function(){ currentPB=posToPB(+this.value); compute(); });
+
+/* editable pay-bill figure — type an exact number; the slider snaps to it, the coins re-drop */
+(function(){
+  var el=$('paybillOut'), pb=$('paybill'); if(!el||!pb) return;
+  function commit(){
+    var raw=(el.textContent||'').replace(/[^0-9]/g,'');
+    var v=raw?parseInt(raw,10):PB_MIN; v=Math.max(PB_MIN,Math.min(PB_MAX,v));
+    currentPB=v; pb.value=pbToPos(v); el.textContent=fmt(v);
+    compute(); pb.dispatchEvent(new Event('change'));
+  }
+  el.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); el.blur(); } });
+  el.addEventListener('blur',commit);
+  el.addEventListener('focus',function(){ var r=document.createRange(); r.selectNodeContents(el); var s=getSelection(); s.removeAllRanges(); s.addRange(r); });
+})();
 
 /* ---------- entrance: light the copy + calculator, then compute ---------- */
 requestAnimationFrame(()=>{
@@ -423,6 +441,99 @@ requestAnimationFrame(()=>{
   document.querySelector('.levy-card').classList.add('lit');
   compute();
 });
+
+/* ---------- HERO: on settle, levy coins travel from the levy pot into the talent pool ---------- */
+(function(){
+  var cv=document.getElementById('heroStream'); if(!cv||!window.AC) return;
+  var cx=cv.getContext('2d'), DPR=Math.min(2,devicePixelRatio||1), MONO="'JetBrains Mono',monospace";
+  var reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var cap=16, cols=8, people=[], targetA=0, inited=false, flowPhase=0;
+  function fit(){ var r=cv.getBoundingClientRect(); if(!r.width) return; cv.width=Math.floor(r.width*DPR); cv.height=Math.floor(r.height*DPR); }
+  function appN(){ try{ return AC.levy(currentPB).apprentices||0; }catch(e){ return 0; } }
+  function L(){ var W=cv.width,H=cv.height, topY=H*0.15, botY=H*0.79;
+    return {W:W,H:H, topY:topY, botY:botY, potX:W*0.135, potW:W*0.15,
+      poolX0:W*0.40, poolX1:W*0.975, tubeY:(topY+botY)/2}; }
+  function slot(i,l){ var pw=l.poolX1-l.poolX0, sw=pw/cols, col=i%cols, row=Math.floor(i/cols);
+    var s=Math.min(sw*0.6,(l.botY-l.topY)/2*0.6), gap=s*1.7, cy=(l.topY+l.botY)/2;
+    return {x:l.poolX0+sw*(col+0.5), y:cy-gap/2+row*gap}; }
+  function drop(anim){
+    targetA=appN(); var show=Math.min(targetA,cap); people=[];
+    for(var i=0;i<show;i++){ people.push({slot:i, pop:anim?0:1, delay:anim?260+i*70:0, anointed:false}); }
+    // anoint a random cohort of 5
+    var idx=[]; for(var i=0;i<show;i++) idx.push(i);
+    for(var i=idx.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)), t=idx[i]; idx[i]=idx[j]; idx[j]=t; }
+    for(var i=0;i<Math.min(5,show);i++) people[idx[i]].anointed=true;
+  }
+  function roundRect(x,y,w,h,r){ cx.beginPath();cx.moveTo(x+r,y);cx.arcTo(x+w,y,x+w,y+h,r);cx.arcTo(x+w,y+h,x,y+h,r);cx.arcTo(x,y+h,x,y,r);cx.arcTo(x,y,x+w,y,r);cx.closePath(); }
+  function person(x,y,s,a){ cx.globalAlpha=a;
+    cx.beginPath();cx.arc(x,y-s*0.6,s*0.27,0,7);cx.fill();
+    cx.beginPath();cx.moveTo(x-s*0.44,y+s*0.5);cx.quadraticCurveTo(x-s*0.44,y-s*0.16,x,y-s*0.16);cx.quadraticCurveTo(x+s*0.44,y-s*0.16,x+s*0.44,y+s*0.5);cx.closePath();cx.fill();
+    cx.globalAlpha=1; }
+  function coin(x,y,spin){ cx.save(); cx.translate(x,y); cx.scale(0.35+0.65*Math.abs(Math.cos(spin)),1);
+    cx.fillStyle='#f0c65a'; cx.beginPath();cx.arc(0,0,3.3*DPR,0,7);cx.fill();
+    cx.fillStyle='rgba(255,244,205,.9)'; cx.beginPath();cx.arc(-0.7*DPR,-0.7*DPR,1.2*DPR,0,7);cx.fill(); cx.restore(); }
+  function draw(dt){
+    var l=L(), W=l.W, H=l.H; if(!W) return; cx.clearRect(0,0,W,H); flowPhase+=dt;
+    var pw=l.poolX1-l.poolX0, sw=pw/cols, ph=l.botY-l.topY, s=Math.min(sw*0.6, ph/2*0.6);
+    var potL=l.potX-l.potW/2, potR=l.potX+l.potW/2;
+    var th=Math.max(10*DPR, ph*0.17), poolLiqY=l.botY-ph*0.20;
+    // talent pool basin + collected levy liquid (ripple)
+    cx.fillStyle='rgba(34,211,238,.05)'; roundRect(l.poolX0,l.topY,pw,ph,11*DPR); cx.fill();
+    cx.save(); roundRect(l.poolX0,l.topY,pw,ph,11*DPR); cx.clip();
+    cx.fillStyle='rgba(240,198,90,.15)'; cx.fillRect(l.poolX0,poolLiqY,pw,ph);
+    cx.strokeStyle='rgba(255,240,190,.30)'; cx.lineWidth=1*DPR; cx.beginPath();
+    for(var xx=l.poolX0; xx<=l.poolX1; xx+=5*DPR){ var wy=poolLiqY+Math.sin(xx*0.05+flowPhase*0.004)*1.5*DPR; if(xx<=l.poolX0)cx.moveTo(xx,wy);else cx.lineTo(xx,wy); } cx.stroke();
+    cx.restore();
+    cx.strokeStyle='rgba(34,211,238,.18)'; cx.lineWidth=1*DPR; roundRect(l.poolX0,l.topY,pw,ph,11*DPR); cx.stroke();
+    // levy pot with liquid money
+    cx.fillStyle='rgba(240,198,90,.10)'; roundRect(potL,l.topY,l.potW,ph,7*DPR); cx.fill();
+    cx.save(); roundRect(potL,l.topY,l.potW,ph,7*DPR); cx.clip();
+    cx.fillStyle='rgba(240,198,90,.26)'; cx.fillRect(potL,l.topY+ph*0.40,l.potW,ph);
+    cx.strokeStyle='rgba(255,240,190,.55)'; cx.lineWidth=1.2*DPR; cx.beginPath();
+    for(var xx=potL; xx<=potR; xx+=5*DPR){ var wy=l.topY+ph*0.40+Math.sin(xx*0.08+flowPhase*0.005)*1.2*DPR; if(xx<=potL)cx.moveTo(xx,wy);else cx.lineTo(xx,wy); } cx.stroke();
+    cx.restore();
+    cx.strokeStyle='rgba(240,198,90,.5)'; cx.lineWidth=1.4*DPR; roundRect(potL,l.topY,l.potW,ph,7*DPR); cx.stroke();
+    // feeder pipe: attaches flush to the pot, runs out, bends DOWN in the gap (well before the pool)
+    var bendX=potR+(l.poolX0-potR)*0.5, spoutY=l.tubeY+ph*0.16;
+    cx.lineJoin='round'; cx.lineCap='butt';
+    cx.beginPath(); cx.moveTo(potR,l.tubeY); cx.lineTo(bendX,l.tubeY); cx.lineTo(bendX,spoutY);
+    cx.strokeStyle='rgba(240,198,90,.5)'; cx.lineWidth=th; cx.stroke();                 // pipe wall
+    cx.strokeStyle='rgba(240,198,90,.32)'; cx.lineWidth=Math.max(2*DPR,th-4*DPR); cx.stroke(); // liquid
+    cx.strokeStyle='rgba(250,224,150,.55)'; cx.lineWidth=Math.max(1.5*DPR,th-8*DPR);   // flowing highlight
+    cx.setLineDash([5*DPR,18*DPR]); cx.lineDashOffset=-flowPhase*0.12; cx.stroke(); cx.setLineDash([]);
+    // pour: liquid arcs from the spout, across the gap, into the pool
+    var landX=l.poolX0+pw*0.06, landY=poolLiqY, ctrlX=(bendX+landX)/2, ctrlY=Math.max(spoutY,landY)+ph*0.05;
+    cx.lineCap='round';
+    cx.beginPath(); cx.moveTo(bendX,spoutY); cx.quadraticCurveTo(ctrlX,ctrlY,landX,landY);
+    cx.strokeStyle='rgba(240,198,90,.45)'; cx.lineWidth=Math.max(3*DPR,th*0.4); cx.stroke();
+    cx.strokeStyle='rgba(250,224,150,.6)'; cx.lineWidth=Math.max(1.5*DPR,th*0.2);
+    cx.setLineDash([4*DPR,13*DPR]); cx.lineDashOffset=-flowPhase*0.14; cx.stroke(); cx.setLineDash([]);
+    cx.lineJoin='miter'; cx.lineCap='butt';
+    // people appearing in the pool — 5 anointed (gold + halo)
+    for(var i=0;i<people.length;i++){ var pp=people[i];
+      if(pp.delay>0){ pp.delay-=dt; continue; }
+      pp.pop=Math.min(1,pp.pop+dt*0.006);
+      var sp=slot(pp.slot,l), e=1-Math.pow(1-pp.pop,3);
+      if(pp.anointed){ cx.strokeStyle='rgba(240,198,90,'+(0.95*e)+')'; cx.lineWidth=1.6*DPR;
+        cx.beginPath(); cx.ellipse(sp.x, sp.y-s*1.02, s*0.34, s*0.13, 0, 0, 7); cx.stroke(); }
+      cx.fillStyle = pp.anointed ? '#f0c65a' : '#22d3ee';
+      cx.shadowColor = pp.anointed ? 'rgba(240,198,90,.7)' : 'rgba(34,211,238,.55)'; cx.shadowBlur=6*DPR;
+      person(sp.x,sp.y,s*(0.55+0.45*e),e); cx.shadowBlur=0; }
+    // labels
+    cx.textAlign='center';
+    cx.fillStyle='rgba(240,198,90,.9)'; cx.font='600 '+(10.5*DPR)+'px '+MONO; cx.fillText('levy pot', l.potX, l.botY+14*DPR);
+    cx.fillStyle='#7fdbe8'; cx.font='600 '+(11*DPR)+'px '+MONO;
+    cx.fillText((targetA||0)+' in your talent pool'+(targetA>cap?' · each ≈'+Math.ceil(targetA/cap):''), (l.poolX0+l.poolX1)/2, l.botY+14*DPR);
+    var anN=Math.min(5, people.length);
+    if(anN>0){ cx.fillStyle='rgba(240,198,90,.95)'; cx.font='600 '+(9.5*DPR)+'px '+MONO;
+      cx.fillText('✦ '+anN+' anointed · first cohort selected', (l.poolX0+l.poolX1)/2, l.botY+27*DPR); }
+  }
+  function init(){ if(inited) return; inited=true; fit(); drop(!reduced); }
+  fit(); addEventListener('resize',fit); addEventListener('load',function(){ setTimeout(init,80); }); setTimeout(init,350);
+  document.getElementById('paybill').addEventListener('change',function(){ drop(!reduced); if(reduced) draw(16); });
+  if(reduced){ init(); draw(16); }
+  else { var last=performance.now(); (function loop(now){ var dt=Math.min(48,now-last); last=now; draw(dt); requestAnimationFrame(loop); })(performance.now()); }
+})();
 
 /* ============================================================
    LIVING-GRADIENT HERO BACKGROUND  (approved animation style)
