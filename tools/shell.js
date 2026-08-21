@@ -9,7 +9,7 @@
 (function(){
   var TOOLS = ['what-can-you-claim','expiry-clock','ni-calculator','status-checker','jd-matcher','is-levy-working'];
   var DEFAULT = 'what-can-you-claim';
-  var view, toolStyle, cache = {};
+  var view, toolStyle, cache = {}, transitioning = false;
 
   function fileOf(route){ return route + '.html'; }
   function routeOf(){
@@ -49,8 +49,10 @@
       try{ if(window.AC && AC.spine) AC.spine.refresh(); }catch(e){}
       if(data.code){ try{ (new Function(data.code))(); }catch(e){ console.error('tool script error:', route, e); } }
     };
-    if(document.startViewTransition){
+    if(document.startViewTransition && !transitioning){
+      transitioning = true;
       var vt = document.startViewTransition(apply);
+      if(vt.finished && vt.finished.finally) vt.finished.finally(function(){ transitioning = false; }); else transitioning = false;
       vt.updateCallbackDone.then(after, after);
     } else { apply(); after(); }
   }
