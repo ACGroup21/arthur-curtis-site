@@ -22,9 +22,11 @@
 
   var STYLE='\
   .lnav{position:relative;display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:26px}\
-  .lnav-brand{display:flex;flex-direction:column;align-items:flex-start;gap:1px;text-decoration:none}\
-  .lnav-brand .fw{font-weight:300;letter-spacing:.22em;font-size:17px;color:var(--ink);text-transform:uppercase;line-height:1.05}\
-  .lnav-brand .by{color:var(--muted-2);font-weight:500;font-size:10.5px;letter-spacing:.05em}\
+  .lnav-brand{display:flex;align-items:center;gap:10px;text-decoration:none}\
+  .lnav-brand .fi{height:24px;width:auto;display:block;flex:0 0 auto}\
+  .lnav-brand .col{display:flex;flex-direction:column;gap:3px}\
+  .lnav-brand .fw{height:13px;width:auto;display:block}\
+  .lnav-brand .by{color:var(--muted-2);font-weight:500;font-size:10px;letter-spacing:.05em}\
   .lnav-brand .by b{color:var(--muted);font-weight:600}\
   .lnav-right{display:flex;gap:8px}\
   .lnav-btn{font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--ink);border-radius:9px;padding:8px 13px;display:flex;align-items:center;gap:7px}\
@@ -48,7 +50,7 @@
     head.classList.add('lnav'); head.innerHTML='';
 
     var brand=el('a','lnav-brand'); brand.href=SITE;
-    brand.innerHTML='<span class="fw">Fundable</span><span class="by">built by <b>AC Digital</b></span>';
+    brand.innerHTML='<img class="fi" src="../assets/fundable-icon.svg" alt=""><span class="col"><img class="fw" src="../assets/fundable-wordmark.svg" alt="Fundable"><span class="by">built by <b>AC Digital</b></span></span>';
     head.appendChild(brand);
 
     var right=el('div','lnav-right',
