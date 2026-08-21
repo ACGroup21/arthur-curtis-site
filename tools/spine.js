@@ -54,9 +54,11 @@
   #spine{position:relative;z-index:5;margin:0 0 18px}\
   .spine-bar{background:linear-gradient(180deg,rgba(16,30,54,.6),rgba(8,18,34,.5));border:1px solid var(--line);border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;backdrop-filter:blur(6px)}\
   .spine-bar .lbl{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--cyan);white-space:nowrap}\
-  .spine-chips{display:flex;gap:6px;flex-wrap:wrap;flex:1;min-width:120px}\
-  .spine-chip{font-size:12.5px;background:rgba(34,211,238,.09);border:1px solid rgba(34,211,238,.28);color:var(--cyan-soft);border-radius:99px;padding:3px 11px;white-space:nowrap}\
-  .spine-empty{font-size:12.5px;color:var(--muted-2)}\
+  .spine-txt{font-family:var(--mono);font-size:12.5px;color:var(--cyan-soft);letter-spacing:.02em;line-height:1.5;flex:1;min-width:120px;min-height:19px}\
+  .spine-txt .sep{color:var(--muted-2)}\
+  .spine-caret{display:inline-block;width:7px;height:13px;background:var(--cyan);vertical-align:-2px;margin-left:1px;box-shadow:0 0 6px var(--cyan);animation:sp-blink .9s step-end infinite}\
+  @keyframes sp-blink{50%{opacity:0}}\
+  .spine-empty{font-size:12.5px;color:var(--muted-2);font-family:var(--mono)}\
   .spine-acts{display:flex;gap:6px;flex-wrap:wrap}\
   .spine-btn{font-family:var(--sans);font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--muted);border-radius:8px;padding:6px 10px;transition:border-color .15s,color .15s}\
   .spine-btn:hover{border-color:var(--cyan);color:var(--cyan)}\
@@ -109,9 +111,6 @@
 
   function render(host){
     var parts=summary();
-    var chips = parts.length
-      ? parts.map(function(t){return '<span class="spine-chip">'+t+'</span>';}).join('')
-      : '<span class="spine-empty">No details yet — they\'ll carry across as you use the tools.</span>';
     var cur=(location.pathname.split('/').pop()||'').toLowerCase();
     var inTool = TOOLMETA.hasOwnProperty(cur);
     var recs = NEXT[cur] || Object.keys(TOOLMETA).filter(function(f){return f!==cur;}).slice(0,3);
@@ -121,7 +120,7 @@
     host.innerHTML =
       '<div class="spine-bar">'+
         '<span class="lbl">Your details</span>'+
-        '<div class="spine-chips">'+chips+'</div>'+
+        '<div class="spine-txt" id="spine-txt"></div>'+
         '<div class="spine-acts">'+
           (inTool?'<button class="spine-btn primary" data-act="next">Where to next? &rarr;</button>':'')+
           '<button class="spine-btn" data-act="email">Email my results</button>'+
@@ -133,6 +132,24 @@
     host.querySelectorAll('.spine-btn').forEach(function(b){
       if(b.getAttribute('data-act')) b.addEventListener('click', function(){ act(b.getAttribute('data-act'), b); });
     });
+    typeDetails(parts);
+  }
+
+  /* type the details out like a digital board — free text, no pills, re-typed on every change/refresh */
+  var typeSeq=0;
+  function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/·/g,'<span class="sep">·</span>'); }
+  function typeDetails(parts){
+    var el=document.getElementById('spine-txt'); if(!el) return;
+    if(!parts.length){ el.innerHTML='<span class="spine-empty">No details yet — they\'ll carry across as you use the tools.</span>'; return; }
+    var full=parts.join('   ·   ');
+    var seq=++typeSeq, i=0, reduce=false;
+    try{ reduce=matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(e){}
+    if(reduce){ el.innerHTML=esc(full)+'<span class="spine-caret"></span>'; return; }
+    (function step(){
+      if(seq!==typeSeq) return;
+      el.innerHTML=esc(full.slice(0,i))+'<span class="spine-caret"></span>';
+      if(i<full.length){ i++; setTimeout(step, 15); }
+    })();
   }
 
   function act(a, btn){
