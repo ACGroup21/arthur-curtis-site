@@ -450,7 +450,7 @@ requestAnimationFrame(()=>{
   var cap=16, cols=8, people=[], targetA=0, inited=false, flowPhase=0;
   function fit(){ var r=cv.getBoundingClientRect(); if(!r.width) return; cv.width=Math.floor(r.width*DPR); cv.height=Math.floor(r.height*DPR); }
   function appN(){ try{ return AC.levy(currentPB).apprentices||0; }catch(e){ return 0; } }
-  function L(){ var W=cv.width,H=cv.height, topY=H*0.15, botY=H*0.79;
+  function L(){ var W=cv.width,H=cv.height, topY=H*0.15, botY=H*0.74;
     return {W:W,H:H, topY:topY, botY:botY, potX:W*0.135, potW:W*0.15,
       poolX0:W*0.40, poolX1:W*0.975, tubeY:(topY+botY)/2}; }
   function slot(i,l){ var pw=l.poolX1-l.poolX0, sw=pw/cols, col=i%cols, row=Math.floor(i/cols);
@@ -520,12 +520,12 @@ requestAnimationFrame(()=>{
     cx.textAlign='center'; cx.font='600 '+(10.5*DPR)+'px '+MONO;
     cx.fillStyle='rgba(240,198,90,.9)'; cx.fillText('Levy Pot', l.potX, l.topY-5*DPR);
     cx.fillStyle='#7fdbe8'; cx.fillText('Talent Pool', (l.poolX0+l.poolX1)/2, l.topY-5*DPR);
-    cx.fillStyle='rgba(240,198,90,.9)'; cx.fillText('Levy Spend', hoseMidX, l.botY+14*DPR);
+    cx.fillStyle='rgba(240,198,90,.9)'; cx.fillText('Levy Spend', hoseMidX, l.botY+18*DPR);
     cx.fillStyle='#7fdbe8'; cx.font='600 '+(11*DPR)+'px '+MONO;
-    cx.fillText((targetA||0)+' funded'+(targetA>cap?' · each ≈'+Math.ceil(targetA/cap):''), (l.poolX0+l.poolX1)/2, l.botY+14*DPR);
+    cx.fillText((targetA||0)+' funded'+(targetA>cap?' · each ≈'+Math.ceil(targetA/cap):''), (l.poolX0+l.poolX1)/2, l.botY+18*DPR);
     var selN=0; for(var i=0;i<people.length;i++) if(people[i].anointed) selN++;
     if(selN>0){ cx.fillStyle='rgba(240,198,90,.95)'; cx.font='600 '+(9.5*DPR)+'px '+MONO;
-      cx.fillText('✦ First Cohort: '+selN+' selected · ~£'+fmt(selN*9000)+' (avg £9k each)', (l.poolX0+l.poolX1)/2, l.botY+27*DPR); }
+      cx.fillText('✦ First Cohort: '+selN+' selected · ~£'+fmt(selN*9000)+' (avg £9k each)', (l.poolX0+l.poolX1)/2, l.botY+38*DPR); }
   }
   function init(){ if(inited) return; inited=true; fit(); drop(!reduced); }
   fit(); addEventListener('resize',fit); addEventListener('load',function(){ setTimeout(init,80); }); setTimeout(init,350);
