@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fundable — the tools</title>
+<meta name="description" content="The self-serve levy and apprenticeship tools, in one place — your details carry across every tool as you go.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="lite.css">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<style>
+  /* app-shell: the nav + the "your details" bar are persistent chrome;
+     only #view swaps as you move between tools */
+  #view{min-height:44vh;view-transition-name:acview}
+  ::view-transition-old(root),::view-transition-new(root){animation-duration:.001s}
+  ::view-transition-old(acview){animation:vt-out .16s ease both}
+  ::view-transition-new(acview){animation:vt-in .30s cubic-bezier(.2,.7,.2,1) both}
+  @keyframes vt-out{to{opacity:0;transform:translateY(-8px)}}
+  @keyframes vt-in{from{opacity:0;transform:translateY(12px)}}
+  @media(prefers-reduced-motion:reduce){#view{view-transition-name:none}}
+</style>
+<style id="tool-style"></style>
+</head>
+<body>
+<div class="app">
+  <div class="lite-head"></div>
+  <div id="spine"></div>
+  <main id="view"></main>
+</div>
+
+<script src="engine.js?v=2"></script>
+<script src="spine.js?v=2"></script>
+<script src="nav.js?v=1"></script>
+<script>if(window.AC&&AC.spine)AC.spine.mount();</script>
+<script src="shell.js"></script>
+</body>
+</html>

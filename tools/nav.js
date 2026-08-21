@@ -40,7 +40,7 @@
   @media(max-width:520px){.lnav-brand .bt,.lnav-brand .by{display:none}.lnav-panel{right:0;left:0;min-width:0}}\
   ';
 
-  function here(){ return (location.pathname.split('/').pop()||'').toLowerCase(); }
+  function here(){ return (window.__acTool || location.pathname.split('/').pop()||'').toLowerCase(); }
   function el(tag,cls,html){ var e=document.createElement(tag); if(cls)e.className=cls; if(html!=null)e.innerHTML=html; return e; }
 
   function build(){

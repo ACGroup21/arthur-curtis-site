@@ -111,7 +111,7 @@
 
   function render(host){
     var parts=summary();
-    var cur=(location.pathname.split('/').pop()||'').toLowerCase();
+    var cur=(window.__acTool || location.pathname.split('/').pop()||'').toLowerCase();
     var inTool = TOOLMETA.hasOwnProperty(cur);
     var recs = NEXT[cur] || Object.keys(TOOLMETA).filter(function(f){return f!==cur;}).slice(0,3);
     var recCards = recs.map(function(f){ var m=TOOLMETA[f]; if(!m) return '';
