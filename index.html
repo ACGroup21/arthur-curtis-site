@@ -118,7 +118,8 @@
   @media(max-width:900px){.hero .wrap{grid-template-columns:1fr;gap:34px}.levy-card{order:2}}
 
   /* ---------- SECTION SHELL ---------- */
-  section.block{position:relative;z-index:3;padding:120px 0;border-top:1px solid var(--line);background:rgba(6,16,31,.4)}
+  section.block{position:relative;z-index:3;padding:120px 0;border-top:1px solid var(--line);background:rgba(6,16,31,.24)}
+  section.block#tools{background:linear-gradient(180deg,#0a1a30,#060f1d)}
   /* glowing cyan hairline at every section seam — threads the accent through, softens the cliff below the hero */
   section.block::before,.proof::before,.cta-band::before{content:"";position:absolute;top:-1px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(34,211,238,.42),transparent);z-index:4}
   .kicker{display:inline-flex;align-items:center;gap:9px;font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan);font-weight:600;margin-bottom:16px}
@@ -127,7 +128,7 @@
   .lead{color:var(--muted);font-size:18px;max-width:620px;margin-top:18px}
 
   /* proof strip */
-  .proof{position:relative;z-index:3;padding:38px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:rgba(4,11,22,.5)}
+  .proof{position:relative;z-index:3;padding:38px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:linear-gradient(180deg,#0a1a30,#060f1d)}
   .proof .row{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;text-align:center}
   .proof .row{position:relative}
   .proof .stat{position:relative;flex:1;min-width:150px}
@@ -170,7 +171,7 @@
   @media(max-width:760px){.tools{grid-template-columns:1fr}}
 
   /* CTA band */
-  .cta-band{position:relative;z-index:3;text-align:center;padding:110px 0;background:radial-gradient(80% 130% at 50% 0%,rgba(37,99,235,.18),transparent 60%),rgba(6,16,31,.4)}
+  .cta-band{position:relative;z-index:3;text-align:center;padding:110px 0;background:radial-gradient(80% 130% at 50% 0%,rgba(37,99,235,.18),transparent 60%),linear-gradient(180deg,#0a1a30,#060f1d)}
   .cta-band h2{font-size:clamp(32px,4.4vw,52px);font-weight:800;letter-spacing:-.02em;max-width:720px;margin:0 auto 22px}
   .cta-band p{color:var(--muted);font-size:18px;max-width:520px;margin:0 auto 34px}
 
@@ -444,7 +445,7 @@ const FS=[
 'float warp=fbm(sp+iTime*0.02);',
 'float n=fbm(sp*1.5+vec2(warp,warp*0.6));',
 'n=smoothstep(0.16,0.96,n);',
-'float pres=mix(1.0,0.8,smoothstep(0.0,0.6,ny));',     // all-pervasive: everywhere, a touch calmer lower
+'float pres=mix(0.14,1.0,smoothstep(0.02,0.5,ny));',   // starts sparse at the top, fills in as you scroll down
 'float smoke=n*pres;',
 'vec3 navy=vec3(0.02,0.06,0.15),teal=vec3(0.03,0.42,0.60),cyan=vec3(0.50,0.86,0.96);',
 'vec3 col=mix(navy,teal,smoke);',

@@ -24,7 +24,7 @@
     'float warp=fbm(sp+iTime*0.02);',
     'float n=fbm(sp*1.5+vec2(warp,warp*0.6));',
     'n=smoothstep(0.16,0.96,n);',
-    'float pres=mix(1.0,0.8,smoothstep(0.0,0.6,ny));',
+    'float pres=mix(0.14,1.0,smoothstep(0.02,0.5,ny));',
     'float smoke=n*pres;',
     'vec3 navy=vec3(0.02,0.06,0.15),teal=vec3(0.03,0.42,0.60),cyan=vec3(0.50,0.86,0.96);',
     'vec3 col=mix(navy,teal,smoke);',

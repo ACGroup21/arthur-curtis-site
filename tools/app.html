@@ -14,6 +14,8 @@
   /* app-shell: the nav + the "your details" bar are persistent chrome;
      only #view swaps as you move between tools */
   .app{position:relative;z-index:1}   /* sit above the atmosphere canvas */
+  /* apps use the space on desktop; stay slim only on mobile */
+  @media(min-width:900px){ .app{max-width:1120px;padding-left:40px;padding-right:40px} }
   #view{min-height:44vh;view-transition-name:acview}
   ::view-transition-old(root),::view-transition-new(root){animation-duration:.001s}
   ::view-transition-old(acview){animation:vt-out .16s ease both}
