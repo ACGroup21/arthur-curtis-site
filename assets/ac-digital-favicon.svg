@@ -1,5 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" role="img" aria-label="AC Digital">
+  <style>.ac-glow{animation:acg 2.6s ease-in-out infinite}@keyframes acg{0%,100%{filter:drop-shadow(0 0 1px #3B9EFF)}50%{filter:drop-shadow(0 0 10px #3B9EFF)}}@media(prefers-reduced-motion:reduce){.ac-glow{animation:none;filter:drop-shadow(0 0 9px #3B9EFF)}}@media print{.ac-glow{animation:none;filter:drop-shadow(0 0 9px #3B9EFF)}}</style>
   <rect width="400" height="400" rx="88" fill="#0a1626"/>
   <path d="M 96 322 L 200 82 L 304 322" fill="none" stroke="#FFFFFF" stroke-width="34" stroke-linecap="round" stroke-linejoin="round"/>
-  <circle cx="200" cy="238" r="23" fill="#3B9EFF"/>
+  <circle class="ac-glow" cx="200" cy="238" r="35" fill="#3B9EFF"/>
 </svg>
