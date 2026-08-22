@@ -7,7 +7,7 @@
    Depends on engine.js, spine.js, nav.js. Include LAST.
    ============================================================ */
 (function(){
-  var TOOLS = ['what-can-you-claim','expiry-clock','ni-calculator','status-checker','jd-matcher','is-levy-working'];
+  var TOOLS = ['first-cohort','what-can-you-claim','expiry-clock','ni-calculator','status-checker','jd-matcher','is-levy-working'];
   var DEFAULT = 'what-can-you-claim';
   var view, toolStyle, cache = {}, transitioning = false;
 

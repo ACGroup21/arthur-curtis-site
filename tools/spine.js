@@ -13,6 +13,7 @@
   /* the journey is a web, not a rail — each tool recommends the most relevant next steps.
      The scenario carries forward automatically via localStorage (same origin), no URL needed. */
   var TOOLMETA = {
+    'first-cohort.html':      {label:'Build your first cohort', blurb:'Turn levy into a starter cohort', prev:'~40% of pool'},
     'what-can-you-claim.html':{label:'What you can claim', blurb:'Every grant & saving on a hire', prev:'£5,558 unlocked'},
     'jd-matcher.html':        {label:'JD Matcher',         blurb:'Role → closest standards',      prev:'92% match'},
     'status-checker.html':    {label:'Status Checker',     blurb:'Funded? Band? Duration?',       prev:'✅ funded · £15k'},
@@ -21,6 +22,7 @@
     'is-levy-working.html':   {label:'Levy health',        blurb:'Honest 2-minute diagnostic',   prev:'Score 6/10'}
   };
   var NEXT = {
+    'first-cohort.html':      ['what-can-you-claim.html','jd-matcher.html','is-levy-working.html'],
     'what-can-you-claim.html':['jd-matcher.html','ni-calculator.html','is-levy-working.html'],
     'jd-matcher.html':        ['status-checker.html','what-can-you-claim.html'],
     'status-checker.html':    ['what-can-you-claim.html','jd-matcher.html'],

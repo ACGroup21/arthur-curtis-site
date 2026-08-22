@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Build your first cohort (lite) — Arthur Curtis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="lite.css">
+<link rel="icon" type="image/svg+xml" href="../assets/fundable-favicon.svg">
+<style>
+  .fc-control{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+  .fc-control .lbl{font-size:13px;color:var(--muted)}
+  .fc-pb{font-family:var(--mono);font-size:30px;font-weight:600;letter-spacing:-.01em}
+  .fc-pb .cur{color:var(--muted);font-size:20px}
+  #fcPbOut{outline:none;cursor:text;border-bottom:1.5px dashed rgba(34,211,238,.3);padding-bottom:1px;transition:border-color .2s}
+  #fcPbOut:hover{border-bottom-color:rgba(34,211,238,.6)} #fcPbOut:focus{border-bottom-color:var(--cyan)}
+  .fc-readout{display:flex;gap:24px;flex-wrap:wrap;text-align:right}
+  .fc-readout .r .n{font-family:var(--mono);font-size:20px;font-weight:600;color:var(--cyan);font-variant-numeric:tabular-nums}
+  .fc-readout .r .l{font-size:11px;color:var(--muted-2)}
+  #fcRange{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:6px;margin:18px 0 3px;background:linear-gradient(90deg,var(--cyan),var(--blue));outline:none;cursor:pointer}
+  #fcRange::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 0 0 5px rgba(34,211,238,.22),0 4px 12px rgba(0,0,0,.5);cursor:pointer}
+  #fcRange::-moz-range-thumb{width:24px;height:24px;border:none;border-radius:50%;background:#fff;cursor:pointer;box-shadow:0 0 0 5px rgba(34,211,238,.22)}
+  .fc-ticks{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--muted-2)}
+  .fc-stage{position:relative;width:100%;height:300px;border-radius:14px;overflow:hidden;margin-top:18px;background:radial-gradient(120% 130% at 50% 120%,rgba(34,211,238,.05),transparent),#050e1c;border:1px solid var(--line)}
+  .fc-stage canvas{display:block;width:100%;height:100%}
+  .fc-cta{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-top:18px;padding:18px 20px;border-radius:14px;border:1px solid rgba(34,211,238,.28);background:linear-gradient(150deg,rgba(34,211,238,.09),rgba(37,99,235,.05))}
+  .fc-cta .t .h{font-size:16px;font-weight:700} .fc-cta .t .h b{color:#f0c65a}
+  .fc-cta .t .s{font-size:12.5px;color:var(--muted);margin-top:3px}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="lite-head"></div>
+
+  <span class="eyebrow"><span class="dot"></span>First cohort · lite</span>
+  <h1 class="title">Turn your levy into people.</h1>
+  <p class="subtitle">Set your pay bill and watch your unspent levy become a pool of funded talent — then start your first cohort.</p>
+
+  <div class="card">
+    <div class="fc-control">
+      <div>
+        <div class="lbl">Your annual pay bill</div>
+        <div class="fc-pb"><span class="cur">£</span><span id="fcPbOut" contenteditable="true" inputmode="numeric" spellcheck="false">25,000,000</span></div>
+      </div>
+      <div class="fc-readout">
+        <div class="r"><div class="n">£<span id="fcPot">0</span></div><div class="l">levy to spend</div></div>
+        <div class="r"><div class="n" id="fcApp">0</div><div class="l">apprenticeships</div></div>
+      </div>
+    </div>
+    <input type="range" id="fcRange" min="0" max="1000" step="1" value="326">
+    <div class="fc-ticks"><span>£3m</span><span>£75m</span><span>£2bn</span></div>
+
+    <div class="fc-stage"><canvas id="fcCanvas"></canvas></div>
+
+    <div class="fc-cta">
+      <div class="t">
+        <div class="h">Your first cohort: <b id="fcCohN">0</b> people · ~£<span id="fcCohSpend">0</span></div>
+        <div class="s">An average estimate at ~£9k each. We help you choose the roles and start them right.</div>
+      </div>
+      <a class="btn btn-primary" href="https://acgroup21.github.io/arthur-curtis-site/contact.html" target="_blank" rel="noopener">Make it real — talk to us →</a>
+    </div>
+  </div>
+
+  <p class="note">Indicative. 0.5% of pay bill − £15k allowance + 10% government top-up, apprenticeships at ~£9k avg. Always confirm current rules at <a href="https://www.gov.uk/guidance/pay-apprenticeship-levy" target="_blank" rel="noopener">gov.uk</a>.</p>
+</div>
+
+<script src="engine.js?v=2"></script>
+<script src="spine.js?v=3"></script>
+<script src="nav.js?v=2"></script>
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id);};
+  if(window.AC&&AC.spine) AC.spine.mount();
+  var fmt=(window.AC&&AC.fmt)?AC.fmt:function(n){return Math.round(n).toLocaleString('en-GB');};
+  var PB_MIN=3e6, PB_MAX=2e9, LMIN=Math.log(PB_MIN), LSPAN=Math.log(PB_MAX)-Math.log(PB_MIN), currentPB=25e6;
+  function posToPB(p){ return Math.round(Math.exp(LMIN+LSPAN*(p/1000))/1e5)*1e5; }
+  function pbToPos(v){ return Math.max(0,Math.min(1000,Math.round(1000*(Math.log(v)-LMIN)/LSPAN))); }
+  function levy(v){ if(window.AC&&AC.levy){ var r=AC.levy(v); return {pot:r.pot, app:r.apprentices}; } var pot=Math.max(0,v*0.005-15000); return {pot:pot, app:Math.floor(pot*1.1/9000)}; }
+  function anim(el,t){ if(!el)return; var s=parseFloat((el.textContent||'0').replace(/,/g,''))||0,t0=performance.now(); (function st(n){var p=Math.min(1,(n-t0)/500),e=1-Math.pow(1-p,3);el.textContent=fmt(s+(t-s)*e);if(p<1)requestAnimationFrame(st);})(performance.now()); }
+
+  function refresh(){
+    var r=levy(currentPB); $('fcPbOut').textContent=fmt(currentPB); anim($('fcPot'),r.pot); anim($('fcApp'),r.app);
+    var shown=Math.min(r.app,16), coh=Math.round(shown*0.4); $('fcCohN').textContent=coh; anim($('fcCohSpend'),coh*9000);
+    drop();
+    try{ AC.scenario.set({payBill:currentPB}); }catch(e){}
+  }
+  $('fcRange').addEventListener('input',function(){ currentPB=posToPB(+this.value); refresh(); });
+  var el=$('fcPbOut'), rng=$('fcRange');
+  el.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); el.blur(); } });
+  el.addEventListener('blur',function(){ var v=parseInt((el.textContent||'').replace(/[^0-9]/g,''),10)||PB_MIN; v=Math.max(PB_MIN,Math.min(PB_MAX,v)); currentPB=v; rng.value=pbToPos(v); refresh(); });
+  el.addEventListener('focus',function(){ var g=document.createRange();g.selectNodeContents(el);var s=getSelection();s.removeAllRanges();s.addRange(g); });
+
+  /* ---- pot → tap → L-hose → talent pool animation ---- */
+  var cv=$('fcCanvas'), cx=cv.getContext('2d'), DPR=Math.min(2,devicePixelRatio||1), MONO="'JetBrains Mono',monospace";
+  var cap=16, cols=8, people=[], flow=0;
+  function fit(){var r=cv.getBoundingClientRect();if(!r.width)return;cv.width=Math.floor(r.width*DPR);cv.height=Math.floor(r.height*DPR);}
+  function L(){var W=cv.width,H=cv.height,topY=H*0.15,botY=H*0.74;return{W:W,H:H,topY:topY,botY:botY,potX:W*0.13,potW:W*0.14,poolX0:W*0.40,poolX1:W*0.975,tubeY:(topY+botY)/2};}
+  function slot(i,l){var pw=l.poolX1-l.poolX0,sw=pw/cols,c=i%cols,rw=Math.floor(i/cols);var s=Math.min(sw*0.6,(l.botY-l.topY)/2*0.6),gap=s*1.7,cy=(l.topY+l.botY)/2;return{x:l.poolX0+sw*(c+0.5),y:cy-gap/2+rw*gap};}
+  function drop(){ var r=levy(currentPB), show=Math.min(r.app,cap); people=[]; var coh=Math.round(show*0.4);
+    for(var i=0;i<show;i++) people.push({slot:i,pop:0,delay:260+i*70,sel:false});
+    var idx=[];for(var i=0;i<show;i++)idx.push(i); for(var i=idx.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=idx[i];idx[i]=idx[j];idx[j]=t;} for(var i=0;i<Math.min(coh,show);i++) people[idx[i]].sel=true;
+  }
+  function rr(x,y,w,h,r){cx.beginPath();cx.moveTo(x+r,y);cx.arcTo(x+w,y,x+w,y+h,r);cx.arcTo(x+w,y+h,x,y+h,r);cx.arcTo(x,y+h,x,y,r);cx.arcTo(x,y,x+w,y,r);cx.closePath();}
+  function person(x,y,s,a){cx.globalAlpha=a;cx.beginPath();cx.arc(x,y-s*0.6,s*0.27,0,7);cx.fill();cx.beginPath();cx.moveTo(x-s*0.44,y+s*0.5);cx.quadraticCurveTo(x-s*0.44,y-s*0.16,x,y-s*0.16);cx.quadraticCurveTo(x+s*0.44,y-s*0.16,x+s*0.44,y+s*0.5);cx.closePath();cx.fill();cx.globalAlpha=1;}
+  function draw(dt){
+    var l=L(),W=l.W,H=l.H;if(!W)return;cx.clearRect(0,0,W,H);flow+=dt;
+    var pw=l.poolX1-l.poolX0,sw=pw/cols,ph=l.botY-l.topY,s=Math.min(sw*0.6,ph/2*0.6);
+    var potL=l.potX-l.potW/2,potR=l.potX+l.potW/2,th=Math.max(10*DPR,ph*0.17),poolLiqY=l.botY-ph*0.20;
+    cx.fillStyle='rgba(34,211,238,.05)';rr(l.poolX0,l.topY,pw,ph,11*DPR);cx.fill();
+    cx.save();rr(l.poolX0,l.topY,pw,ph,11*DPR);cx.clip();
+    cx.fillStyle='rgba(240,198,90,.15)';cx.fillRect(l.poolX0,poolLiqY,pw,ph);
+    cx.strokeStyle='rgba(250,224,150,.3)';cx.lineWidth=1*DPR;cx.beginPath();
+    for(var xx=l.poolX0;xx<=l.poolX1;xx+=5*DPR){var wy=poolLiqY+Math.sin(xx*0.05+flow*0.004)*1.5*DPR;xx<=l.poolX0?cx.moveTo(xx,wy):cx.lineTo(xx,wy);}cx.stroke();cx.restore();
+    cx.strokeStyle='rgba(34,211,238,.18)';cx.lineWidth=1*DPR;rr(l.poolX0,l.topY,pw,ph,11*DPR);cx.stroke();
+    cx.fillStyle='rgba(240,198,90,.10)';rr(potL,l.topY,l.potW,ph,7*DPR);cx.fill();
+    cx.save();rr(potL,l.topY,l.potW,ph,7*DPR);cx.clip();cx.fillStyle='rgba(240,198,90,.26)';cx.fillRect(potL,l.topY+ph*0.40,l.potW,ph);
+    cx.strokeStyle='rgba(250,224,150,.55)';cx.lineWidth=1.2*DPR;cx.beginPath();for(var xx=potL;xx<=potR;xx+=5*DPR){var wy=l.topY+ph*0.40+Math.sin(xx*0.08+flow*0.005)*1.2*DPR;xx<=potL?cx.moveTo(xx,wy):cx.lineTo(xx,wy);}cx.stroke();cx.restore();
+    cx.strokeStyle='rgba(240,198,90,.5)';cx.lineWidth=1.4*DPR;rr(potL,l.topY,l.potW,ph,7*DPR);cx.stroke();
+    var tapEndX=potR+(l.poolX0-potR)*0.30,hoseY=l.botY-ph*0.10,poolConnX=l.poolX0;
+    function line3(){cx.beginPath();cx.moveTo(potR,l.tubeY);cx.lineTo(tapEndX,l.tubeY);cx.lineTo(tapEndX,hoseY);cx.lineTo(poolConnX,hoseY);}
+    cx.lineJoin='round';cx.lineCap='butt';
+    line3();cx.strokeStyle='rgba(240,198,90,.5)';cx.lineWidth=th;cx.stroke();
+    line3();cx.strokeStyle='rgba(240,198,90,.32)';cx.lineWidth=Math.max(2*DPR,th-4*DPR);cx.stroke();
+    line3();cx.strokeStyle='rgba(250,224,150,.55)';cx.lineWidth=Math.max(1.5*DPR,th-8*DPR);cx.setLineDash([5*DPR,18*DPR]);cx.lineDashOffset=-flow*0.12;cx.stroke();cx.setLineDash([]);cx.lineJoin='miter';
+    cx.fillStyle='rgba(255,228,150,.95)';cx.strokeStyle='rgba(170,130,45,.8)';cx.lineWidth=1*DPR;
+    var cw=th+5*DPR,cl=Math.max(4*DPR,th*0.55);
+    cx.fillRect(tapEndX-cw/2,l.tubeY+th*0.7,cw,cl);cx.strokeRect(tapEndX-cw/2,l.tubeY+th*0.7,cw,cl);
+    cx.fillRect(poolConnX-th*0.7-cl,hoseY-cw/2,cl,cw);cx.strokeRect(poolConnX-th*0.7-cl,hoseY-cw/2,cl,cw);
+    for(var i=0;i<people.length;i++){var pp=people[i];if(pp.delay>0){pp.delay-=dt;continue;}pp.pop=Math.min(1,pp.pop+dt*0.006);
+      var sp=slot(pp.slot,l),e=1-Math.pow(1-pp.pop,3);cx.fillStyle=pp.sel?'#f0c65a':'#22d3ee';cx.shadowColor=pp.sel?'rgba(240,198,90,.7)':'rgba(34,211,238,.55)';cx.shadowBlur=6*DPR;person(sp.x,sp.y,s*(0.55+0.45*e),e);cx.shadowBlur=0;}
+    cx.textAlign='center';cx.font='600 '+(11*DPR)+'px '+MONO;
+    cx.fillStyle='rgba(240,198,90,.9)';cx.fillText('Levy Pot',l.potX,l.topY-6*DPR);
+    cx.fillStyle='#7fdbe8';cx.fillText('Talent Pool',(l.poolX0+l.poolX1)/2,l.topY-6*DPR);
+    var r2=levy(currentPB);cx.fillStyle='rgba(240,198,90,.9)';cx.fillText('Levy Spend',(tapEndX+poolConnX)/2,l.botY+18*DPR);
+    cx.fillStyle='#7fdbe8';cx.fillText((r2.app||0)+' funded'+(r2.app>cap?' · each ≈'+Math.ceil(r2.app/cap):''),(l.poolX0+l.poolX1)/2,l.botY+18*DPR);
+    var sel=0;for(var i=0;i<people.length;i++)if(people[i].sel)sel++;
+    if(sel>0){cx.fillStyle='rgba(240,198,90,.95)';cx.font='600 '+(9.5*DPR)+'px '+MONO;cx.fillText('✦ First Cohort: '+sel+' selected',(l.poolX0+l.poolX1)/2,l.botY+38*DPR);}
+  }
+  fit(); addEventListener('resize',fit); refresh();
+  var last=performance.now();
+  (function loop(n){ if(!document.body.contains(cv)) return; var dt=Math.min(48,n-last); last=n; draw(dt); requestAnimationFrame(loop); })(performance.now());
+})();
+</script>
+</body>
+</html>

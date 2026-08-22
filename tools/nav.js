@@ -7,6 +7,7 @@
    ============================================================ */
 (function(){
   var TOOLS=[
+    ['first-cohort.html','Build your first cohort'],
     ['what-can-you-claim.html','What can you claim?'],
     ['expiry-clock.html','Levy Expiry Clock'],
     ['ni-calculator.html','NI Savings Calculator'],
