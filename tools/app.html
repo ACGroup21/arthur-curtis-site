@@ -23,10 +23,33 @@
   @keyframes vt-out{to{opacity:0;transform:translateY(-8px)}}
   @keyframes vt-in{from{opacity:0;transform:translateY(12px)}}
   @media(prefers-reduced-motion:reduce){#view{view-transition-name:none}}
+  /* Fundable entry splash */
+  #tsplash{position:fixed;inset:0;z-index:60;background:radial-gradient(70% 70% at 50% 42%,#0b1c34,#050d1a 70%);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:opacity .6s ease}
+  #tsplash.gone{opacity:0;pointer-events:none}
+  #tsplash .tsi{text-align:center}
+  #tsplash svg{width:86px;height:86px;filter:drop-shadow(0 0 24px rgba(34,211,238,.28))}
+  #tsplash .ic-w{opacity:0;animation:tsp .7s cubic-bezier(.2,.8,.25,1) .1s forwards}
+  #tsplash .ar{opacity:0;animation:tsf .6s ease .7s forwards}
+  @keyframes tsp{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:none}}
+  @keyframes tsf{to{opacity:1}}
+  #tsplash .slogan{font-family:'JetBrains Mono',monospace;font-size:clamp(20px,3.6vw,30px);font-weight:500;margin-top:24px;color:var(--ink);opacity:0;animation:tsu .7s cubic-bezier(.2,.7,.2,1) .95s forwards}
+  #tsplash .slogan .fw{font-weight:400;letter-spacing:.2em}
+  #tsplash .hint{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted-2);margin-top:20px;opacity:0;animation:tsu .6s ease 1.6s forwards}
+  @keyframes tsu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 </style>
 <style id="tool-style"></style>
 </head>
 <body>
+<div id="tsplash">
+  <div class="tsi">
+    <svg viewBox="0 0 304 297" aria-hidden="true">
+      <g class="ic-w"><path d="M 15 212 L 10 217 L 8 221 L 8 278 L 10 282 L 14 286 L 18 287 L 19 288 L 73 288 L 74 287 L 78 286 L 82 282 L 83 280 L 83 277 L 84 276 L 84 222 L 83 221 L 82 217 L 78 213 L 74 211 L 18 211 L 17 212 Z M 13 111 L 9 116 L 9 118 L 8 119 L 8 175 L 9 176 L 10 180 L 16 185 L 75 185 L 80 182 L 83 178 L 83 175 L 84 174 L 84 120 L 83 119 L 82 115 L 77 110 L 75 110 L 74 109 L 17 109 Z M 115 9 L 110 14 L 109 16 L 109 20 L 108 21 L 108 72 L 109 73 L 109 76 L 111 78 L 111 79 L 114 82 L 118 83 L 119 84 L 173 84 L 174 83 L 178 82 L 182 78 L 183 74 L 184 73 L 184 18 L 183 17 L 182 13 L 176 8 L 117 8 Z M 13 10 L 10 13 L 8 17 L 8 74 L 9 75 L 9 77 L 14 82 L 18 83 L 19 84 L 73 84 L 79 81 L 82 78 L 83 74 L 84 73 L 84 19 L 81 12 L 79 10 L 75 8 L 17 8 Z" fill="#e8eef7" fill-rule="evenodd"/></g>
+      <path class="ar" d="M 295 119 L 292 113 L 290 111 L 286 109 L 229 109 L 223 113 L 220 119 L 220 140 L 219 141 L 114 141 L 113 142 L 111 142 L 109 144 L 108 148 L 109 150 L 113 153 L 219 153 L 220 154 L 220 175 L 221 176 L 222 180 L 228 185 L 286 185 L 290 183 L 293 180 L 295 176 Z" fill="#00C8D0" fill-rule="evenodd"/>
+    </svg>
+    <div class="slogan">It's a <span class="fw">Fundable</span> World</div>
+    <div class="hint">click to enter</div>
+  </div>
+</div>
 <div class="app">
   <div class="lite-head"></div>
   <div id="spine"></div>
@@ -39,5 +62,13 @@
 <script src="nav.js?v=1"></script>
 <script>if(window.AC&&AC.spine)AC.spine.mount();</script>
 <script src="shell.js"></script>
+<script>
+(function(){ var s=document.getElementById('tsplash'); if(!s) return;
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce || sessionStorage.getItem('fundable_tools_entered')){ s.classList.add('gone'); setTimeout(function(){ s && s.remove(); },40); return; }
+  function go(){ if(!s) return; s.classList.add('gone'); try{ sessionStorage.setItem('fundable_tools_entered','1'); }catch(e){} var x=s; s=null; setTimeout(function(){ x.remove(); },700); }
+  s.addEventListener('click', go); setTimeout(go, 3000);
+})();
+</script>
 </body>
 </html>
