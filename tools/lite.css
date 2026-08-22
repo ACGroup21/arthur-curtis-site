@@ -5,7 +5,7 @@
    ============================================================ */
 :root{
   --navy:#0B1B3A; --bg:#05101f; --bg-2:#040b16;
-  --blue:#2563eb; --cyan:#22d3ee; --cyan-soft:#67e8f9; --ink:#eaf2fb;
+  --blue:#0284c7; --cyan:#22d3ee; --cyan-soft:#67e8f9; --ink:#eaf2fb;
   --muted:#8ba0b6; --muted-2:#5f7388; --line:rgba(120,160,210,0.14);
   --glass:rgba(255,255,255,0.035); --warm:#f0883e;
   --sans:'Inter',system-ui,-apple-system,sans-serif; --mono:'JetBrains Mono',monospace;
