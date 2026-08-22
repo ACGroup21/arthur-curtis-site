@@ -228,9 +228,13 @@
   .case-card .cc-sub{font-size:13px;color:var(--muted);margin-top:5px}
   .case-card p{font-size:14px;color:#c2d0e0;line-height:1.55;margin-top:15px}
 
-  footer{position:relative;z-index:3;border-top:1px solid var(--line);padding:50px 0 40px;color:var(--muted);font-size:13.5px;background:rgba(4,11,22,.5)}
+  footer{position:relative;z-index:3;border-top:1px solid var(--line);padding:44px 0 40px;color:var(--muted);font-size:13.5px;background:linear-gradient(180deg,#0a1a30,#060f1d)}
   footer .row{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:center}
   footer img{height:30px;opacity:.9}
+  footer .foot-brands{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  footer .foot-by{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted-2);padding-left:16px;border-left:1px solid var(--line)}
+  footer .foot-by img{height:26px;opacity:1}
+  footer .foot-by b{color:var(--muted);font-weight:600}
 
   .mock-flag{position:fixed;bottom:16px;left:16px;z-index:99;background:rgba(34,211,238,.12);border:1px solid rgba(34,211,238,.4);color:var(--cyan-soft);font-family:var(--mono);font-size:11px;padding:7px 12px;border-radius:8px;backdrop-filter:blur(8px)}
   .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease}
@@ -489,7 +493,7 @@
 
 <footer>
   <div class="wrap row">
-    <img src="assets/viral-white-accent.svg" alt="VIRAL by Arthur Curtis" style="height:44px">
+    <div class="foot-brands"><img src="assets/viral-white-accent.svg" alt="VIRAL by Arthur Curtis" style="height:40px"><span class="foot-by"><img src="assets/hummingbird-white.png" alt="AC Digital"><b>AC Digital</b></span></div>
     <span>© 2026 Arthur Curtis · Making people better</span>
     <span><a href="mailto:hello@arthurcurtis.com">hello@arthurcurtis.com</a> · <a href="#">LinkedIn</a></span>
   </div>

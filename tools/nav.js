@@ -23,12 +23,9 @@
 
   var STYLE='\
   .lnav{position:relative;display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:26px}\
-  .lnav-brand{display:flex;align-items:center;gap:10px;text-decoration:none}\
-  .lnav-brand .fi{height:24px;width:auto;display:block;flex:0 0 auto}\
-  .lnav-brand .col{display:flex;flex-direction:column;gap:3px}\
-  .lnav-brand .fw{height:13px;width:auto;display:block}\
-  .lnav-brand .by{color:var(--muted-2);font-weight:500;font-size:10px;letter-spacing:.05em}\
-  .lnav-brand .by b{color:var(--muted);font-weight:600}\
+  .lnav-brand{display:flex;align-items:center;gap:11px;text-decoration:none}\
+  .lnav-brand .fi{height:28px;width:auto;display:block;flex:0 0 auto}\
+  .lnav-brand .fw{height:16px;width:auto;display:block}\
   .lnav-right{display:flex;gap:8px}\
   .lnav-btn{font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--ink);border-radius:9px;padding:8px 13px;display:flex;align-items:center;gap:7px}\
   .lnav-btn:hover{border-color:var(--cyan);color:var(--cyan)}\
@@ -41,10 +38,11 @@
   .lnav-panel a.on{color:var(--cyan);background:rgba(34,211,238,.07)}\
   .lnav-panel a.on::after{content:" ·";color:var(--cyan)}\
   @media(max-width:520px){.lnav-brand .by{display:none}.lnav-panel{right:0;left:0;min-width:0}}\
-  .lite-foot{margin-top:48px;padding:26px 2px 8px;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}\
-  .lite-foot .ff-brand{display:flex;align-items:center;gap:12px}\
-  .lite-foot .ff-logo{height:22px;width:auto;display:block;opacity:.9}\
-  .lite-foot .ff-by{font-size:11px;color:var(--muted-2)}\
+  .lite-foot{margin-top:48px;padding:24px 22px;border-top:1px solid var(--line);border-radius:16px 16px 0 0;display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;background:linear-gradient(180deg,#0a1a30,#060f1d)}\
+  .lite-foot .ff-brand{display:flex;align-items:center;gap:14px;flex-wrap:wrap}\
+  .lite-foot .ff-logo{height:24px;width:auto;display:block}\
+  .lite-foot .ff-by{display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--muted-2);padding-left:14px;border-left:1px solid var(--line)}\
+  .lite-foot .ff-by img{height:22px;width:auto;display:block}\
   .lite-foot .ff-by b{color:var(--muted);font-weight:600}\
   .lite-foot .ff-links a{font-size:12.5px;color:var(--muted);text-decoration:none}\
   .lite-foot .ff-links a:hover{color:var(--cyan)}\
@@ -58,7 +56,7 @@
     head.classList.add('lnav'); head.innerHTML='';
 
     var brand=el('a','lnav-brand'); brand.href=SITE;
-    brand.innerHTML='<img class="fi" src="../assets/fundable-icon.svg" alt=""><span class="col"><img class="fw" src="../assets/fundable-wordmark.svg" alt="Fundable"><span class="by">built by <b>AC Digital</b></span></span>';
+    brand.innerHTML='<img class="fi" src="../assets/fundable-icon.svg" alt=""><img class="fw" src="../assets/fundable-wordmark.svg" alt="Fundable">';
     head.appendChild(brand);
 
     var right=el('div','lnav-right',
@@ -95,7 +93,7 @@
     if(document.querySelector('.lite-foot')) return;
     var app=document.querySelector('.app'); if(!app) return;
     var f=el('footer','lite-foot');
-    f.innerHTML='<div class="ff-brand"><img class="ff-logo" src="../assets/fundable-logo.svg" alt="Fundable"><span class="ff-by">built by <b>AC Digital</b></span></div>'+
+    f.innerHTML='<div class="ff-brand"><img class="ff-logo" src="../assets/fundable-logo.svg" alt="Fundable"><span class="ff-by">built by <img src="../assets/hummingbird-white.png" alt=""><b>AC Digital</b></span></div>'+
       '<div class="ff-links"><a href="'+SITE+'">arthurcurtis.com &rarr;</a></div>';
     app.appendChild(f);
   }

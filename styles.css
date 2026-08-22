@@ -124,12 +124,16 @@ section.block{position:relative;z-index:3;padding:90px 0;border-top:1px solid va
 .cta-band h2{font-size:clamp(30px,4.2vw,50px);font-weight:800;letter-spacing:-.02em;max-width:720px;margin:0 auto 20px}
 .cta-band p{color:var(--muted);font-size:18px;max-width:520px;margin:0 auto 32px}
 
-/* footer */
-footer{position:relative;z-index:3;border-top:1px solid var(--line);padding:50px 0 40px;color:var(--muted);font-size:13.5px}
+/* footer — solid so the brands read clearly over the atmosphere */
+footer{position:relative;z-index:3;border-top:1px solid var(--line);padding:44px 0 40px;color:var(--muted);font-size:13.5px;background:linear-gradient(180deg,#0a1a30,#060f1d)}
 footer .row{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:center}
 footer img{height:30px;opacity:.9}
 footer a{color:var(--muted);transition:color .2s}
 footer a:hover{color:var(--cyan)}
+footer .foot-brands{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+footer .foot-by{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted-2);padding-left:16px;border-left:1px solid var(--line)}
+footer .foot-by img{height:26px;opacity:1}
+footer .foot-by b{color:var(--muted);font-weight:600}
 
 /* scroll reveal */
 .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
