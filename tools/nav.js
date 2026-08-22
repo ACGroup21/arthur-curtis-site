@@ -42,7 +42,7 @@
   .lite-foot .ff-brand{display:flex;align-items:center;gap:14px;flex-wrap:wrap}\
   .lite-foot .ff-logo{height:24px;width:auto;display:block}\
   .lite-foot .ff-by{display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--muted-2);padding-left:14px;border-left:1px solid var(--line)}\
-  .lite-foot .ff-by img{height:22px;width:auto;display:block}\
+  .lite-foot .ff-by img{height:26px;width:auto;display:block}\
   .lite-foot .ff-by b{color:var(--muted);font-weight:600}\
   .lite-foot .ff-links a{font-size:12.5px;color:var(--muted);text-decoration:none}\
   .lite-foot .ff-links a:hover{color:var(--cyan)}\
@@ -93,7 +93,7 @@
     if(document.querySelector('.lite-foot')) return;
     var app=document.querySelector('.app'); if(!app) return;
     var f=el('footer','lite-foot');
-    f.innerHTML='<div class="ff-brand"><img class="ff-logo" src="../assets/fundable-logo.svg" alt="Fundable"><span class="ff-by">built by <img src="../assets/hummingbird-white.png" alt=""><b>AC Digital</b></span></div>'+
+    f.innerHTML='<div class="ff-brand"><img class="ff-logo" src="../assets/fundable-logo.svg" alt="Fundable"><span class="ff-by">built by <img src="../assets/ac-digital-white.svg" alt=""><b>AC Digital</b></span></div>'+
       '<div class="ff-links"><a href="'+SITE+'">arthurcurtis.com &rarr;</a></div>';
     app.appendChild(f);
   }
