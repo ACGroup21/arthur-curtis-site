@@ -12,6 +12,17 @@
 <style>
   textarea{width:100%;min-height:150px;background:var(--glass);border:1px solid var(--line);border-radius:12px;padding:14px;color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.5;resize:vertical}
   textarea:focus{outline:none;border-color:var(--cyan)}
+  /* drop box — read a JD PDF/text in the browser (same idea as the flagship app) */
+  .drop{border:1.5px dashed rgba(34,211,238,.35);border-radius:14px;background:linear-gradient(180deg,rgba(34,211,238,.05),transparent);padding:22px;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;margin-bottom:12px}
+  .drop:hover,.drop:focus{outline:none;border-color:var(--cyan);background:linear-gradient(180deg,rgba(34,211,238,.09),transparent)}
+  .drop.over{border-color:var(--cyan);background:rgba(34,211,238,.13);border-style:solid}
+  .drop .di-ico{width:32px;height:32px;margin:0 auto 8px;color:var(--cyan);display:block}
+  .drop .drop-t{font-size:15px;font-weight:600;color:var(--ink)}
+  .drop .drop-t span{color:var(--cyan)}
+  .drop .drop-s{font-size:12px;color:var(--muted-2);margin-top:5px}
+  .drop-status{font-family:var(--mono);font-size:12px;color:var(--cyan-soft);min-height:16px;margin:2px 0 10px}
+  .drop-status.err{color:#e0607a}
+  .drop-or{text-align:center;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted-2);margin:0 0 10px}
   .matches{margin-top:8px;display:flex;flex-direction:column;gap:10px}
   .mrow{padding:15px 16px;border:1px solid var(--line);border-radius:14px;background:var(--glass)}
   .mrow .mtop{display:flex;justify-content:space-between;gap:10px;align-items:baseline;flex-wrap:wrap}
@@ -38,7 +49,15 @@
   <p class="subtitle">Paste a job description and see the closest apprenticeship standards — matched on the actual role requirements across all 322 standards.</p>
 
   <div class="card">
-    <h2>Paste the job description</h2>
+    <h2>Add the job description</h2>
+    <div class="drop" id="drop" tabindex="0" role="button" aria-label="Upload a job description file">
+      <input type="file" id="jdfile" accept=".pdf,.txt,.md,text/plain,application/pdf" hidden>
+      <svg class="di-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4M8 8l4-4 4 4"/><path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>
+      <div class="drop-t">Drop a JD file here <span>or click to browse</span></div>
+      <div class="drop-s">PDF or plain text · read in your browser, nothing is uploaded</div>
+    </div>
+    <div class="drop-status" id="dstatus"></div>
+    <div class="drop-or">or paste below</div>
     <textarea id="jd" placeholder="Paste the JD here — responsibilities, skills, the day-to-day…"></textarea>
     <div class="funnel" style="margin-top:14px">
       <button class="btn btn-primary" id="go">Find matching standards →</button>
@@ -118,6 +137,70 @@
     $('jd').value="We are hiring a Data Analyst to collect, clean and analyse large datasets, build dashboards and reports, and turn data into insight for the business. You will work with SQL and Python, ensure data quality and security, and present findings to stakeholders to support decisions.";
     run();
   });
+
+  /* ---- drop box: read a JD PDF or text file in the browser, then match (mirrors the flagship app) ---- */
+  (function(){
+    var drop=$('drop'), file=$('jdfile'), status=$('dstatus'); if(!drop||!file) return;
+    function say(msg,err){ status.textContent=msg||''; status.className='drop-status'+(err?' err':''); }
+    drop.addEventListener('click',function(){ file.click(); });
+    drop.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); file.click(); } });
+    ['dragenter','dragover'].forEach(function(ev){ drop.addEventListener(ev,function(e){ e.preventDefault(); drop.classList.add('over'); }); });
+    drop.addEventListener('dragleave',function(e){ if(!drop.contains(e.relatedTarget)) drop.classList.remove('over'); });
+    drop.addEventListener('drop',function(e){ e.preventDefault(); drop.classList.remove('over'); var f=e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0]; if(f) handle(f); });
+    file.addEventListener('change',function(){ if(file.files&&file.files[0]) handle(file.files[0]); });
+
+    function handle(f){
+      var name=(f.name||'').toLowerCase();
+      if(name.slice(-4)==='.pdf'||f.type==='application/pdf'){ readPdf(f); }
+      else if(name.slice(-4)==='.txt'||name.slice(-3)==='.md'||/^text\//.test(f.type)||f.type===''){ readText(f); }
+      else { say('Unsupported file ('+(f.name||'?')+') — paste the text below instead.',true); }
+    }
+    function done(text,f){
+      text=(text||'').replace(/[ \t]+\n/g,'\n').replace(/\n{3,}/g,'\n\n').trim();
+      if(!text){ say('Could not read any text from that file — paste it below instead.',true); return; }
+      $('jd').value=text;
+      var words=(text.match(/\S+/g)||[]).length;
+      say('Loaded '+(f.name||'file')+' · '+words.toLocaleString('en-GB')+' words');
+      run();
+    }
+    function readText(f){ say('Reading '+f.name+'…'); var r=new FileReader(); r.onload=function(){ done(String(r.result||''),f); }; r.onerror=function(){ say('Could not read that file.',true); }; r.readAsText(f); }
+
+    var PDFJS_SRC='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+    var PDFJS_WK ='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    var pdfP=null;
+    function ensurePdf(){
+      if(window.pdfjsLib){ try{ window.pdfjsLib.GlobalWorkerOptions.workerSrc=PDFJS_WK; }catch(e){} return Promise.resolve(window.pdfjsLib); }
+      if(pdfP) return pdfP;
+      pdfP=new Promise(function(res,rej){
+        var s=document.createElement('script'); s.src=PDFJS_SRC;
+        s.onload=function(){ try{ window.pdfjsLib.GlobalWorkerOptions.workerSrc=PDFJS_WK; }catch(e){} res(window.pdfjsLib); };
+        s.onerror=function(){ rej(new Error('pdfjs load failed')); };
+        document.head.appendChild(s);
+      });
+      return pdfP;
+    }
+    function readPdf(f){
+      say('Loading PDF reader…');
+      ensurePdf().then(function(lib){
+        say('Reading '+f.name+'…');
+        var fr=new FileReader();
+        fr.onload=function(){
+          lib.getDocument({data:new Uint8Array(fr.result)}).promise.then(function(pdf){
+            var pages=pdf.numPages, chunks=[], i=1;
+            (function next(){
+              if(i>pages){ done(chunks.join('\n'),f); return; }
+              say('Reading '+f.name+' · page '+i+'/'+pages+'…');
+              pdf.getPage(i).then(function(pg){ return pg.getTextContent(); }).then(function(tc){
+                chunks.push(tc.items.map(function(it){return it.str;}).join(' ')); i++; next();
+              }).catch(function(){ i++; next(); });
+            })();
+          }).catch(function(){ say('Could not parse that PDF — paste the text instead.',true); });
+        };
+        fr.onerror=function(){ say('Could not read that file.',true); };
+        fr.readAsArrayBuffer(f);
+      }).catch(function(){ say('Could not load the PDF reader (offline?) — paste the text instead.',true); });
+    }
+  })();
 </script>
 </body>
 </html>
