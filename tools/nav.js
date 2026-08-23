@@ -41,12 +41,11 @@
   .lite-foot{margin-top:48px;padding:24px 22px;border-top:1px solid var(--line);border-radius:16px 16px 0 0;display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;background:linear-gradient(180deg,#0a1a30,#060f1d)}\
   .lite-foot .ff-brand{display:flex;align-items:center;gap:14px;flex-wrap:wrap}\
   .lite-foot .ff-logo{height:24px;width:auto;display:block}\
-  .lite-foot .ff-by{display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--muted-2);padding-left:14px;border-left:1px solid var(--line)}\
-  .lite-foot .ff-by img{height:28px;width:auto;display:block}\
-  .lite-foot .ff-by .acd-word{display:inline-flex;gap:.3em;align-items:baseline;font-weight:800;font-size:14px;letter-spacing:.005em;line-height:1}\
-  .lite-foot .ff-by .acd-ac{color:#fff}\
-  .lite-foot .ff-by .acd-d{color:#3B9EFF;font-weight:700}\
-  .lite-foot .ff-by b{color:var(--muted);font-weight:600}\
+  .lite-foot .ff-by{display:flex;align-items:center;gap:9px;color:var(--muted-2);padding-left:14px;border-left:1px solid var(--line)}\
+  .lite-foot .ff-by .acd-mark{height:20px;width:auto;display:block;flex:none}\
+  .lite-foot .ff-by .acd-txt{font-family:"JetBrains Mono",monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;line-height:1.35}\
+  .lite-foot .ff-by .acd-txt strong{color:#fff;font-weight:600;letter-spacing:.06em}\
+  .lite-foot .ff-by .acd-txt .acd-blue{color:#3B9EFF}\
   .lite-foot .ff-links a{font-size:12.5px;color:var(--muted);text-decoration:none}\
   .lite-foot .ff-links a:hover{color:var(--cyan)}\
   ';
@@ -96,7 +95,7 @@
     if(document.querySelector('.lite-foot')) return;
     var app=document.querySelector('.app'); if(!app) return;
     var f=el('footer','lite-foot');
-    f.innerHTML='<div class="ff-brand"><img class="ff-logo" src="../assets/fundable-logo.svg" alt="Fundable"><span class="ff-by">built by <img src="../assets/ac-a-logo-white.svg" alt="AC Digital"><span class="acd-word"><span class="acd-ac">AC</span><span class="acd-d">Digital</span></span></span></div>'+
+    f.innerHTML='<div class="ff-brand"><img class="ff-logo" src="../assets/fundable-logo.svg" alt="Fundable"><span class="ff-by"><img class="acd-mark" src="../assets/ac-a-logo-white.svg" alt="AC Digital"><span class="acd-txt">Built&nbsp;by <strong>AC&nbsp;<span class="acd-blue">Digital</span></strong> &middot; part&nbsp;of Arthur&nbsp;Curtis&nbsp;Group</span></span></div>'+
       '<div class="ff-links"><a href="'+SITE+'">arthurcurtis.com &rarr;</a></div>';
     app.appendChild(f);
   }

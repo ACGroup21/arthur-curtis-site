@@ -131,12 +131,11 @@ footer img{height:30px;opacity:.9}
 footer a{color:var(--muted);transition:color .2s}
 footer a:hover{color:var(--cyan)}
 footer .foot-brands{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
-footer .foot-by{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted-2);padding-left:16px;border-left:1px solid var(--line)}
-footer .foot-by img{height:34px;opacity:1}
-footer .foot-by .acd-word{display:inline-flex;gap:.3em;align-items:baseline;font-family:'Inter',system-ui,sans-serif;font-weight:800;font-size:16px;letter-spacing:.005em;line-height:1}
-footer .foot-by .acd-ac{color:#fff}
-footer .foot-by .acd-d{color:#3B9EFF;font-weight:700}
-footer .foot-by b{color:var(--muted);font-weight:600}
+footer .foot-by{display:flex;align-items:center;gap:9px;padding-left:16px;border-left:1px solid var(--line)}
+footer .foot-by .acd-mark{height:20px;width:auto;display:block;flex:none;opacity:1}
+footer .foot-by .acd-txt{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-2);line-height:1.35}
+footer .foot-by .acd-txt strong{color:#fff;font-weight:600;letter-spacing:.06em}
+footer .foot-by .acd-txt .acd-blue{color:#3B9EFF}
 
 /* scroll reveal */
 .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
