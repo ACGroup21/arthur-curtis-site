@@ -43,6 +43,9 @@
   .lite-foot .ff-logo{height:24px;width:auto;display:block}\
   .lite-foot .ff-by{display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--muted-2);padding-left:14px;border-left:1px solid var(--line)}\
   .lite-foot .ff-by img{height:28px;width:auto;display:block}\
+  .lite-foot .ff-by .acd-word{display:inline-flex;gap:.3em;align-items:baseline;font-weight:800;font-size:14px;letter-spacing:.005em;line-height:1}\
+  .lite-foot .ff-by .acd-ac{color:#fff}\
+  .lite-foot .ff-by .acd-d{color:#3B9EFF;font-weight:700}\
   .lite-foot .ff-by b{color:var(--muted);font-weight:600}\
   .lite-foot .ff-links a{font-size:12.5px;color:var(--muted);text-decoration:none}\
   .lite-foot .ff-links a:hover{color:var(--cyan)}\
@@ -56,7 +59,7 @@
     head.classList.add('lnav'); head.innerHTML='';
 
     var brand=el('a','lnav-brand'); brand.href=SITE;
-    brand.innerHTML='<img class="fi" src="../assets/fundable-icon.svg" alt=""><img class="fw" src="../assets/fundable-wordmark.svg" alt="Fundable">';
+    brand.innerHTML='<img class="fw" src="../assets/fundable-wordmark.svg" alt="Fundable">';
     head.appendChild(brand);
 
     var right=el('div','lnav-right',
@@ -93,7 +96,7 @@
     if(document.querySelector('.lite-foot')) return;
     var app=document.querySelector('.app'); if(!app) return;
     var f=el('footer','lite-foot');
-    f.innerHTML='<div class="ff-brand"><img class="ff-logo" src="../assets/fundable-logo.svg" alt="Fundable"><span class="ff-by">built by <img src="../assets/ac-a-logo-white.svg" alt="AC Digital"></span></div>'+
+    f.innerHTML='<div class="ff-brand"><img class="ff-logo" src="../assets/fundable-logo.svg" alt="Fundable"><span class="ff-by">built by <img src="../assets/ac-a-logo-white.svg" alt="AC Digital"><span class="acd-word"><span class="acd-ac">AC</span><span class="acd-d">Digital</span></span></span></div>'+
       '<div class="ff-links"><a href="'+SITE+'">arthurcurtis.com &rarr;</a></div>';
     app.appendChild(f);
   }
