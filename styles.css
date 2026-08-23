@@ -131,10 +131,10 @@ footer img{height:30px;opacity:.9}
 footer a{color:var(--muted);transition:color .2s}
 footer a:hover{color:var(--cyan)}
 footer .foot-brands{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
-footer .foot-by{display:flex;align-items:center;gap:9px;padding-left:16px;border-left:1px solid var(--line)}
-footer .foot-by .acd-mark{height:20px;width:auto;display:block;flex:none;opacity:1}
-footer .foot-by .acd-txt{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-2);line-height:1.35}
-footer .foot-by .acd-txt strong{color:#fff;font-weight:600;letter-spacing:.06em}
+footer .foot-by{display:flex;align-items:center;gap:8px;padding-left:16px;border-left:1px solid var(--line)}
+footer .foot-by .acd-mark{height:16px;width:auto;display:block;flex:none;opacity:1}
+footer .foot-by .acd-txt{font-family:var(--mono);font-size:9px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted-2);line-height:1.35}
+footer .foot-by .acd-txt strong{color:#fff;font-weight:600;letter-spacing:.07em}
 footer .foot-by .acd-txt .acd-blue{color:#3B9EFF}
 
 /* scroll reveal */
