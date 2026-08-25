@@ -203,6 +203,7 @@ window.AC = (function(){
           }catch(e){}
           applyPatch(p); RULES.__source = 'canonical';
           try{ window.dispatchEvent(new CustomEvent('ac:rules', {detail:{source:'canonical', version:RULES.__version}})); }catch(e){}
+          try{ autoWireWhenReady(); }catch(e){}
           return RULES;
         })
         .catch(function(err){
@@ -213,8 +214,61 @@ window.AC = (function(){
         })
     : Promise.resolve(RULES);
 
+  /* ---- source-trace: tag any figure with data-trace="canonical.path" (+ data-label,
+     optional data-note / data-indicative) and it becomes clickable to its gov.uk
+     source, read LIVE from the canonical rulebook. One shared popover, repositioned.
+     Auto-wires static tags once the canonical loads; call AC.wireTrace(root) after a
+     dynamic re-render. CSS is injected so no extra stylesheet cache to bust. ---- */
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+  var _MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  function fmtDate(iso){ if(!iso) return ''; var p=String(iso).split('-'); if(p.length<3) return iso; return (+p[2])+' '+_MON[(+p[1])-1]+' '+p[0]; }
+  function injectTraceCSS(){
+    if(document.getElementById('ac-trace-css')) return;
+    var s=document.createElement('style'); s.id='ac-trace-css';
+    s.textContent=".ac-trace{border-bottom:1.5px dotted rgba(34,211,238,.55);cursor:pointer;color:var(--cyan,#22d3ee);transition:color .15s,border-color .15s;white-space:nowrap}.ac-trace:hover{color:var(--cyan-soft,#67e8f9);border-bottom-color:var(--cyan,#22d3ee)}.ac-trace:focus-visible{outline:2px solid var(--cyan,#22d3ee);outline-offset:2px;border-radius:3px}.ac-tpop{position:fixed;z-index:9999;width:min(250px,86vw);background:var(--navy,#0B1B3A);border:1px solid var(--line,rgba(120,160,210,.14));border-radius:12px;padding:13px 15px;box-shadow:0 20px 50px rgba(0,0,0,.55);opacity:0;pointer-events:none;transition:opacity .16s;display:flex;flex-direction:column;gap:5px;text-align:left;font-family:'Inter',system-ui,sans-serif}.ac-tpop.on{opacity:1;pointer-events:auto}.ac-tk{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--cyan,#22d3ee);font-weight:600}.ac-tc{font-size:12px;color:var(--ink,#eaf2fb);opacity:.86;line-height:1.45}.ac-tpop a{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--cyan,#22d3ee);text-decoration:none;font-weight:500}.ac-tpop a:hover{text-decoration:underline}.ac-tv{font-size:10.5px;color:var(--muted,#8ba0b6);display:flex;align-items:center;gap:6px;margin-top:2px}.ac-tv.ok::before{content:'';width:6px;height:6px;border-radius:50%;background:#39d07f;flex:none}";
+    (document.head||document.documentElement).appendChild(s);
+  }
+  var _tpop=null;
+  function ensurePop(){
+    if(_tpop) return _tpop;
+    _tpop=document.createElement('div'); _tpop.className='ac-tpop'; _tpop.setAttribute('role','tooltip');
+    document.body.appendChild(_tpop);
+    document.addEventListener('click',function(e){ if(_tpop.classList.contains('on') && !(e.target.closest && (e.target.closest('.ac-tpop')||e.target.closest('[data-trace]')))) hidePop(); });
+    document.addEventListener('keydown',function(e){ if(e.key==='Escape') hidePop(); });
+    window.addEventListener('scroll',hidePop,true); window.addEventListener('resize',hidePop);
+    return _tpop;
+  }
+  function hidePop(){ if(_tpop) _tpop.classList.remove('on'); }
+  function showPop(el){
+    var leaf = RULES.__canonical ? pick(RULES.__canonical, el.getAttribute('data-trace')) : null;
+    var src = leaf && leaf.source;
+    var note = el.getAttribute('data-note') || (leaf && leaf.note) || '';
+    var asOf = (RULES.__canonical && RULES.__canonical.meta && RULES.__canonical.meta.asOf) || RULES.__asOf;
+    var indicative = el.hasAttribute('data-indicative') || !src;
+    var pop=ensurePop();
+    pop.innerHTML='<span class="ac-tk">'+esc(el.getAttribute('data-label')||'Source')+'</span>'+
+      (note?'<span class="ac-tc">'+esc(note)+'</span>':'')+
+      (src?'<a href="'+esc(src)+'" target="_blank" rel="noopener">gov.uk &rarr;</a>':'')+
+      '<span class="ac-tv'+(indicative?'':' ok')+'">'+(indicative?'Indicative — not a funding rule':'Verified '+esc(fmtDate(asOf)))+'</span>';
+    var r=el.getBoundingClientRect();
+    pop.style.visibility='hidden'; pop.classList.add('on');
+    var pw=pop.offsetWidth, ph=pop.offsetHeight;
+    pop.style.left=Math.min(Math.max(8, r.left+r.width/2-pw/2), window.innerWidth-pw-8)+'px';
+    var top=r.top-ph-10; pop.style.top=(top<8 ? r.bottom+10 : top)+'px'; pop.style.visibility='';
+  }
+  function wireTrace(root){
+    injectTraceCSS(); root=root||document; var els=root.querySelectorAll('[data-trace]');
+    for(var i=0;i<els.length;i++){ (function(el){
+      if(el.__traced) return; el.__traced=true;
+      el.classList.add('ac-trace'); el.setAttribute('role','button'); el.setAttribute('tabindex','0');
+      el.addEventListener('click',function(e){ e.stopPropagation(); showPop(el); });
+      el.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); e.stopPropagation(); showPop(el); } });
+    })(els[i]); }
+  }
+  function autoWireWhenReady(){ function go(){ try{ wireTrace(document); }catch(e){} } if(document.readyState!=='loading') go(); else document.addEventListener('DOMContentLoaded',go); }
+
   return {
-    RULES: RULES, RULES_URL: RULES_URL, rulesReady: rulesReady,
+    RULES: RULES, RULES_URL: RULES_URL, rulesReady: rulesReady, wireTrace: wireTrace,
     levy: levy, niSaving: niSaving, ageFlags: ageFlags, assess: assess,
     fmt: fmt, fmtMoney: fmtMoney, scenario: scenario
   };
