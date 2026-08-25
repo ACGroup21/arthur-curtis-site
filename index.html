@@ -283,9 +283,16 @@
     input[type=range]::-webkit-slider-thumb{width:28px;height:28px}
     input[type=range]::-moz-range-thumb{width:28px;height:28px}
   }
+
+  /* ---------- accessibility ---------- */
+  .skip-link{position:fixed;top:-64px;left:12px;z-index:200;background:var(--cyan);color:#04121f;padding:11px 18px;border-radius:9px;font-weight:700;font-size:14px;text-decoration:none;box-shadow:0 8px 24px rgba(2,10,26,.5);transition:top .2s}
+  .skip-link:focus{top:12px;outline:2px solid #fff;outline-offset:2px}
+  main:focus{outline:none}
+  a:focus-visible,button:focus-visible,summary:focus-visible,input[type=range]:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--cyan);outline-offset:3px;border-radius:4px}
 </style>
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to content</a>
 
 <div id="splash">
   <canvas id="sp-canvas"></canvas>
@@ -344,6 +351,8 @@
     <a class="btn btn-primary" href="contact.html">Book a call</a>
   </div>
 </nav>
+
+<main id="main" tabindex="-1">
 
 <!-- ============ HERO ============ -->
 <header class="hero">
@@ -522,6 +531,8 @@
     <a class="btn btn-primary" style="padding:15px 30px;font-size:16px" href="contact.html">Book a meeting with us →</a>
   </div>
 </section>
+
+</main>
 
 <footer>
   <div class="wrap row">
