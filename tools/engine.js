@@ -146,7 +146,7 @@ window.AC = (function(){
      refreshes AC.RULES in place and fires 'ac:rules'. Constants only, no logic.
      Safe before the repo exists — a 404/failure just keeps the baked values.
      Source: ACGroup21/ac-funding-data → funding-rules.json */
-  var RULES_URL = 'https://acgroup21.github.io/ac-funding-data/funding-rules.json';
+  var RULES_URL = 'https://raw.githubusercontent.com/ACGroup21/ACGroup21-ac-funding-data/main/funding-rules.json';
   RULES.__source = 'baked';
 
   function pick(o, path){ return path.split('.').reduce(function(a,k){ return (a==null ? a : a[k]); }, o); }
