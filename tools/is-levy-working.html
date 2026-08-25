@@ -123,13 +123,14 @@
     if(score>=8){ band='On top of it'; colour='var(--cyan)';
       text='Your levy is largely pulling its weight. The gains left are at the margin — squeezing the <b>NI exemption</b> on under-25s, moving <b>unspent funds via transfers</b>, and proving <b>ROI</b> to leadership. Worth a second opinion to catch the last few percent.'; }
     else if(score>=4){ band='Getting by'; colour='var(--warm)';
-      text='You\'re using some of it, but there\'s clear headroom — and with expiry now at <b>12 months</b>, drift costs more than it used to. A tighter, owned plan would turn "some" into "most".'; }
+      text='You\'re using some of it, but there\'s clear headroom — and with expiry now at <span data-trace="expiry.monthsFrom" data-label="The 12-month expiry clock"><b>12 months</b></span>, drift costs more than it used to. A tighter, owned plan would turn "some" into "most".'; }
     else { band='At risk'; colour='#e0607a';
-      text='You\'re likely forfeiting levy every month. On the new <b>12-month clock</b>, that adds up fast. The priority is simple: a real spend plan, mapped to roles, before more expires.'; }
+      text='You\'re likely forfeiting levy every month. On the new <span data-trace="expiry.monthsFrom" data-label="The 12-month expiry clock"><b>12-month clock</b></span>, that adds up fast. The priority is simple: a real spend plan, mapped to roles, before more expires.'; }
 
     $('bandTitle').textContent=band; $('bandTitle').style.color=colour;
     $('meterFill').style.background=colour;
     $('bandText').innerHTML=text;
+    if(AC.wireTrace) AC.wireTrace($('bandText'));
 
     var nl=$('nonlevy');
     if(isNonLevy){ nl.style.display='block';
