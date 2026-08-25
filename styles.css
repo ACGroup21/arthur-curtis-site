@@ -141,3 +141,15 @@ footer .foot-by .acd-txt .acd-blue{color:#3B9EFF}
 .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
 .reveal.in{opacity:1;transform:none}
 @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+
+/* ---------- mobile refinement (phones) ---------- */
+@media(max-width:560px){
+  nav#nav{padding:16px 20px}
+  .loop{grid-template-columns:1fr;gap:14px;margin-top:30px}
+  .loop .step{padding:20px 18px}
+  /* 16px inputs stop iOS Safari zooming in on focus */
+  .field input,.field textarea,.field select{font-size:16px}
+  .cta-band{padding:66px 0}
+  .cta-band p{font-size:16px}
+  footer .row{flex-direction:column;align-items:flex-start;gap:18px;text-align:left}
+}
