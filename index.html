@@ -292,43 +292,7 @@
 
   /* define --warm (dark) */
   :root{--warm:#f0a35c}
-  /* ============ LIGHT THEME ============ */
-  :root[data-theme="light"]{
-    --navy:#ffffff;--navy-2:#eef3fa;--bg:#f4f7fb;--bg-2:#e8eef6;
-    --blue:#0a3d66;--cyan:#0a5f8a;--cyan-soft:#0a6f9e;--ink:#12263f;
-    --muted:#4c5e74;--muted-2:#5c6c80;--line:rgba(20,50,90,0.15);
-    --glass:rgba(20,50,90,0.025);--warm:#c2410c;
-  }
-  :root[data-theme="light"] body{background:var(--bg);color:var(--ink)}
-  :root[data-theme="light"] #bgCanvas{display:none}
-  :root[data-theme="light"] .grain{opacity:.03}
-  :root[data-theme="light"] h1 .grad{background:linear-gradient(110deg,#1596c9,#0a5f8a 45%,#0a3d66);-webkit-background-clip:text;background-clip:text;color:transparent}
-  :root[data-theme="light"] .btn-primary{background:linear-gradient(120deg,#0c6a99,#0a4e78);color:#fff;box-shadow:0 6px 20px rgba(10,80,120,.28)}
-  /* nav + footer stay dark (white brand marks live there) */
-  :root[data-theme="light"] nav#nav{background:linear-gradient(180deg,rgba(5,16,31,0.9),rgba(5,16,31,0))}
-  :root[data-theme="light"] nav#nav.scrolled{background:rgba(5,16,31,0.94)}
-  :root[data-theme="light"] #nav .links a{color:#8ba0b6}
-  :root[data-theme="light"] #nav .links a:hover{color:#eaf2fb}
-  :root[data-theme="light"] footer{color:#8ba0b6}
-  :root[data-theme="light"] footer a{color:#8ba0b6}
-  :root[data-theme="light"] footer a:hover{color:#67e8f9}
-  /* homepage: calculator card + pipeline nodes → light surfaces */
-  :root[data-theme="light"] .levy-card{background:linear-gradient(180deg,#ffffff,#f3f7fc);box-shadow:0 24px 60px rgba(20,50,90,.14)}
-  :root[data-theme="light"] .levy-card.lit{box-shadow:0 24px 60px rgba(20,50,90,.14),0 0 0 1px rgba(10,95,138,.16)}
-  :root[data-theme="light"] .pnode.dip .pv{color:#c2410c}
-  :root[data-theme="light"] .cohort-box{border-color:rgba(10,95,138,.3)}
-  /* dark section bands + cards → light */
-  :root[data-theme="light"] section.block{background:rgba(20,50,90,.028)}
-  :root[data-theme="light"] section.block#tools{background:linear-gradient(180deg,#edf2f8,#e5ecf5)}
-  :root[data-theme="light"] .proof{background:linear-gradient(180deg,#edf2f8,#e5ecf5)}
-  :root[data-theme="light"] .tool{background:linear-gradient(160deg,#ffffff,#f1f5fb)}
-  :root[data-theme="light"] .case-card{background:linear-gradient(180deg,#ffffff,#f2f6fc)}
-  :root[data-theme="light"] .case-card p{color:var(--muted)}
-  :root[data-theme="light"] .est-f input{background:#ffffff}
-  :root[data-theme="light"] .cta-band{background:radial-gradient(80% 130% at 50% 0%,rgba(37,99,235,.10),transparent 60%),linear-gradient(180deg,#edf2f8,#e5ecf5)}
-  :root[data-theme="light"] .pop,:root[data-theme="light"] .srctrig{color:#0a5f8a}
 </style>
-<script>/*ac-theme-early*/try{var t=localStorage.getItem("ac_theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -843,6 +807,6 @@ const FS=[
 })();
 </script>
 <script src="mobilenav.js?v=1"></script>
-<script src="comfort.js?v=2"></script>
+<script src="comfort.js?v=3"></script>
 </body>
 </html>

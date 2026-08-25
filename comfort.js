@@ -78,12 +78,7 @@
     'body.ac-rm .grain{opacity:.15!important}',
     'body.ac-rm .reveal{opacity:1!important;transform:none!important}',
     'body.ac-rm *,body.ac-rm *::before,body.ac-rm *::after{animation-duration:0s!important;animation-delay:0s!important;animation-iteration-count:1!important;transition-duration:0s!important;scroll-behavior:auto!important}',
-    '@media (max-width:520px){#ac-cbtn{left:14px;bottom:14px}#ac-panel{left:14px;bottom:70px}}',
-    /* appearance segmented control */
-    '.ac-seg{display:flex;gap:5px;margin-bottom:15px;background:rgba(30,44,68,.5);border:1px solid rgba(150,180,220,.18);border-radius:11px;padding:4px}',
-    '.ac-seg button{flex:1;padding:9px 0;border:none;border-radius:8px;background:none;color:#9fb2cc;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:background .2s,color .2s;display:flex;align-items:center;justify-content:center;gap:6px}',
-    '.ac-seg button[aria-pressed="true"]{background:rgba(34,211,238,.16);color:#e7eef8}',
-    '.ac-seg button:focus-visible{outline:2px solid #22d3ee;outline-offset:2px}'
+    '@media (max-width:520px){#ac-cbtn{left:14px;bottom:14px}#ac-panel{left:14px;bottom:70px}}'
   ].join('');
   document.head.appendChild(css);
 
@@ -100,11 +95,9 @@
     var cls = t.k==='none' ? 'none-sw' : '';
     return '<button class="'+cls+'" data-tint="'+t.k+'" style="'+bg+'" title="'+t.name+'" aria-label="'+t.name+' tint" aria-pressed="false"></button>';
   }).join('');
-  var themeable=(function(){try{for(var i=0;i<document.styleSheets.length;i++){var r;try{r=document.styleSheets[i].cssRules;}catch(e){continue;}if(!r)continue;for(var j=0;j<r.length;j++){if(r[j].selectorText&&r[j].selectorText.indexOf('[data-theme="light"]')>-1)return true;}}}catch(e){}return false;})();
   panel.innerHTML =
     '<h4>Reading comfort</h4>'+
-    '<p class="ac-sub">Ease visual stress — '+(themeable?'switch appearance, ':'')+'lay a calm colour over the page, or cut motion.</p>'+
-    (themeable?'<div class="ac-lab">Appearance</div><div class="ac-seg" id="ac-theme-seg" role="group" aria-label="Appearance"><button type="button" data-tv="dark" aria-pressed="true">Dark</button><button type="button" data-tv="light" aria-pressed="false">Light</button></div>':'')+
+    '<p class="ac-sub">Ease visual stress — lay a calm colour over the page, or cut motion.</p>'+
     '<div class="ac-lab">Colour tint</div>'+
     '<div class="ac-sw">'+swHTML+'</div>'+
     '<div class="ac-strwrap"><div class="ac-lab">Tint strength</div><input type="range" id="ac-str" min="0" max="100" step="1" aria-label="Tint strength"></div>'+
@@ -135,15 +128,6 @@
     var str = panel.querySelector('#ac-str'); if(str) str.value = state.strength;
     panel.querySelector('.ac-strwrap').classList.toggle('dim', isNone);
     var mot = panel.querySelector('#ac-mot'); if(mot){ mot.setAttribute('aria-pressed', state.motion?'true':'false'); mot.setAttribute('aria-checked', state.motion?'true':'false'); }
-    var curTheme = document.documentElement.getAttribute('data-theme') || 'dark';
-    [].forEach.call(panel.querySelectorAll('#ac-theme-seg button'), function(b){
-      b.setAttribute('aria-pressed', b.getAttribute('data-tv')===curTheme ? 'true':'false');
-    });
-  }
-  function setTheme(t){
-    document.documentElement.setAttribute('data-theme', t);
-    try{ localStorage.setItem('ac_theme', t); }catch(e){}
-    apply();
   }
 
   /* ---- interactions ---- */
@@ -161,9 +145,6 @@
     var mot=panel.querySelector('#ac-mot');
     mot.addEventListener('click', function(){ state.motion=!state.motion; save(); apply(); });
     panel.querySelector('#ac-reset').addEventListener('click', function(){ state={tint:'none',strength:55,motion:false}; save(); apply(); });
-    [].forEach.call(panel.querySelectorAll('#ac-theme-seg button'), function(b){
-      b.addEventListener('click', function(){ setTheme(b.getAttribute('data-tv')); });
-    });
   }
 
   if(document.body) mount();
