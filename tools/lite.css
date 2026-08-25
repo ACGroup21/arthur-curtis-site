@@ -93,3 +93,8 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border:none;border-ra
 .hub-card h3{font-size:18px;font-weight:700;margin-bottom:6px}
 .hub-card p{font-size:13.5px;color:var(--muted);line-height:1.5}
 @media(max-width:640px){.tiles,.hub-grid{grid-template-columns:1fr}}
+/* bigger slider thumb for touch on phones */
+@media(max-width:560px){
+  input[type=range]::-webkit-slider-thumb{width:28px;height:28px}
+  input[type=range]::-moz-range-thumb{width:28px;height:28px}
+}
