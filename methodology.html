@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Methodology — Arthur Curtis</title>
+<meta name="description" content="How every Arthur Curtis figure is built: the exact funding rules, each traced to its gov.uk source and dated. One canonical rulebook the whole platform reads. If you can't check it, we don't ship it.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" type="image/png" href="assets/favicon-hummingbird.png?v=2">
+<style>
+  .mmeta{font-family:var(--mono);font-size:12.5px;color:var(--muted);margin:0 0 20px;display:inline-flex;align-items:center;gap:9px;flex-wrap:wrap;border:1px solid var(--line);border-radius:99px;padding:8px 15px;background:rgba(120,160,210,.05)}
+  .mmeta .lv{width:7px;height:7px;border-radius:50%;background:#39d07f;box-shadow:0 0 9px #39d07f;flex:none;animation:pulse 2.6s infinite}
+  .mtable-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:6px}
+  .mtable{width:100%;border-collapse:collapse;min-width:560px}
+  .mtable .mgroup td{font-family:var(--mono);font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--cyan);padding:22px 0 7px;font-weight:600}
+  .mtable .mrow td{padding:13px 16px 13px 0;border-top:1px solid var(--line);vertical-align:top}
+  .mtable .mname{color:var(--ink);font-weight:600;font-size:14.5px}
+  .mtable .mnote{color:var(--muted-2);font-size:12px;margin-top:3px;line-height:1.45;max-width:42ch}
+  .mtable .mval{font-family:var(--mono);color:var(--cyan);font-weight:600;white-space:nowrap;text-align:right;font-variant-numeric:tabular-nums;font-size:15px}
+  .mtable .msrc a{color:var(--cyan-soft);font-size:12.5px;font-family:var(--mono);text-decoration:none;white-space:nowrap}
+  .mtable .msrc a:hover{text-decoration:underline}
+  .mtable .mver{color:var(--muted);font-size:11.5px;white-space:nowrap;font-family:var(--mono)}
+  .formula{font-family:var(--mono);font-size:clamp(13px,2vw,15px);color:var(--ink);background:rgba(120,160,210,.05);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-top:8px;line-height:2.1;overflow-x:auto}
+  .formula b{color:var(--cyan)}
+  .formula .op{color:var(--muted);padding:0 4px}
+  .rb-src{margin-top:16px;font-size:13px;color:var(--muted)}
+  .rb-src a{color:var(--cyan);font-family:var(--mono);font-size:12.5px}
+</style>
+</head>
+<body>
+<canvas id="bgCanvas"></canvas>
+<div class="grain"></div>
+
+<nav id="nav">
+  <a href="index.html"><img src="assets/ac-education-mark.svg" class="logo" alt="Arthur Curtis Education"></a>
+  <div class="links">
+    <a href="approach.html">Approach</a>
+    <a href="tools.html">Tools</a>
+    <a href="employers.html">For employers</a>
+    <a href="about.html">About</a>
+    <a class="btn btn-primary" href="contact.html">Book a call</a>
+  </div>
+</nav>
+
+<header class="page-hero">
+  <div class="wrap">
+    <span class="eyebrow"><span class="dot"></span>Methodology</span>
+    <h1>Show the <span class="grad">working.</span></h1>
+    <p class="sub">Every figure in every tool is built from a published funding rule, traced to its gov.uk source and dated. This page is that promise in full — including the live rulebook the whole platform reads from.</p>
+  </div>
+</header>
+
+<section class="block">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="kicker">The rules we hold ourselves to</div>
+      <h2 class="h2">If you can't check it, we don't ship it.</h2>
+    </div>
+    <ul class="checks reveal">
+      <li><span class="ck">✓</span><span class="t"><b>Independence over incentive.</b> We don't sell training, so nothing here is bent toward a course we'd profit from.</span></li>
+      <li><span class="ck">✓</span><span class="t"><b>Every figure is sourced.</b> Each funding number links to the gov.uk guidance it comes from — see the rulebook below.</span></li>
+      <li><span class="ck">✓</span><span class="t"><b>One source of truth.</b> The site and our full calculator read the <em>same</em> canonical rulebook, so they can never quietly disagree.</span></li>
+      <li><span class="ck">✓</span><span class="t"><b>Honest labels.</b> Indicative averages are flagged as estimates, never dressed up as rules.</span></li>
+      <li><span class="ck">✓</span><span class="t"><b>Dated verification.</b> Every figure carries the date we last checked it against gov.uk.</span></li>
+    </ul>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="kicker">How the levy number is built</div>
+      <h2 class="h2">Five steps, no black box.</h2>
+      <div class="prose">
+        <p>The headline "your levy funds N apprentices" is one short calculation on your pay bill — the same steps HMRC and the ESFA use. Here it is in full:</p>
+      </div>
+      <div class="formula">
+        pay bill <span class="op">×</span> <b>0.5%</b> <span class="op">−</span> <b>£15,000</b> allowance <span class="op">=</span> your levy pot<br>
+        levy pot <span class="op">+</span> <b>10%</b> government top-up <span class="op">=</span> what you can spend<br>
+        what you can spend <span class="op">÷</span> the <b>funding band</b> <span class="op">=</span> apprenticeships
+      </div>
+      <div class="prose" style="margin-top:16px">
+        <p>The NI saving, co-investment, incentives and the expiry clock all run the same way — a published rate or threshold, applied plainly. Each of those numbers is in the rulebook below, with its source.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="kicker">The funding rulebook</div>
+      <h2 class="h2">Every number, every source.</h2>
+      <div class="prose"><p>This table is <b>generated live</b> from our canonical rulebook — the exact file the calculators read. If a rule changes there, it changes here.</p></div>
+      <div class="mmeta" id="rbMeta"><span class="lv"></span>Loading the live rulebook…</div>
+      <div class="mtable-wrap">
+        <table class="mtable"><tbody id="rbBody"></tbody></table>
+      </div>
+      <p class="rb-src">Source of truth: <a href="https://raw.githubusercontent.com/ACGroup21/ACGroup21-ac-funding-data/main/funding-rules.json" target="_blank" rel="noopener">funding-rules.json →</a></p>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="kicker">What we don't claim</div>
+      <h2 class="h2">The honest edges.</h2>
+    </div>
+    <ul class="checks reveal">
+      <li><span class="ck" style="color:var(--warm)">!</span><span class="t"><b>Averages aren't rules.</b> The ~£9,000 "average band" used for the headline apprentice count is indicative only — real funding bands run £1,500–£27,000 per standard.</span></li>
+      <li><span class="ck" style="color:var(--warm)">!</span><span class="t"><b>England, for now.</b> These rules are the ESFA's for England. Scotland (SDS) and Wales differ — multi-nation support is on the roadmap.</span></li>
+      <li><span class="ck" style="color:var(--warm)">!</span><span class="t"><b>Not financial advice.</b> We model published funding rules; we're not licensed financial advisors, and none of this is personalised investment advice.</span></li>
+      <li><span class="ck" style="color:var(--warm)">!</span><span class="t"><b>Guidance, not a guarantee.</b> Figures are indicative — your actual funding depends on your real pay bill, ages, standards and start dates. That's what a conversation is for.</span></li>
+    </ul>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="kicker">One source of truth</div>
+      <h2 class="h2">The site and the calculator read the same rulebook.</h2>
+      <div class="prose">
+        <p>Most tools drift: a number gets updated in one place and forgotten in another. We fixed that at the root. Every funding constant lives in a single canonical file that both this website and our full Fundable calculator fetch at runtime — so a rule is changed <em>once</em>, and everything updates together.</p>
+        <p>It means the number you see in a two-minute calculator and the number in a full funded plan are computed from <b>the identical rulebook</b>. No drift, no surprises. That file is public, and it's linked above.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-band">
+  <div class="wrap">
+    <h2>Check the number yourself.</h2>
+    <p>Every tool shows its working. Start with a two-minute answer, then talk to us.</p>
+    <a class="btn btn-primary btn-lg" href="tools.html">Open the tools →</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap row">
+    <div class="foot-brands"><img src="assets/viral-white-accent.png" alt="viral by arthur curtis" style="height:36px;opacity:1"><span class="foot-by"><img class="acd-mark" src="assets/ac-a-logo-white.svg" alt="AC Digital"><span class="acd-txt">Built&nbsp;by <strong>AC&nbsp;<span class="acd-blue">Digital</span></strong></span></span></div>
+    <span>© 2026 Arthur Curtis · Making people better</span>
+    <span><a href="contact.html">hello@arthurcurtis.com</a> · <a href="https://www.linkedin.com/company/arthur-curtis-education/" target="_blank" rel="noopener">LinkedIn</a></span>
+  </div>
+</footer>
+
+<script src="site.js"></script>
+<script src="tools/engine.js?v=5"></script>
+<script>
+(function(){
+  var ROWS=[
+    {g:'Apprenticeship levy', path:'levy.rate', name:'Levy rate', fmt:'pct1'},
+    {g:'Apprenticeship levy', path:'levy.allowance', name:'Annual levy allowance', fmt:'gbp'},
+    {g:'Apprenticeship levy', path:'levy.topUp', name:'Government top-up', fmt:'pctplus'},
+    {g:'Fund expiry', path:'expiry.monthsFrom', name:'Expiry — from August 2026', fmt:'months'},
+    {g:'Fund expiry', path:'expiry.monthsBefore', name:'Expiry — funds banked before', fmt:'months'},
+    {g:'Co-investment', path:'coInvest.employerBefore', name:'Employer share — before Aug 2026', fmt:'pct'},
+    {g:'Co-investment', path:'coInvest.employerFrom', name:'Employer share — from Aug 2026', fmt:'pct'},
+    {g:'Co-investment', path:'coInvest.govNonLevy', name:'Government share (non-levy)', fmt:'pct'},
+    {g:'Employer National Insurance', path:'ni.employerRate', name:'Employer NIC rate', fmt:'pct'},
+    {g:'Employer National Insurance', path:'ni.secondaryThreshold', name:'Secondary Threshold', fmt:'gbp'},
+    {g:'Employer National Insurance', path:'ni.apprenticeUpperThreshold', name:'Apprentice Upper Secondary Threshold', fmt:'gbp'},
+    {g:'Incentives & payments', path:'incentives.employerPayment', name:'Employer incentive', fmt:'gbp'},
+    {g:'Incentives & payments', path:'incentives.hiringPayment', name:'Hiring payment (non-levy, new 16–24)', fmt:'gbp'},
+    {g:'Incentives & payments', path:'incentives.careLeaverBursary', name:'Care-leaver bursary (paid to the apprentice)', fmt:'gbp'},
+    {g:'Incentives & payments', path:'incentives.learningSupportMonthly', name:'Learning support', fmt:'gbpmo'},
+    {g:'Delivery', path:'delivery.drawTraining', name:'Drawn over the practical period', fmt:'pct'},
+    {g:'Delivery', path:'delivery.drawEpa', name:'Drawn at end-point assessment', fmt:'pct'},
+    {g:'Delivery', path:'delivery.transferCapPct', name:'Levy transfer cap', fmt:'pct'},
+    {g:'Benchmarks', path:'benchmarks.nationalAchievementRate', name:'National achievement rate (2024/25)', fmt:'pct1'}
+  ];
+  function pick(o,p){ return p.split('.').reduce(function(a,k){ return a==null?a:a[k]; }, o); }
+  function fmtVal(v,t){
+    if(v==null) return '—';
+    switch(t){
+      case 'pct1': return (v*100).toFixed(1).replace(/\.0$/,'')+'%';
+      case 'pct': return Math.round(v*100)+'%';
+      case 'pctplus': return '+'+Math.round(v*100)+'%';
+      case 'gbp': return '£'+Number(v).toLocaleString('en-GB');
+      case 'gbpmo': return '£'+Number(v).toLocaleString('en-GB')+'/mo';
+      case 'months': return v+' months';
+      default: return String(v);
+    }
+  }
+  var MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  function fmtDate(iso){ if(!iso) return ''; var p=String(iso).split('-'); return p.length<3?iso:(+p[2])+' '+MON[(+p[1])-1]+' '+p[0]; }
+  function esc(s){ return String(s==null?'':s).replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c];}); }
+
+  function render(c){
+    var body=document.getElementById('rbBody'), meta=document.getElementById('rbMeta');
+    if(!c){
+      meta.innerHTML='<span class="lv" style="background:var(--warm);box-shadow:0 0 9px var(--warm)"></span>Live rulebook unavailable right now';
+      body.innerHTML='<tr><td style="padding:16px 0;color:var(--muted)">Couldn\'t reach the live rulebook. <a href="https://raw.githubusercontent.com/ACGroup21/ACGroup21-ac-funding-data/main/funding-rules.json" target="_blank" rel="noopener" style="color:var(--cyan)">View the source directly →</a></td></tr>';
+      return;
+    }
+    var html='', lastG=null;
+    ROWS.forEach(function(r){
+      var leaf=pick(c,r.path); if(!leaf || leaf.source===undefined) return;
+      if(r.g!==lastG){ html+='<tr class="mgroup"><td colspan="4">'+esc(r.g)+'</td></tr>'; lastG=r.g; }
+      html+='<tr class="mrow"><td><div class="mname">'+esc(r.name)+'</div>'+(leaf.note?'<div class="mnote">'+esc(leaf.note)+'</div>':'')+'</td>'+
+        '<td class="mval">'+esc(fmtVal(leaf.value,r.fmt))+'</td>'+
+        '<td class="msrc"><a href="'+esc(leaf.source)+'" target="_blank" rel="noopener">gov.uk →</a></td>'+
+        '<td class="mver">'+esc(fmtDate(leaf.asOf))+'</td></tr>';
+    });
+    body.innerHTML=html;
+    var m=c.meta||{};
+    meta.innerHTML='<span class="lv"></span>Rulebook '+esc(m.version||'—')+' · verified '+esc(fmtDate(m.asOf))+' · generated live from the canonical source';
+  }
+
+  if(typeof AC!=='undefined' && AC.rulesReady){ AC.rulesReady.then(function(){ render(AC.RULES && AC.RULES.__canonical); }); }
+  else { render(null); }
+})();
+</script>
+</body>
+</html>
