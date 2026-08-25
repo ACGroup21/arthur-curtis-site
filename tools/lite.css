@@ -98,3 +98,36 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border:none;border-ra
   input[type=range]::-webkit-slider-thumb{width:28px;height:28px}
   input[type=range]::-moz-range-thumb{width:28px;height:28px}
 }
+
+/* ============================================================
+   LIGHT THEME — matches the main site (cobalt & deep-teal on
+   cool white). Cyan is never text on white here.
+   ============================================================ */
+:root[data-theme="light"]{
+  --navy:#ffffff;--bg:#f4f7fb;--bg-2:#e8eef6;
+  --blue:#0a3d66;--cyan:#0a5f8a;--cyan-soft:#0a6f9e;--ink:#12263f;
+  --muted:#4c5e74;--muted-2:#5c6c80;--line:rgba(20,50,90,0.15);
+  --glass:rgba(20,50,90,0.028);--warm:#c2410c;
+}
+:root[data-theme="light"] body{background:radial-gradient(1200px 700px at 75% -10%,rgba(10,95,138,0.05),transparent),var(--bg);color:var(--ink)}
+:root[data-theme="light"] #bgCanvas{display:none}
+/* content surfaces */
+:root[data-theme="light"] .card{background:linear-gradient(180deg,#ffffff,#f4f8fc);box-shadow:0 20px 50px rgba(20,50,90,.12)}
+:root[data-theme="light"] .tile{background:#ffffff;border-color:rgba(20,50,90,.12)}
+:root[data-theme="light"] .tile.accent{background:rgba(194,65,12,.07);border-color:rgba(194,65,12,.32)}
+:root[data-theme="light"] .callout{background:rgba(194,65,12,.07);border-color:rgba(194,65,12,.3)}
+:root[data-theme="light"] .callout.cool{background:rgba(10,95,138,.06);border-color:rgba(10,95,138,.3)}
+:root[data-theme="light"] .field input[type=number],:root[data-theme="light"] .field input[type=text],:root[data-theme="light"] .field select{background:#ffffff}
+:root[data-theme="light"] .hub-card{background:linear-gradient(160deg,#ffffff,#f1f5fb)}
+:root[data-theme="light"] .brand .mark{background:linear-gradient(130deg,#0c6a99,#0a4e78);color:#fff}
+/* buttons stay vivid with white text */
+:root[data-theme="light"] .btn-primary,:root[data-theme="light"] .spine-btn.primary{background:linear-gradient(120deg,#0c6a99,#0a4e78);color:#fff;box-shadow:0 6px 20px rgba(10,80,120,.28)}
+/* chrome: lnav + spine → light; light-coloured brand marks sit in a dark pill */
+:root[data-theme="light"] .lnav-brand{background:#0b1b3a;padding:7px 11px;border-radius:11px}
+:root[data-theme="light"] .lnav-panel{background:#ffffff;box-shadow:0 22px 55px rgba(20,50,90,.18)}
+:root[data-theme="light"] .lnav-panel a:hover{background:rgba(10,95,138,.08)}
+:root[data-theme="light"] .lnav-panel a.on{background:rgba(10,95,138,.07)}
+:root[data-theme="light"] .spine-bar{background:linear-gradient(180deg,#ffffff,#f2f6fc)}
+:root[data-theme="light"] .lead-box,:root[data-theme="light"] .lead-in{background:#ffffff}
+:root[data-theme="light"] .sn-card{background:#ffffff;border-color:rgba(20,50,90,.12)}
+/* .lite-foot stays dark (its AC Digital mark is white) — no override */
