@@ -2,8 +2,9 @@
    AC Lite — shared engine (100% client-side, no backend)
    Every lite app draws from this: funding constants, math, and
    the shared scenario (localStorage + shareable URL).
-   NOTE: constants are a working set for the sandbox — re-verify
-   every figure against gov.uk before anything is published.
+   NOTE: the inline RULES below is the OFFLINE FALLBACK. At runtime it is
+   refreshed from the canonical funding-rules.json (ACGroup21/ac-funding-data) —
+   edit funding figures THERE, not here; keep this fallback roughly in sync.
    ============================================================ */
 window.AC = (function(){
 
@@ -139,8 +140,82 @@ window.AC = (function(){
     }
   };
 
+  /* ---- canonical funding rulebook -------------------------------------------
+     Fetch the single source of truth and map it into AC.RULES. The inline RULES
+     above is the OFFLINE FALLBACK: tools render instantly on it, then this
+     refreshes AC.RULES in place and fires 'ac:rules'. Constants only, no logic.
+     Safe before the repo exists — a 404/failure just keeps the baked values.
+     Source: ACGroup21/ac-funding-data → funding-rules.json */
+  var RULES_URL = 'https://acgroup21.github.io/ac-funding-data/funding-rules.json';
+  RULES.__source = 'baked';
+
+  function pick(o, path){ return path.split('.').reduce(function(a,k){ return (a==null ? a : a[k]); }, o); }
+
+  /* canonical JSON → a patch in AC.RULES' own shape (missing paths stay undefined) */
+  function adapt(c){
+    return {
+      levyRate: pick(c,'levy.rate.value'),
+      allowance: pick(c,'levy.allowance.value'),
+      topUp: pick(c,'levy.topUp.value'),
+      expiryMonths: pick(c,'expiry.monthsFrom.value'),
+      expiryMonthsPrev: pick(c,'expiry.monthsBefore.value'),
+      expiryChanged: pick(c,'expiry.changed'),
+      avgApprenticeCost: pick(c,'headline.avgApprenticeCost'),
+      incentive: pick(c,'incentives.employerPayment.value'),
+      hiringPayment: pick(c,'incentives.hiringPayment.value'),
+      hiringPaymentFrom: pick(c,'incentives.hiringPayment.from'),
+      careLeaverBursary: pick(c,'incentives.careLeaverBursary.value'),
+      learningSupportMonthly: pick(c,'incentives.learningSupportMonthly.value'),
+      ni: { employerRate: pick(c,'ni.employerRate.value'), ust: pick(c,'ni.apprenticeUpperThreshold.value'),
+            secondaryThreshold: pick(c,'ni.secondaryThreshold.value'), underAge: pick(c,'ni.exemptUnderAge') },
+      l7: { fundedMaxAge: pick(c,'level7.fundedMaxAge'), careLeaverEhcpMaxAge: pick(c,'level7.careLeaverEhcpMaxAge'),
+            changeDate: pick(c,'level7.changed') },
+      coInvest: { govNonLevy: pick(c,'coInvest.govNonLevy.value'), employer: pick(c,'coInvest.employerBefore.value'),
+                  fullFundedAges: pick(c,'coInvest.fullyFundedAges') },
+      __version: pick(c,'meta.version'), __asOf: pick(c,'meta.asOf'), __canonical: c
+    };
+  }
+
+  /* assign only defined values; deep-merge the nested groups so baked keys survive */
+  function applyPatch(p){
+    ['ni','l7','coInvest'].forEach(function(k){
+      if(p[k]) Object.keys(p[k]).forEach(function(kk){ if(p[k][kk] !== undefined) RULES[k][kk] = p[k][kk]; });
+    });
+    Object.keys(p).forEach(function(k){
+      if(k==='ni' || k==='l7' || k==='coInvest') return;
+      if(p[k] !== undefined) RULES[k] = p[k];
+    });
+  }
+
+  var rulesReady = (typeof fetch === 'function')
+    ? fetch(RULES_URL).then(function(r){ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
+        .then(function(c){
+          var p = adapt(c);
+          if(!(isFinite(p.levyRate) && isFinite(p.allowance) && isFinite(p.topUp)))
+            throw new Error('canonical missing core values');
+          /* dev parity: surface any figure that differs from the baked fallback */
+          try{
+            var diffs = [];
+            ['levyRate','allowance','topUp','incentive','hiringPayment','careLeaverBursary'].forEach(function(k){
+              if(p[k] !== undefined && p[k] !== RULES[k]) diffs.push(k+': baked '+RULES[k]+' → canonical '+p[k]);
+            });
+            if(diffs.length && typeof console!=='undefined' && console.debug) console.debug('[AC] rulebook diffs — '+diffs.join(' | '));
+          }catch(e){}
+          applyPatch(p); RULES.__source = 'canonical';
+          try{ window.dispatchEvent(new CustomEvent('ac:rules', {detail:{source:'canonical', version:RULES.__version}})); }catch(e){}
+          return RULES;
+        })
+        .catch(function(err){
+          RULES.__source = 'baked';
+          try{ if(typeof console!=='undefined' && console.warn) console.warn('[AC] funding rules: baked fallback — '+(err && err.message)); }catch(e){}
+          try{ window.dispatchEvent(new CustomEvent('ac:rules', {detail:{source:'baked'}})); }catch(e){}
+          return RULES;
+        })
+    : Promise.resolve(RULES);
+
   return {
-    RULES: RULES, levy: levy, niSaving: niSaving, ageFlags: ageFlags, assess: assess,
+    RULES: RULES, RULES_URL: RULES_URL, rulesReady: rulesReady,
+    levy: levy, niSaving: niSaving, ageFlags: ageFlags, assess: assess,
     fmt: fmt, fmtMoney: fmtMoney, scenario: scenario
   };
 })();
