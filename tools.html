@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=2">
+<link rel="stylesheet" href="styles.css?v=3">
 <link rel="icon" type="image/png" href="assets/favicon-hummingbird.png?v=3">
 <style>
   /* ---- product tiles: each tool card shows a live-style preview of its output ---- */
@@ -43,7 +43,14 @@
   .pv-div{height:1px;background:var(--line);margin:7px 0}
   .pv-match{display:flex;justify-content:space-between;align-items:baseline;font-size:13.5px;color:var(--ink);font-weight:600}
   .pv-hint{font-family:var(--mono);font-size:11px;color:var(--muted-2)}
+  /* light theme: flip the tool cards; darken green indicators (green fails on white) */
+  :root[data-theme="light"] .ptile{background:linear-gradient(180deg,#ffffff,#f1f5fb)}
+  :root[data-theme="light"] .pt-prev{background:#f4f8fc;border-color:rgba(20,50,90,.12)}
+  :root[data-theme="light"] .pt-live,:root[data-theme="light"] .pv-row .ok,:root[data-theme="light"] .pv-badge{color:#15803d}
+  :root[data-theme="light"] .pv-badge{background:rgba(21,128,61,.09);border-color:rgba(21,128,61,.32)}
+  :root[data-theme="light"] .pv-badge .d,:root[data-theme="light"] .pt-live .d{background:#15803d;box-shadow:0 0 8px #15803d}
 </style>
+<script>/*ac-theme-early*/try{var t=localStorage.getItem("ac_theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -188,6 +195,6 @@
 
 <script src="site.js"></script>
 <script src="mobilenav.js?v=1"></script>
-<script src="comfort.js?v=1"></script>
+<script src="comfort.js?v=2"></script>
 </body>
 </html>
