@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arthur Curtis — Light concept</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f7f5ef;        /* warm paper ground */
+    --paper-2:#efece3;      /* recessed paper */
+    --card:#fffefb;         /* exhibit white */
+    --ink:#1b1c1e;          /* near-black, warm */
+    --ink-2:#3d4045;        /* strong secondary */
+    --muted:#6d7075;        /* labels */
+    --line:#e2ddd2;         /* hairline */
+    --line-2:#d3cdbf;       /* stronger rule */
+    --accent:#b4400f;       /* terracotta — money & emphasis */
+    --navy:#14243c;         /* deep structural ink */
+    --serif:'Fraunces',Georgia,serif;
+    --sans:'Inter',system-ui,-apple-system,sans-serif;
+    --mono:'JetBrains Mono',monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1160px;margin:0 auto;padding:0 40px}
+  @media(max-width:640px){.wrap{padding:0 22px}}
+  a{color:inherit;text-decoration:none}
+  .mono{font-family:var(--mono)}
+
+  /* ---------- masthead ---------- */
+  .mast{border-bottom:1px solid var(--line-2)}
+  .mast .row{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;padding:22px 0 16px}
+  .brand{line-height:1}
+  .brand .nm{font-family:var(--serif);font-weight:600;font-size:23px;letter-spacing:-.01em}
+  .brand .dl{font-family:var(--mono);font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-top:6px}
+  .mast nav{display:flex;align-items:center;gap:26px}
+  .mast nav a{font-size:14px;color:var(--ink-2);font-weight:500;padding-bottom:2px}
+  .mast nav a:hover{color:var(--accent)}
+  .mast nav a.book{font-family:var(--sans);border:1px solid var(--ink);border-radius:2px;padding:9px 15px;font-weight:600;font-size:13.5px}
+  .mast nav a.book:hover{background:var(--ink);color:var(--paper)}
+  @media(max-width:860px){.mast nav a:not(.book){display:none}}
+
+  /* ---------- hero ---------- */
+  .hero{padding:64px 0 24px;display:grid;grid-template-columns:1.04fr .96fr;gap:56px;align-items:start}
+  @media(max-width:940px){.hero{grid-template-columns:1fr;gap:40px;padding-top:44px}}
+  .kick{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:10px}
+  .kick::before{content:"";width:22px;height:1px;background:var(--accent)}
+  h1{font-family:var(--serif);font-weight:500;font-size:clamp(44px,6.4vw,82px);line-height:1.0;letter-spacing:-.02em;margin:22px 0 0;color:var(--ink)}
+  h1 em{font-style:italic;font-weight:500}
+  .lead{font-size:clamp(18px,2vw,21px);line-height:1.5;color:var(--ink-2);margin-top:24px;max-width:34ch}
+  .actions{display:flex;gap:14px;flex-wrap:wrap;margin-top:32px}
+  .btn{font-family:var(--sans);font-weight:600;font-size:15px;cursor:pointer;border-radius:2px;padding:14px 22px;transition:background .15s,color .15s,border-color .15s,transform .4s cubic-bezier(.34,1.56,.64,1);display:inline-flex;align-items:center;gap:8px;will-change:transform}
+  .btn-solid{background:var(--accent);color:#fff;border:1px solid var(--accent)}
+  .btn-solid:hover{background:#9a370c;border-color:#9a370c}
+  .btn-line{background:transparent;border:1px solid var(--line-2);color:var(--ink)}
+  .btn-line:hover{border-color:var(--ink)}
+  .undernote{margin-top:22px;font-size:13px;color:var(--muted);display:flex;align-items:center;gap:9px}
+  .undernote .tick{color:var(--accent);font-weight:700}
+
+  /* ---------- exhibit (the calculator, as a report figure) ---------- */
+  .exhibit{background:var(--card);border:1px solid var(--line-2);border-radius:3px;box-shadow:0 1px 0 rgba(20,20,20,.02),0 18px 44px -30px rgba(30,25,15,.5)}
+  .ex-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:15px 22px;border-bottom:1px solid var(--line)}
+  .ex-head .t{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+  .ex-head .live{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+  .ex-body{padding:22px}
+  .pb-label{font-size:12.5px;color:var(--muted);letter-spacing:.02em}
+  .pb-fig{font-family:var(--sans);font-weight:700;font-size:34px;letter-spacing:-.02em;font-variant-numeric:tabular-nums;margin-top:4px;color:var(--ink)}
+  .pb-fig .cur{color:var(--muted);font-weight:500;font-size:24px}
+  #pbOut{outline:none;cursor:text;border-bottom:1.5px dashed var(--line-2);padding-bottom:1px}
+  #pbOut:hover,#pbOut:focus{border-bottom-color:var(--accent)}
+  input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:2px;background:var(--line-2);outline:none;margin:20px 0 4px;cursor:pointer}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--accent);cursor:pointer;border:3px solid var(--card);box-shadow:0 0 0 1px var(--accent)}
+  input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:var(--accent);cursor:pointer;border:3px solid var(--card);box-shadow:0 0 0 1px var(--accent)}
+  .ticks{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10.5px;color:var(--muted)}
+  .ledger{margin-top:20px;border-top:1px solid var(--line-2)}
+  .lrow{display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding:13px 0;border-bottom:1px solid var(--line)}
+  .lrow .k{font-size:14px;color:var(--ink-2)}
+  .lrow .v{font-family:var(--sans);font-weight:700;font-size:20px;letter-spacing:-.01em;font-variant-numeric:tabular-nums;color:var(--ink)}
+  .lrow.key{padding:16px 0}
+  .lrow.key .k{color:var(--ink);font-weight:600}
+  .lrow.key .v{font-size:30px;color:var(--accent)}
+  .ex-foot{font-family:var(--mono);font-size:10.5px;line-height:1.7;color:var(--muted);padding:14px 22px 18px;border-top:1px solid var(--line);background:var(--paper-2)}
+  .ex-foot a{color:var(--accent);border-bottom:1px solid rgba(180,64,15,.3)}
+
+  /* ---------- stat band ---------- */
+  .band{border-top:1px solid var(--line-2);border-bottom:1px solid var(--line-2);margin-top:60px}
+  .band .row{display:grid;grid-template-columns:repeat(4,1fr)}
+  @media(max-width:720px){.band .row{grid-template-columns:1fr 1fr}}
+  .stat{padding:30px 26px;border-right:1px solid var(--line)}
+  .stat:last-child{border-right:none}
+  @media(max-width:720px){.stat:nth-child(2){border-right:none}.stat:nth-child(1),.stat:nth-child(2){border-bottom:1px solid var(--line)}}
+  .stat .n{font-family:var(--serif);font-weight:500;font-size:40px;letter-spacing:-.02em;line-height:1;color:var(--ink)}
+  .stat .n .u{color:var(--accent)}
+  .stat .l{font-size:13px;color:var(--muted);margin-top:10px;line-height:1.45;max-width:22ch}
+
+  /* ---------- loop / how ---------- */
+  .sec{padding:78px 0}
+  .sec-head{display:flex;align-items:baseline;gap:18px;margin-bottom:38px}
+  .sec-head .no{font-family:var(--mono);font-size:12px;color:var(--accent)}
+  .sec-head h2{font-family:var(--serif);font-weight:500;font-size:clamp(28px,3.6vw,40px);letter-spacing:-.01em}
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+  @media(max-width:820px){.steps{grid-template-columns:1fr 1fr}}
+  @media(max-width:520px){.steps{grid-template-columns:1fr}}
+  .step{background:var(--paper);padding:26px 24px}
+  .step .sn{font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:.1em}
+  .step h3{font-family:var(--serif);font-weight:600;font-size:21px;margin:14px 0 8px}
+  .step p{font-size:14px;color:var(--ink-2);line-height:1.55}
+
+  /* ---------- closing / footer ---------- */
+  .close{background:var(--navy);color:#eef2f7;margin-top:20px}
+  .close .wrap{padding:64px 40px}
+  @media(max-width:640px){.close .wrap{padding:52px 22px}}
+  .close .kick{color:#e0a58a}
+  .close .kick::before{background:#e0a58a}
+  .close h2{font-family:var(--serif);font-weight:500;font-size:clamp(30px,4.6vw,52px);letter-spacing:-.02em;line-height:1.04;margin-top:20px;max-width:16ch}
+  .close p{color:#aeb9c8;font-size:17px;margin-top:16px;max-width:44ch}
+  .close .btn-solid{margin-top:28px}
+  footer{border-top:1px solid var(--line-2);padding:26px 0;font-size:13px;color:var(--muted)}
+  footer .row{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:center}
+  footer .nm{font-family:var(--serif);font-weight:600;font-size:16px;color:var(--ink)}
+
+  .flag{position:fixed;left:16px;bottom:16px;z-index:50;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:var(--card);border:1px solid var(--line-2);border-radius:2px;padding:7px 12px}
+</style>
+</head>
+<body>
+
+<header class="mast">
+  <div class="wrap row">
+    <div class="brand">
+      <div class="nm">Arthur Curtis</div>
+      <div class="dl">Apprenticeship levy intelligence</div>
+    </div>
+    <nav>
+      <a href="#">Approach</a>
+      <a href="#">Tools</a>
+      <a href="#">For employers</a>
+      <a href="#">Methodology</a>
+      <a class="book" href="#">Book a call</a>
+    </nav>
+  </div>
+</header>
+
+<section class="wrap hero">
+  <div>
+    <div class="kick">Apprenticeship levy · made to work</div>
+    <h1>Watch your<br>levy <em>work.</em></h1>
+    <p class="lead">Most levy-paying employers let millions expire unused. We turn your levy into a managed engine for developing people — planned, funded, and proven.</p>
+    <div class="actions">
+      <a class="btn btn-solid" href="#calc">See your full breakdown →</a>
+      <a class="btn btn-line" href="#how">How it works</a>
+    </div>
+    <div class="undernote"><span class="tick">✓</span> Every figure traced to a gov.uk source, and dated.</div>
+  </div>
+
+  <div class="exhibit" id="calc">
+    <div class="ex-head"><span class="t">Exhibit — your levy, estimated</span><span class="live">Live</span></div>
+    <div class="ex-body">
+      <div class="pb-label">Annual pay bill</div>
+      <div class="pb-fig"><span class="cur">£</span><span id="pbOut" contenteditable="true" inputmode="numeric" spellcheck="false">25,000,000</span></div>
+      <input type="range" id="rng" min="0" max="1000" step="1" value="326">
+      <div class="ticks"><span>£3m</span><span>£75m</span><span>£2bn</span></div>
+      <div class="ledger">
+        <div class="lrow"><span class="k">Annual levy pot</span><span class="v">£<span id="oPot">0</span></span></div>
+        <div class="lrow"><span class="k">With 10% government top-up</span><span class="v">£<span id="oTop">0</span></span></div>
+        <div class="lrow key"><span class="k">Apprenticeships fundable</span><span class="v" id="oApp">0</span></div>
+        <div class="lrow"><span class="k">Monthly funding flow</span><span class="v">£<span id="oMon">0</span></span></div>
+      </div>
+    </div>
+    <div class="ex-foot">0.5% of pay bill, less the £15,000 allowance, plus a 10% top-up; apprenticeships at ~£9,000 average.<br>Source: <a href="#">gov.uk · Pay Apprenticeship Levy</a> · verified 16 Aug 2026.</div>
+  </div>
+</section>
+
+<div class="band">
+  <div class="wrap row" style="padding:0">
+    <div class="row" style="display:grid;grid-template-columns:repeat(4,1fr);width:100%">
+      <div class="stat"><div class="n">£3bn<span class="u">+</span></div><div class="l">of UK levy funding lost to the Treasury unspent</div></div>
+      <div class="stat"><div class="n">12<span class="u"> mo</span></div><div class="l">before unspent levy expires, from Aug 2026</div></div>
+      <div class="stat"><div class="n">0.5<span class="u">%</span></div><div class="l">of pay bill, already leaving your account</div></div>
+      <div class="stat"><div class="n">+10<span class="u">%</span></div><div class="l">government top-up on every pound</div></div>
+    </div>
+  </div>
+</div>
+
+<section class="wrap sec" id="how">
+  <div class="sec-head"><span class="no">§ 01</span><h2>Goal, Map, Fund, Report.</h2></div>
+  <div class="steps">
+    <div class="step"><div class="sn">01</div><h3>Goal</h3><p>Define the people outcomes the business needs — not a catalogue of courses.</p></div>
+    <div class="step"><div class="sn">02</div><h3>Map</h3><p>Match roles to the right standards and map a path for every learner.</p></div>
+    <div class="step"><div class="sn">03</div><h3>Fund</h3><p>Engineer the spend so the levy covers it, month by month, before it expires.</p></div>
+    <div class="step"><div class="sn">04</div><h3>Report</h3><p>Prove impact with reporting leadership can trust — traceable to the source.</p></div>
+  </div>
+</section>
+
+<section class="close">
+  <div class="wrap">
+    <div class="kick">Make it mean something</div>
+    <h2>A number your CFO would stake a plan on.</h2>
+    <p>Start with the two-minute breakdown above, or a proper conversation. Either works.</p>
+    <a class="btn btn-solid" href="#">Book a call →</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap row">
+    <span class="nm">Arthur Curtis</span>
+    <span>© 2026 · Making people better</span>
+    <span class="mono" style="font-size:11px">hello@arthurcurtis.com · LinkedIn</span>
+  </div>
+</footer>
+
+<div class="flag">Light concept · not the live site</div>
+
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id);};
+  var fmt=function(n){return Math.round(n).toLocaleString('en-GB');};
+  var PB_MIN=3e6, PB_MAX=2e9, LMIN=Math.log(PB_MIN), LSPAN=Math.log(PB_MAX)-LMIN, pb=25e6;
+  function posToPB(p){ return Math.round(Math.exp(LMIN+LSPAN*(p/1000))/1e5)*1e5; }
+  function pbToPos(v){ return Math.max(0,Math.min(1000,Math.round(1000*(Math.log(v)-LMIN)/LSPAN))); }
+  function calc(v){ var pot=Math.max(0,v*0.005-15000), top=pot*1.1; return {pot:pot, top:top, app:Math.floor(top/9000), mon:top/12}; }
+  function anim(el,t){ if(!el)return; var s=parseFloat((el.textContent||'0').replace(/,/g,''))||0,t0=performance.now(); (function st(n){var p=Math.min(1,(n-t0)/450),e=1-Math.pow(1-p,3);el.textContent=fmt(s+(t-s)*e);if(p<1)requestAnimationFrame(st);})(performance.now()); }
+  function render(){ var r=calc(pb); $('pbOut').textContent=fmt(pb); anim($('oPot'),r.pot); anim($('oTop'),r.top); anim($('oApp'),r.app); anim($('oMon'),r.mon); }
+  var rng=$('rng'), el=$('pbOut');
+  rng.addEventListener('input',function(){ pb=posToPB(+this.value); render(); });
+  el.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); el.blur(); } });
+  el.addEventListener('blur',function(){ var v=parseInt((el.textContent||'').replace(/[^0-9]/g,''),10)||PB_MIN; v=Math.max(PB_MIN,Math.min(PB_MAX,v)); pb=v; rng.value=pbToPos(v); render(); });
+  el.addEventListener('focus',function(){ var g=document.createRange();g.selectNodeContents(el);var s=getSelection();s.removeAllRanges();s.addRange(g); });
+  render();
+
+  /* magnetic CTA — the solid buttons lean toward the cursor, then spring back (desktop only) */
+  var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  if(!reduce && matchMedia('(pointer:fine)').matches){
+    document.querySelectorAll('.btn-solid').forEach(function(btn){
+      var host=btn.parentElement;
+      host.addEventListener('pointermove',function(e){
+        var r=btn.getBoundingClientRect(), cx=r.left+r.width/2, cy=r.top+r.height/2;
+        var dx=e.clientX-cx, dy=e.clientY-cy;
+        if(Math.hypot(dx,dy) < r.width*0.9){ btn.style.transform='translate('+(dx*.28)+'px,'+(dy*.42)+'px)'; }
+        else { btn.style.transform='translate(0,0)'; }
+      });
+      host.addEventListener('pointerleave',function(){ btn.style.transform='translate(0,0)'; });
+    });
+  }
+})();
+</script>
+</body>
+</html>

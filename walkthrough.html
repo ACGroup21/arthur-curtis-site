@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arthur Curtis — Presentation Review</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#05101f; --bg-2:#081627; --ink:#eaf2fb; --muted:#8ba0b6; --muted-2:#5f7388;
+    --cyan:#22d3ee; --cyan-soft:#67e8f9; --line:rgba(120,160,210,.14);
+    --sans:'Inter',system-ui,sans-serif; --mono:'JetBrains Mono',monospace;
+    --good:#39d07f; --warm:#f0a35c;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:
+    radial-gradient(1100px 600px at 80% -8%,rgba(34,211,238,.06),transparent),
+    var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 26px}
+  header.top{padding:64px 0 34px;border-bottom:1px solid var(--line)}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan);margin-bottom:16px}
+  .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan)}
+  h1{font-size:clamp(30px,4.4vw,46px);font-weight:800;letter-spacing:-.02em;line-height:1.05}
+  h1 .g{background:linear-gradient(110deg,var(--cyan-soft),var(--cyan) 45%,#3b82f6);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .sub{color:var(--muted);font-size:17px;margin-top:14px;max-width:640px}
+  .legend{display:flex;gap:20px;flex-wrap:wrap;margin-top:22px;font-size:12.5px;color:var(--muted)}
+  .legend b{font-family:var(--mono);font-weight:600}
+  .legend .lg-good{color:var(--good)} .legend .lg-con{color:var(--warm)}
+
+  .entry{padding:52px 0;border-bottom:1px solid var(--line);display:grid;grid-template-columns:1.5fr 1fr;gap:38px;align-items:start}
+  .frame-col,.notes{min-width:0}
+  @media(max-width:920px){.entry{grid-template-columns:1fr;gap:26px}}
+  .idx{font-family:var(--mono);font-size:12px;color:var(--cyan);letter-spacing:.08em}
+  .pg-name{font-size:23px;font-weight:800;letter-spacing:-.01em;margin:6px 0 3px}
+  .pg-tag{font-size:13.5px;color:var(--muted)}
+  /* browser frame */
+  .browser{margin-top:16px;border:1px solid var(--line);border-radius:13px;overflow:hidden;background:var(--bg-2);box-shadow:0 26px 60px rgba(2,8,22,.5)}
+  .bbar{height:38px;display:flex;align-items:center;gap:14px;padding:0 14px;background:linear-gradient(180deg,#0e1f33,#0a1728);border-bottom:1px solid var(--line)}
+  .dots{display:flex;gap:7px}
+  .dots i{width:11px;height:11px;border-radius:50%;display:block}
+  .dots i:nth-child(1){background:#ff5f57} .dots i:nth-child(2){background:#febc2e} .dots i:nth-child(3){background:#28c840}
+  .url{flex:1;font-family:var(--mono);font-size:11.5px;color:var(--muted-2);background:rgba(3,10,22,.6);border:1px solid var(--line);border-radius:7px;padding:5px 11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .viewport{position:relative;width:100%;overflow:hidden;background:#05101f}
+  .viewport iframe{position:absolute;top:0;left:0;border:0;width:1280px;height:900px;transform-origin:top left;background:#05101f}
+  .open{display:inline-flex;align-items:center;gap:6px;margin-top:12px;font-size:13.5px;font-weight:600;color:var(--cyan);text-decoration:none}
+  .open:hover{gap:10px}
+  /* notes */
+  .notes .nh{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-2);margin-bottom:14px}
+  .note{display:flex;gap:11px;padding:11px 0;border-top:1px solid var(--line);font-size:14px;line-height:1.55}
+  .note:first-of-type{border-top:none}
+  .note .mk{flex:none;width:20px;height:20px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;margin-top:1px}
+  .note.good .mk{background:rgba(57,208,127,.14);color:var(--good)}
+  .note.con .mk{background:rgba(240,163,92,.14);color:var(--warm)}
+  .note b{color:var(--ink);font-weight:600}
+  footer{padding:44px 0 70px;color:var(--muted-2);font-size:13px;text-align:center}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <span class="eyebrow"><span class="dot"></span>Presentation review</span>
+    <h1>The site, <span class="g">page by page.</span></h1>
+    <p class="sub">Every page of the live site, framed for a walk-through — with a few honest notes on what's working and what's worth a second look. Each panel is the real page; scroll it, or open it full-size.</p>
+    <div class="legend">
+      <span><b class="lg-good">✓</b> works well &nbsp;·&nbsp; <b class="lg-con">→</b> worth considering</span>
+      <span>Panels are live — the actual pages, not screenshots.</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap" id="stream"></div>
+
+<footer class="wrap">Internal review · not linked from the site · Arthur Curtis</footer>
+
+<script>
+var PAGES=[
+  {name:'Home', tag:'The front door — hero + live calculator', url:'index.html', notes:[
+    ['good','<b>The hero is a working calculator.</b> Move the slider and real levy figures update on the spot — almost no consultancy site lets you check the claim on the homepage. Strong, immediate trust.'],
+    ['good','<b>Every figure shows its source.</b> Tap × 0.5%, − £15k or + 10% and the gov.uk reference pops up — the "show the working" promise, made live.'],
+    ['con','<b>The particle splash ("click to enter") gates the value.</b> It looks premium, but it delays the moment someone sees a number. Worth testing whether it earns the wait.']
+  ]},
+  {name:'For employers', tag:'The value proposition', url:'employers.html', notes:[
+    ['good','<b>Leads with the real problem</b> — "the money\'s already gone; the question is whether it works for you" — backed by hard numbers (£3bn+ lost, the 12-month clock).'],
+    ['good','<b>The FAQ answers the actual objections</b> honestly: non-levy? will it really expire? how is this different from a provider? That candour is on-brand.']
+  ]},
+  {name:'Approach', tag:'How we work', url:'approach.html', notes:[
+    ['good','<b>Goal → Map → Fund → Report.</b> One clean, memorable loop — easy to hold in your head and easy to sell in a room.'],
+    ['good','<b>"We build the software, not slides"</b> is stated plainly as the differentiator, and the page backs it by linking to the actual tools.']
+  ]},
+  {name:'Tools', tag:'The self-serve toolkit', url:'tools.html', notes:[
+    ['good','<b>Each card previews its own output</b> — you see the kind of answer you\'ll get before clicking. Reinforces "we build tools, not decks."'],
+    ['good','<b>Six real, working tools, no sign-up.</b> Rare in this space, and the strongest proof of the whole positioning.']
+  ]},
+  {name:'What can you claim?', tag:'A live tool, inside the shell', url:'tools/app.html#/what-can-you-claim', notes:[
+    ['good','<b>Set the hire, and every grant, incentive and saving updates live</b> — each with its own source link. The claim and the proof sit in the same place.'],
+    ['good','<b>Inputs carry across every tool</b> via the shared scenario, so a visitor never re-enters their pay bill.']
+  ]},
+  {name:'Methodology', tag:'The trust spine', url:'methodology.html', notes:[
+    ['good','<b>The funding rulebook is generated live from one canonical source</b> — every figure, its value, its gov.uk link, and the date it was checked. A genuine trust artifact almost no competitor has.'],
+    ['good','<b>It names the honest edges too</b> — averages aren\'t rules, England-only, not financial advice. Saying what you <i>don\'t</i> claim builds more trust than polish.']
+  ]},
+  {name:'About', tag:'The people & the position', url:'about.html', notes:[
+    ['good','<b>"Making people better" + "trust is the whole product"</b> — a clear, human position that isn\'t about the levy mechanics for once.'],
+    ['con','<b>Case studies are still placeholders.</b> Real client stories will carry a lot of weight here — this page will step up a level once they land.']
+  ]},
+  {name:'Contact', tag:'The conversion', url:'contact.html', notes:[
+    ['good','<b>Low friction:</b> a short form (pay bill optional), direct email/LinkedIn, and a "rather just try it?" nudge back to the tools for people not ready to talk.']
+  ]}
+];
+
+var BASE = location.href.replace(/walkthrough\.html.*$/, '');
+var stream = document.getElementById('stream');
+
+PAGES.forEach(function(p, i){
+  var e = document.createElement('section'); e.className='entry';
+  var notesHTML = p.notes.map(function(n){
+    var cls = n[0]==='good'?'good':'con', mk = n[0]==='good'?'✓':'→';
+    return '<div class="note '+cls+'"><span class="mk">'+mk+'</span><span>'+n[1]+'</span></div>';
+  }).join('');
+  var full = BASE + p.url;
+  e.innerHTML =
+    '<div class="frame-col">'+
+      '<div class="idx">'+String(i+1).padStart(2,'0')+' / '+String(PAGES.length).padStart(2,'0')+'</div>'+
+      '<div class="pg-name">'+p.name+'</div>'+
+      '<div class="pg-tag">'+p.tag+'</div>'+
+      '<div class="browser">'+
+        '<div class="bbar"><div class="dots"><i></i><i></i><i></i></div>'+
+          '<div class="url">arthurcurtis.com/'+p.url.replace('index.html','')+'</div></div>'+
+        '<div class="viewport"><iframe loading="lazy" title="'+p.name+'" src="'+p.url+'"></iframe></div>'+
+      '</div>'+
+      '<a class="open" href="'+p.url+'" target="_blank" rel="noopener">Open the real page →</a>'+
+    '</div>'+
+    '<div class="notes"><div class="nh">Notes</div>'+notesHTML+'</div>';
+  stream.appendChild(e);
+});
+
+/* scale each live page to fit its panel, and skip the intro splashes (same-origin) */
+function fit(){
+  document.querySelectorAll('.viewport').forEach(function(v){
+    var f=v.querySelector('iframe'); var s=v.clientWidth/1280;
+    f.style.transform='scale('+s+')'; v.style.height=(900*s)+'px';
+  });
+}
+document.querySelectorAll('.viewport iframe').forEach(function(f){
+  f.addEventListener('load', function(){
+    try{
+      var w=f.contentWindow, ss=w.sessionStorage;
+      if(!ss.getItem('_wtseen')){ ss.setItem('_wtseen','1'); ss.setItem('ac_entered','1'); ss.setItem('fundable_tools_entered','1'); w.location.reload(); return; }
+    }catch(e){/* cross-origin — splash auto-dismisses on its own */}
+  });
+});
+fit();
+window.addEventListener('resize', fit);
+window.addEventListener('load', fit);
+</script>
+</body>
+</html>

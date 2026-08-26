@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arthur Curtis — Design System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* ground & surface */
+    --ground:#04070f; --ground-2:#060b16; --surface:#0b1426; --surface-2:#0a1120; --glass:rgba(126,160,220,.045);
+    /* text */
+    --ink:#eef4fc; --muted:#9fb1ca; --muted-2:#6b7c98;
+    /* accent & energy */
+    --accent:#00B8C0;              /* UI cyan — safe as text/glow on the dark ground */
+    --energy:#009ba3;              /* the field's core cyan */
+    --indigo:#2f7d9c;              /* the field's cool secondary */
+    /* lines */
+    --line:rgba(120,160,220,.14); --line-2:rgba(120,160,220,.24);
+    /* semantic (separate from accent) */
+    --good:#57d1a6; --warn:#f0b45e; --bad:#f07a90;
+    /* type */
+    --sans:'Inter',system-ui,-apple-system,sans-serif; --mono:'JetBrains Mono',monospace;
+    /* radii & shadow */
+    --r:16px; --r-pill:32px; --shadow:0 30px 80px -34px rgba(0,0,0,.8);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--sans);color:var(--ink);background:var(--ground);line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 34px}
+  @media(max-width:640px){.wrap{padding:0 20px}}
+  .mono{font-family:var(--mono)}
+
+  /* ---------- header w/ living band ---------- */
+  .head{position:relative;border-bottom:1px solid var(--line);overflow:hidden}
+  #band{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+  .head::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(4,7,15,.2),rgba(4,7,15,.86));z-index:1}
+  .head .wrap{position:relative;z-index:2;padding:74px 34px 40px}
+  .brand{display:flex;align-items:center;gap:11px;font-weight:700;font-size:15px}
+  .brand .orb{width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#a9e0ff,#3a5fa8 74%);box-shadow:0 0 18px rgba(0,184,192,.4),inset 0 0 8px rgba(255,255,255,.4)}
+  .head h1{font-size:clamp(34px,5vw,56px);font-weight:800;letter-spacing:-.03em;line-height:1.0;margin-top:24px}
+  .head h1 .g{background:linear-gradient(100deg,#7fe6ea,#fff 46%,#2fb8c2);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .head .sub{color:var(--muted);font-size:17px;margin-top:14px;max-width:52ch}
+  .head .ver{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);margin-top:18px}
+
+  /* ---------- section scaffold ---------- */
+  section{padding:56px 0;border-bottom:1px solid var(--line)}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:10px}
+  .eyebrow::before{content:"";width:22px;height:1px;background:var(--accent)}
+  .s-title{font-size:26px;font-weight:800;letter-spacing:-.02em;margin:14px 0 4px}
+  .s-note{color:var(--muted);font-size:15px;max-width:60ch}
+  .block{margin-top:30px}
+  .b-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted-2);margin-bottom:16px}
+
+  /* ---------- color ---------- */
+  .swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px}
+  .sw{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface-2)}
+  .sw .chip{height:66px}
+  .sw .meta{padding:11px 13px}
+  .sw .nm{font-size:13.5px;font-weight:600}
+  .sw .hex{font-family:var(--mono);font-size:11px;color:var(--muted-2);margin-top:2px}
+  .sw .role{font-size:11.5px;color:var(--muted);margin-top:6px;line-height:1.4}
+
+  /* ---------- type ---------- */
+  .spec{border:1px solid var(--line);border-radius:var(--r);padding:26px;background:var(--surface-2)}
+  .spec + .spec{margin-top:14px}
+  .spec .tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-2);margin-bottom:12px;display:flex;justify-content:space-between;gap:10px}
+  .d-xl{font-size:clamp(40px,5.4vw,64px);font-weight:800;letter-spacing:-.03em;line-height:1.0}
+  .d-xl .g{background:linear-gradient(100deg,#7fe6ea,#fff 46%,#2fb8c2);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .t-h{font-size:26px;font-weight:700;letter-spacing:-.01em}
+  .t-body{font-size:17px;color:var(--muted);max-width:62ch}
+  .t-mono{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent)}
+  .t-fig{font-family:var(--mono);font-weight:600;font-size:34px;font-variant-numeric:tabular-nums;color:var(--accent);text-shadow:0 0 22px rgba(0,184,192,.4)}
+
+  /* ---------- components: buttons ---------- */
+  .row{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .btn{font-family:var(--sans);font-weight:600;font-size:15px;cursor:pointer;border:none;border-radius:var(--r-pill);padding:14px 24px;display:inline-flex;align-items:center;gap:9px;
+    transition:transform .4s cubic-bezier(.34,1.56,.64,1),box-shadow .3s,border-color .2s;will-change:transform}
+  .btn-primary{color:#04141c;background:linear-gradient(100deg,#00B8C0,#5fe0e6);box-shadow:0 0 0 1px rgba(0,184,192,.36),0 14px 40px -14px rgba(0,184,192,.6)}
+  .btn-primary:hover{box-shadow:0 0 0 1px rgba(0,184,192,.5),0 18px 50px -12px rgba(0,184,192,.7)}
+  .btn-ghost{color:var(--ink);background:rgba(8,16,32,.5);border:1px solid var(--line-2)}
+  .btn-ghost:hover{border-color:var(--accent)}
+  .btn-sm{padding:9px 16px;font-size:13.5px}
+  .btn[disabled]{opacity:.4;cursor:not-allowed}
+  .btn:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+  /* panels */
+  .panel{border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:linear-gradient(180deg,rgba(11,19,38,.5),rgba(6,11,24,.46));backdrop-filter:blur(12px);box-shadow:var(--shadow),0 0 90px -50px rgba(0,184,192,.4)}
+  .panel .p-top{display:flex;align-items:center;justify-content:space-between;padding:13px 18px;border-bottom:1px solid var(--line)}
+  .panel .p-body{padding:18px}
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:680px){.grid-2{grid-template-columns:1fr}}
+  .feature{border:1px solid var(--line);border-radius:var(--r);padding:22px;background:var(--surface-2);position:relative;overflow:hidden}
+  .feature::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,184,192,.5),transparent)}
+  .feature h4{font-size:17px;font-weight:700}
+  .feature p{color:var(--muted);font-size:14px;margin-top:7px}
+
+  /* inputs */
+  .field{margin-bottom:18px}
+  .field label{display:block;font-size:12px;color:var(--muted-2);margin-bottom:8px;letter-spacing:.02em}
+  .field input[type=text]{width:100%;background:rgba(4,11,22,.5);border:1px solid var(--line-2);border-radius:11px;padding:13px 14px;color:var(--ink);font-family:var(--mono);font-size:16px;transition:border-color .2s}
+  .field input[type=text]:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,184,192,.14)}
+  input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:3px;border-radius:3px;outline:none;margin:4px 0;cursor:pointer;background:linear-gradient(90deg,var(--energy),var(--indigo))}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:#fff;cursor:pointer;box-shadow:0 0 0 4px rgba(0,184,192,.22),0 0 18px rgba(0,184,192,.7)}
+  input[type=range]::-moz-range-thumb{width:22px;height:22px;border:none;border-radius:50%;background:#fff;cursor:pointer;box-shadow:0 0 0 4px rgba(0,184,192,.22)}
+  input[type=range]:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
+
+  /* labels & badges */
+  .pill{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;border-radius:30px;padding:6px 12px;border:1px solid var(--line-2)}
+  .pill .d{width:6px;height:6px;border-radius:50%}
+  .pill.live{color:var(--accent);border-color:rgba(0,184,192,.3)} .pill.live .d{background:var(--accent);box-shadow:0 0 8px var(--accent)}
+  .pill.good{color:var(--good);border-color:rgba(87,209,166,.3)} .pill.good .d{background:var(--good)}
+  .pill.warn{color:var(--warn);border-color:rgba(240,180,94,.3)} .pill.warn .d{background:var(--warn)}
+  .pill.bad{color:var(--bad);border-color:rgba(240,122,144,.3)} .pill.bad .d{background:var(--bad)}
+  .eb{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+
+  /* data display */
+  .tiles{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  @media(max-width:520px){.tiles{grid-template-columns:1fr}}
+  .tile{background:var(--surface-2);padding:15px 16px}
+  .tile .k{font-size:11px;color:var(--muted-2)}
+  .tile .v{font-family:var(--mono);font-weight:600;font-size:22px;margin-top:5px;font-variant-numeric:tabular-nums}
+  .tile.key .v{font-size:30px;color:var(--accent);text-shadow:0 0 22px rgba(0,184,192,.55)}
+  table.data{width:100%;border-collapse:collapse;font-size:14px}
+  table.data th{text-align:left;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted-2);font-weight:500;padding:0 0 10px}
+  table.data td{padding:11px 0;border-top:1px solid var(--line)}
+  table.data td.n{font-family:var(--mono);text-align:right;font-variant-numeric:tabular-nums;color:var(--ink)}
+  table.data td .src{color:var(--accent);font-family:var(--mono);font-size:12px}
+
+  /* dividers */
+  .rule{height:1px;background:var(--line)}
+  .rule-energy{height:1px;background:linear-gradient(90deg,transparent,var(--energy),var(--indigo),transparent);opacity:.6}
+
+  /* motion cards */
+  .m-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:680px){.m-grid{grid-template-columns:1fr}}
+  .m-card{border:1px solid var(--line);border-radius:var(--r);padding:20px;background:var(--surface-2)}
+  .m-card .mt{font-weight:700;font-size:15px}
+  .m-card .md{color:var(--muted);font-size:13.5px;margin-top:6px;line-height:1.5}
+  .m-card .spec-line{font-family:var(--mono);font-size:11px;color:var(--muted-2);margin-top:10px}
+
+  footer{padding:34px 0 60px;color:var(--muted-2);font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-align:center}
+
+.brand .mark{height:27px;width:auto;display:block}
+.ac-credit{display:inline-flex;align-items:center;gap:8px}
+.acd-mark{height:16px;width:auto;display:block;flex:none}
+.acd-txt{font-family:var(--mono);font-size:9px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted-2);line-height:1.35}
+.acd-txt strong{color:#fff;font-weight:600;letter-spacing:.07em}
+.acd-txt .acd-blue{color:#3B9EFF}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute;pointer-events:none" aria-hidden="true"><symbol id="ac-mark" viewBox="155 272 930 560"><path d="M 267 713 L 254 713 L 253 712 L 250 712 L 244 709 L 241 706 L 240 706 L 236 702 L 236 701 L 235 701 L 230 712 L 228 714 L 221 729 L 219 731 L 211 748 L 209 750 L 199 771 L 197 773 L 191 786 L 189 788 L 180 806 L 220 806 L 221 805 Z M 881 308 L 880 309 L 867 309 L 866 310 L 858 310 L 857 311 L 852 311 L 851 312 L 846 312 L 845 313 L 836 314 L 835 315 L 832 315 L 828 317 L 825 317 L 821 319 L 818 319 L 817 320 L 812 321 L 809 323 L 804 324 L 794 329 L 792 329 L 774 338 L 772 340 L 764 344 L 762 346 L 749 354 L 745 358 L 744 358 L 735 366 L 734 366 L 727 373 L 726 373 L 706 394 L 706 395 L 701 400 L 701 401 L 692 412 L 692 413 L 684 424 L 679 434 L 677 436 L 667 456 L 667 458 L 664 463 L 664 465 L 662 468 L 662 470 L 660 473 L 660 475 L 657 482 L 657 485 L 654 492 L 654 495 L 653 496 L 653 499 L 652 500 L 652 503 L 651 504 L 651 508 L 650 509 L 650 513 L 649 514 L 649 519 L 648 520 L 648 526 L 647 527 L 647 536 L 646 537 L 646 575 L 647 576 L 647 585 L 648 586 L 649 599 L 650 600 L 650 604 L 651 605 L 651 609 L 652 610 L 652 614 L 653 615 L 653 618 L 655 622 L 655 625 L 656 626 L 656 628 L 657 629 L 661 643 L 665 651 L 665 653 L 668 658 L 668 660 L 675 674 L 677 676 L 679 681 L 686 691 L 687 694 L 697 707 L 697 708 L 700 711 L 700 712 L 715 728 L 715 729 L 732 745 L 733 745 L 739 751 L 740 751 L 747 757 L 751 759 L 754 762 L 755 762 L 763 768 L 766 769 L 768 771 L 771 772 L 773 774 L 797 786 L 799 786 L 802 788 L 804 788 L 812 792 L 814 792 L 821 795 L 824 795 L 828 797 L 831 797 L 835 799 L 843 800 L 844 801 L 848 801 L 849 802 L 853 802 L 854 803 L 868 804 L 869 805 L 880 805 L 881 806 L 908 806 L 909 805 L 920 805 L 921 804 L 935 803 L 936 802 L 941 802 L 942 801 L 946 801 L 947 800 L 950 800 L 951 799 L 962 797 L 963 796 L 965 796 L 966 795 L 968 795 L 969 794 L 983 790 L 986 788 L 993 786 L 1000 782 L 1002 782 L 1008 779 L 1005 776 L 999 766 L 999 764 L 997 760 L 997 757 L 996 756 L 996 744 L 986 749 L 984 749 L 979 752 L 972 754 L 969 756 L 967 756 L 966 757 L 964 757 L 963 758 L 961 758 L 954 761 L 943 763 L 942 764 L 938 764 L 937 765 L 933 765 L 932 766 L 928 766 L 927 767 L 921 767 L 920 768 L 910 768 L 909 769 L 884 769 L 883 768 L 873 768 L 872 767 L 859 766 L 858 765 L 849 764 L 848 763 L 841 762 L 837 760 L 834 760 L 833 759 L 825 757 L 822 755 L 820 755 L 817 753 L 815 753 L 791 741 L 789 739 L 786 738 L 781 734 L 775 731 L 772 728 L 771 728 L 768 725 L 763 722 L 757 716 L 756 716 L 734 694 L 734 693 L 726 684 L 726 683 L 716 670 L 715 667 L 710 660 L 708 655 L 706 653 L 702 645 L 702 643 L 698 636 L 698 634 L 696 631 L 695 626 L 693 623 L 693 620 L 690 613 L 690 610 L 688 606 L 688 602 L 687 601 L 687 598 L 686 597 L 686 593 L 685 592 L 684 579 L 683 578 L 683 566 L 682 565 L 682 547 L 683 546 L 683 533 L 684 532 L 685 520 L 686 519 L 686 515 L 687 514 L 687 510 L 688 509 L 689 502 L 691 498 L 691 495 L 692 494 L 694 486 L 698 478 L 698 476 L 711 450 L 713 448 L 714 445 L 716 443 L 722 433 L 725 430 L 725 429 L 729 425 L 729 424 L 733 420 L 733 419 L 740 412 L 740 411 L 749 402 L 750 402 L 759 393 L 760 393 L 772 383 L 773 383 L 784 375 L 787 374 L 789 372 L 796 369 L 798 367 L 800 367 L 809 362 L 811 362 L 821 357 L 823 357 L 824 356 L 826 356 L 833 353 L 840 352 L 844 350 L 853 349 L 854 348 L 867 347 L 868 346 L 879 346 L 880 345 L 899 345 L 900 346 L 911 346 L 912 347 L 918 347 L 919 348 L 924 348 L 925 349 L 929 349 L 930 350 L 937 351 L 941 353 L 944 353 L 945 354 L 953 356 L 965 362 L 967 362 L 973 365 L 975 367 L 980 369 L 982 371 L 985 372 L 987 374 L 997 380 L 1005 387 L 1006 387 L 1013 394 L 1015 394 L 1041 366 L 1041 365 L 1038 362 L 1037 362 L 1028 354 L 1024 352 L 1021 349 L 1020 349 L 1009 341 L 995 334 L 993 332 L 991 332 L 984 328 L 982 328 L 977 325 L 975 325 L 972 323 L 967 322 L 964 320 L 958 319 L 951 316 L 948 316 L 947 315 L 944 315 L 943 314 L 939 314 L 938 313 L 934 313 L 933 312 L 929 312 L 928 311 L 914 310 L 913 309 L 901 309 L 900 308 Z M 436 297 L 416 337 L 414 339 L 414 341 L 412 343 L 404 360 L 402 362 L 392 383 L 390 385 L 374 417 L 372 419 L 365 434 L 363 436 L 353 457 L 351 459 L 342 478 L 340 480 L 333 495 L 331 497 L 316 527 L 314 529 L 308 542 L 306 544 L 305 548 L 312 548 L 313 549 L 316 549 L 323 552 L 325 554 L 326 554 L 335 563 L 336 565 L 348 541 L 350 539 L 362 514 L 364 512 L 371 497 L 373 495 L 381 478 L 383 476 L 392 457 L 394 455 L 400 442 L 402 440 L 416 412 L 418 410 L 422 401 L 424 399 L 430 386 L 435 379 L 437 381 L 443 394 L 445 396 L 492 490 L 494 492 L 525 555 L 527 557 L 528 561 L 532 569 L 534 571 L 540 583 L 540 585 L 542 587 L 589 682 L 591 684 L 651 805 L 652 806 L 691 806 L 692 805 L 694 806 L 694 804 L 663 742 L 661 740 L 637 691 L 634 687 L 634 685 L 630 677 L 628 675 L 604 626 L 602 624 L 601 620 L 599 618 L 598 614 L 595 610 L 595 608 L 593 606 L 593 604 L 591 602 L 585 590 L 585 588 L 581 580 L 579 578 L 540 499 L 538 497 L 512 444 L 510 442 L 471 364 L 469 362 L 437 297 Z" fill="#FEFDFD" fill-rule="evenodd"/>
+  <path d="M 1031 891 L 1030 892 L 1030 939 L 1031 940 L 1031 943 L 1038 943 L 1038 908 L 1039 907 L 1041 908 L 1041 909 L 1048 917 L 1048 918 L 1051 921 L 1051 922 L 1055 926 L 1055 927 L 1058 930 L 1058 931 L 1061 934 L 1061 935 L 1064 938 L 1064 939 L 1067 942 L 1067 943 L 1075 943 L 1075 891 L 1074 892 L 1070 892 L 1069 891 L 1067 892 L 1067 927 L 1066 928 L 1062 923 L 1062 922 L 1059 919 L 1059 918 L 1056 915 L 1056 914 L 1052 910 L 1052 909 L 1040 894 L 1040 893 L 1038 891 L 1036 892 Z M 923 893 L 921 895 L 917 897 L 914 900 L 909 910 L 909 924 L 910 925 L 910 927 L 913 933 L 919 939 L 925 942 L 927 942 L 928 943 L 932 943 L 933 944 L 939 944 L 940 943 L 944 943 L 945 942 L 949 941 L 951 939 L 952 939 L 959 932 L 962 926 L 962 923 L 963 922 L 963 913 L 962 912 L 962 909 L 961 908 L 961 906 L 959 902 L 952 895 L 951 895 L 949 893 L 947 893 L 943 891 L 929 891 L 928 892 Z M 931 898 L 940 898 L 941 899 L 943 899 L 947 901 L 950 904 L 954 911 L 955 919 L 954 920 L 954 923 L 952 927 L 948 932 L 941 936 L 930 936 L 926 934 L 919 927 L 917 923 L 917 912 L 918 911 L 919 907 L 926 900 L 930 899 Z M 833 891 L 832 892 L 832 924 L 833 925 L 833 931 L 832 932 L 832 940 L 833 941 L 832 942 L 833 943 L 840 943 L 840 891 L 839 892 L 837 891 Z M 726 891 L 725 892 L 725 898 L 726 899 L 741 899 L 742 900 L 742 943 L 750 943 L 750 900 L 751 899 L 766 899 L 767 898 L 767 892 L 752 892 L 751 891 L 742 891 L 741 892 L 735 892 L 734 891 L 730 891 L 728 892 Z M 638 891 L 636 893 L 633 899 L 633 901 L 629 908 L 629 910 L 625 917 L 625 919 L 621 926 L 621 928 L 617 935 L 617 937 L 614 943 L 623 943 L 624 939 L 627 934 L 627 932 L 629 930 L 631 930 L 632 931 L 643 931 L 644 930 L 653 930 L 656 934 L 656 936 L 658 939 L 659 943 L 667 943 L 666 938 L 662 931 L 662 929 L 659 924 L 659 922 L 656 917 L 656 915 L 652 908 L 652 906 L 648 899 L 648 897 L 646 893 L 642 891 Z M 640 902 L 642 903 L 646 911 L 646 913 L 649 918 L 649 920 L 650 921 L 650 923 L 649 924 L 632 924 L 631 923 L 634 917 L 634 915 L 637 910 L 637 908 L 639 905 L 639 903 Z M 524 892 L 520 894 L 517 897 L 516 897 L 513 900 L 513 901 L 510 905 L 510 907 L 508 911 L 508 923 L 509 924 L 510 930 L 518 939 L 521 940 L 523 942 L 525 942 L 526 943 L 531 943 L 532 944 L 543 943 L 549 940 L 553 936 L 554 936 L 554 935 L 550 931 L 550 930 L 548 930 L 545 933 L 539 936 L 530 936 L 529 935 L 527 935 L 525 934 L 518 927 L 517 923 L 516 922 L 516 913 L 517 912 L 517 910 L 519 906 L 527 899 L 529 899 L 530 898 L 539 898 L 540 899 L 544 900 L 548 904 L 549 904 L 554 899 L 554 898 L 549 894 L 545 892 L 543 892 L 542 891 L 528 891 L 527 892 Z M 399 891 L 398 892 L 398 924 L 399 925 L 399 929 L 400 930 L 400 932 L 402 936 L 408 941 L 412 943 L 416 943 L 417 944 L 423 944 L 424 943 L 427 943 L 428 942 L 432 941 L 438 935 L 440 931 L 440 929 L 441 928 L 441 925 L 442 924 L 442 892 L 441 891 L 440 892 L 439 891 L 434 891 L 434 923 L 433 924 L 433 927 L 428 934 L 424 936 L 415 936 L 409 932 L 407 928 L 407 926 L 406 925 L 406 891 Z M 286 891 L 285 892 L 285 943 L 310 943 L 311 942 L 317 941 L 324 937 L 325 935 L 329 931 L 331 927 L 331 925 L 332 924 L 332 911 L 331 910 L 331 908 L 330 907 L 329 903 L 322 896 L 321 896 L 319 894 L 317 894 L 313 892 L 307 892 L 306 891 L 297 891 L 296 892 L 289 892 L 288 891 Z M 294 899 L 311 899 L 312 900 L 314 900 L 316 901 L 323 909 L 323 911 L 324 912 L 324 922 L 323 923 L 322 927 L 316 933 L 312 935 L 310 935 L 309 936 L 294 936 L 293 935 L 293 900 Z M 180 891 L 180 895 L 179 896 L 179 898 L 180 899 L 180 902 L 179 903 L 179 908 L 180 909 L 180 925 L 179 926 L 179 933 L 180 934 L 180 943 L 216 943 L 216 936 L 189 936 L 187 934 L 187 922 L 189 920 L 190 921 L 207 921 L 208 920 L 211 920 L 212 921 L 212 913 L 211 914 L 209 913 L 188 913 L 187 912 L 187 900 L 188 899 L 215 899 L 216 898 L 216 892 L 215 891 L 214 892 L 200 892 L 199 891 L 192 891 L 191 892 L 182 892 Z M 1035 733 L 1034 734 L 1031 734 L 1030 735 L 1026 736 L 1019 743 L 1017 747 L 1017 749 L 1016 750 L 1016 761 L 1021 771 L 1026 775 L 1030 777 L 1032 777 L 1033 778 L 1043 778 L 1044 777 L 1046 777 L 1050 775 L 1056 770 L 1059 764 L 1059 762 L 1060 761 L 1060 750 L 1059 749 L 1059 747 L 1057 743 L 1050 736 L 1046 734 L 1043 734 L 1042 733 Z M 314 565 L 309 565 L 308 564 L 306 565 L 301 565 L 295 568 L 290 572 L 286 580 L 286 583 L 285 584 L 285 589 L 286 590 L 286 593 L 287 594 L 288 598 L 293 604 L 284 621 L 284 623 L 270 650 L 269 654 L 267 656 L 258 656 L 257 657 L 253 658 L 246 664 L 243 670 L 243 672 L 242 673 L 242 683 L 243 684 L 243 686 L 245 690 L 252 697 L 254 698 L 256 698 L 257 699 L 262 699 L 263 700 L 265 700 L 266 699 L 270 699 L 276 696 L 282 690 L 284 686 L 284 684 L 285 683 L 285 673 L 284 672 L 283 667 L 277 660 L 282 651 L 282 649 L 284 647 L 284 645 L 294 626 L 294 624 L 301 610 L 303 608 L 308 609 L 309 608 L 313 608 L 314 607 L 318 606 L 324 601 L 324 600 L 327 596 L 327 594 L 328 593 L 328 589 L 329 588 L 329 584 L 328 583 L 327 577 L 324 573 L 324 572 L 321 569 Z" fill="#00B8C0" fill-rule="evenodd"/></symbol></svg>
+
+<header class="head">
+  <canvas id="band"></canvas>
+  <div class="wrap">
+    <div class="brand"><svg class="mark" viewBox="155 272 930 560" aria-hidden="true"><use href="#ac-mark"></use></svg>Arthur Curtis</div>
+    <h1>The <span class="g">living-energy</span> system.</h1>
+    <p class="sub">The design language for taking workforce development into the future — one palette, one type system, one motion vocabulary. Tone: <b style="color:var(--ink)">Deep</b>.</p>
+    <div class="ver">Concept · v0.1 · dark-only, single visual world</div>
+  </div>
+</header>
+
+<main>
+<section id="color"><div class="wrap">
+  <div class="eyebrow">Foundations</div>
+  <div class="s-title">Colour</div>
+  <p class="s-note">Near-black cool ground, restrained cyan energy, cool-neutral text. Semantic colours are held separate from the accent so status never competes with brand.</p>
+  <div class="block"><div class="b-label">Ground &amp; surface</div>
+    <div class="swatches">
+      <div class="sw"><div class="chip" style="background:#04070f"></div><div class="meta"><div class="nm">Ground</div><div class="hex">#04070f · --ground</div><div class="role">The page. Cool near-black the field sits on.</div></div></div>
+      <div class="sw"><div class="chip" style="background:#0b1426"></div><div class="meta"><div class="nm">Surface</div><div class="hex">#0b1426 · --surface</div><div class="role">Panels &amp; cards, usually as translucent glass.</div></div></div>
+      <div class="sw"><div class="chip" style="background:#0a1120"></div><div class="meta"><div class="nm">Surface 2</div><div class="hex">#0a1120 · --surface-2</div><div class="role">Recessed tiles and inset areas.</div></div></div>
+    </div>
+  </div>
+  <div class="block"><div class="b-label">Text</div>
+    <div class="swatches">
+      <div class="sw"><div class="chip" style="background:#eef4fc"></div><div class="meta"><div class="nm">Ink</div><div class="hex">#eef4fc · --ink</div><div class="role">Primary text &amp; headings.</div></div></div>
+      <div class="sw"><div class="chip" style="background:#9fb1ca"></div><div class="meta"><div class="nm">Muted</div><div class="hex">#9fb1ca · --muted</div><div class="role">Body &amp; secondary copy.</div></div></div>
+      <div class="sw"><div class="chip" style="background:#6b7c98"></div><div class="meta"><div class="nm">Muted 2</div><div class="hex">#6b7c98 · --muted-2</div><div class="role">Labels, captions, footnotes.</div></div></div>
+    </div>
+  </div>
+  <div class="block"><div class="b-label">Accent &amp; energy</div>
+    <div class="swatches">
+      <div class="sw"><div class="chip" style="background:#00B8C0"></div><div class="meta"><div class="nm">Accent</div><div class="hex">#00B8C0 · --accent</div><div class="role">UI cyan — links, focus, key figures, glow. Safe as text on the ground.</div></div></div>
+      <div class="sw"><div class="chip" style="background:#009ba3"></div><div class="meta"><div class="nm">Energy</div><div class="hex">#009ba3 · --energy</div><div class="role">The field's core cyan; slider &amp; energy accents.</div></div></div>
+      <div class="sw"><div class="chip" style="background:#2f7d9c"></div><div class="meta"><div class="nm">Indigo</div><div class="hex">#2f7d9c · --indigo</div><div class="role">The field's cool secondary; gradient tails.</div></div></div>
+    </div>
+  </div>
+  <div class="block"><div class="b-label">Semantic</div>
+    <div class="swatches">
+      <div class="sw"><div class="chip" style="background:#57d1a6"></div><div class="meta"><div class="nm">Good</div><div class="hex">#57d1a6 · --good</div><div class="role">Funded, eligible, on-track.</div></div></div>
+      <div class="sw"><div class="chip" style="background:#f0b45e"></div><div class="meta"><div class="nm">Warning</div><div class="hex">#f0b45e · --warn</div><div class="role">Expiring, indicative, attention.</div></div></div>
+      <div class="sw"><div class="chip" style="background:#f07a90"></div><div class="meta"><div class="nm">Critical</div><div class="hex">#f07a90 · --bad</div><div class="role">At risk, lost, error.</div></div></div>
+    </div>
+  </div>
+</div></section>
+
+<section id="type"><div class="wrap">
+  <div class="eyebrow">Foundations</div>
+  <div class="s-title">Typography</div>
+  <p class="s-note"><b style="color:var(--ink)">Inter</b> carries everything; <b style="color:var(--ink)">JetBrains Mono</b> handles labels and figures — the "instrument" voice. Display headlines take the light gradient; figures are always tabular.</p>
+  <div class="block">
+    <div class="spec"><div class="tag"><span>Display · Inter 800</span><span>clamp(40–64px) · -0.03em</span></div><div class="d-xl">Turn your levy into <span class="g">living energy.</span></div></div>
+    <div class="spec"><div class="tag"><span>Heading · Inter 700</span><span>26px</span></div><div class="t-h">A number your CFO would stake a plan on.</div></div>
+    <div class="spec"><div class="tag"><span>Body · Inter 400</span><span>17px · muted</span></div><div class="t-body">Every employer pays into the apprenticeship levy. Most let it expire. We turn it into a living system that plans, funds, and proves the people your business will need next.</div></div>
+    <div class="spec"><div class="tag"><span>Label · JetBrains Mono</span><span>12px · .16em · uppercase</span></div><div class="t-mono">The future of workforce development</div></div>
+    <div class="spec"><div class="tag"><span>Figure · Mono 600 · tabular</span><span>glow on key values</span></div><div class="t-fig">£1,218,000</div></div>
+  </div>
+</div></section>
+
+<section id="motion"><div class="wrap">
+  <div class="eyebrow">Foundations</div>
+  <div class="s-title">Motion</div>
+  <p class="s-note">Motion is used sparingly and with meaning — the atmosphere lives, and the interface responds to intent. Everything honours <span class="mono" style="color:var(--accent)">prefers-reduced-motion</span>.</p>
+  <div class="block m-grid">
+    <div class="m-card"><div class="mt">Load reveal</div><div class="md">The field ignites from the centre and blooms outward; copy rises in over it, staggered.</div><div class="spec-line">u_reveal 0→1 · easeOutCubic · ~1.7s</div></div>
+    <div class="m-card"><div class="mt">Energy-reactive field</div><div class="md">The background brightens and quickens as the levy grows — the graphic <em>is</em> the data.</div><div class="spec-line">u_energy = log(payBill) mapped 0→1</div></div>
+    <div class="m-card"><div class="mt">Magnetic call-to-action</div><div class="md">The primary button leans toward the cursor, then springs back. Try it below.</div><div class="spec-line">translate ≤ .28×/.42× offset · spring ease</div></div>
+    <div class="m-card"><div class="mt">Cursor lift</div><div class="md">The field gently lifts toward the pointer — the atmosphere acknowledges you.</div><div class="spec-line">radial add at u_mouse · subtle</div></div>
+  </div>
+  <div class="block"><div class="b-label">Try the magnetic button</div><div class="row"><button class="btn btn-primary" type="button">See what your levy can build →</button></div></div>
+</div></section>
+
+<section id="buttons"><div class="wrap">
+  <div class="eyebrow">Components</div>
+  <div class="s-title">Buttons</div>
+  <p class="s-note">Pill-shaped. One primary per view (magnetic, luminous); ghost for secondary; small for inline. Focus is always visible.</p>
+  <div class="block"><div class="row">
+    <button class="btn btn-primary" type="button">Primary →</button>
+    <button class="btn btn-ghost" type="button">Ghost</button>
+    <button class="btn btn-ghost btn-sm" type="button">Small</button>
+    <button class="btn btn-primary" type="button" disabled>Disabled</button>
+  </div></div>
+</div></section>
+
+<section id="panels"><div class="wrap">
+  <div class="eyebrow">Components</div>
+  <div class="s-title">Panels &amp; cards</div>
+  <p class="s-note">Frosted glass over the field for live data (the console); flat surface cards with a top energy-edge for static content.</p>
+  <div class="block grid-2">
+    <div class="panel">
+      <div class="p-top"><span class="mono" style="font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted-2)">Levy → workforce · live</span><span class="pill live"><span class="d"></span>Live</span></div>
+      <div class="p-body">
+        <div style="font-size:12px;color:var(--muted-2)">Your annual pay bill</div>
+        <div class="mono" style="font-weight:600;font-size:28px;margin-top:4px">£<span style="font-variant-numeric:tabular-nums">25,000,000</span></div>
+        <input type="range" id="demoRange" min="0" max="100" value="45" aria-label="Demo slider" style="margin:16px 0 4px">
+        <div class="tiles" style="margin-top:14px"><div class="tile key"><div class="k">Apprenticeships / yr</div><div class="v">13</div></div><div class="tile"><div class="k">With top-up</div><div class="v">£121,000</div></div></div>
+      </div>
+    </div>
+    <div class="feature"><h4>Frosted glass</h4><p>Used where live data sits over the atmosphere — the field reads through the blur, so the numbers feel alive rather than pasted on.</p>
+      <div class="rule-energy" style="margin:16px 0"></div>
+      <h4>Surface card</h4><p>Flat, quieter surface for static content — a hairline energy-edge at the top ties it to the system without the glow.</p></div>
+  </div>
+</div></section>
+
+<section id="inputs"><div class="wrap">
+  <div class="eyebrow">Components</div>
+  <div class="s-title">Inputs</div>
+  <p class="s-note">Mono for anything numeric. The slider carries the energy gradient — the one place the field's colour enters a control.</p>
+  <div class="block grid-2">
+    <div><div class="field"><label>Annual pay bill</label><input type="text" value="25,000,000" inputmode="numeric"></div>
+      <div class="field"><label>Focus state shown on tab</label><input type="text" value="Editable figure"></div></div>
+    <div><div class="field"><label>Energy slider</label><input type="range" min="0" max="100" value="60" aria-label="Energy"></div>
+      <p style="color:var(--muted);font-size:13.5px;margin-top:6px">Thumb: white with a cyan halo. Track: <span class="mono" style="color:var(--accent)">--energy → --indigo</span>. Drives the field on the hero.</p></div>
+  </div>
+</div></section>
+
+<section id="labels"><div class="wrap">
+  <div class="eyebrow">Components</div>
+  <div class="s-title">Labels &amp; badges</div>
+  <p class="s-note">Mono, uppercase, tracked. Status pills use semantic colour; the eyebrow uses the accent.</p>
+  <div class="block"><div class="row" style="gap:10px">
+    <span class="eb">— The future of workforce development</span>
+  </div></div>
+  <div class="block"><div class="row" style="gap:10px">
+    <span class="pill live"><span class="d"></span>Live</span>
+    <span class="pill good"><span class="d"></span>Funded</span>
+    <span class="pill warn"><span class="d"></span>Expiring</span>
+    <span class="pill bad"><span class="d"></span>At risk</span>
+  </div></div>
+</div></section>
+
+<section id="data"><div class="wrap">
+  <div class="eyebrow">Components</div>
+  <div class="s-title">Data display</div>
+  <p class="s-note">Figures are the design. Key values glow; tables stay quiet, mono, tabular, and always cite a source.</p>
+  <div class="block grid-2">
+    <div class="tiles">
+      <div class="tile key"><div class="k">Apprenticeships / yr</div><div class="v">13</div></div>
+      <div class="tile"><div class="k">Annual levy pot</div><div class="v">£110,000</div></div>
+      <div class="tile"><div class="k">With 10% top-up</div><div class="v">£121,000</div></div>
+      <div class="tile"><div class="k">Monthly flow</div><div class="v">£10,083</div></div>
+    </div>
+    <div class="panel"><div class="p-body"><table class="data">
+      <thead><tr><th>Figure</th><th style="text-align:right">Value</th><th style="text-align:right">Source</th></tr></thead>
+      <tbody>
+        <tr><td>Levy rate</td><td class="n">0.5%</td><td class="n"><span class="src">gov.uk →</span></td></tr>
+        <tr><td>Annual allowance</td><td class="n">£15,000</td><td class="n"><span class="src">gov.uk →</span></td></tr>
+        <tr><td>Government top-up</td><td class="n">+10%</td><td class="n"><span class="src">gov.uk →</span></td></tr>
+      </tbody>
+    </table></div></div>
+  </div>
+</div></section>
+
+<section id="dividers"><div class="wrap">
+  <div class="eyebrow">Components</div>
+  <div class="s-title">Dividers</div>
+  <p class="s-note">A plain hairline for structure; an energy line for moments that matter.</p>
+  <div class="block">
+    <div class="b-label">Hairline · --line</div><div class="rule"></div>
+    <div class="b-label" style="margin-top:26px">Energy line · --energy → --indigo</div><div class="rule-energy"></div>
+  </div>
+</div></section>
+</main>
+
+<footer><div style="display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap"><span class="ac-credit"><svg class="acd-mark" viewBox="61 47 278 310" aria-hidden="true"><path d="M 96 322 L 200 82 L 304 322" fill="none" stroke="#FFFFFF" stroke-width="34" stroke-linecap="round" stroke-linejoin="round"/><circle cx="200" cy="238" r="23" fill="#3B9EFF"/></svg><span class="acd-txt">Built&nbsp;by <strong>AC&nbsp;<span class="acd-blue">Digital</span></strong></span></span><span>Arthur Curtis · living-energy design system · concept v0.1</span></div></footer>
+
+<script id="fs" type="x-shader/x-fragment">
+precision highp float;
+uniform vec2 u_res; uniform float u_time;
+float hash(vec2 p){ p=fract(p*vec2(123.34,456.21)); p+=dot(p,p+45.32); return fract(p.x*p.y); }
+float noise(vec2 p){ vec2 i=floor(p),f=fract(p); vec2 u=f*f*(3.0-2.0*f);
+  float a=hash(i),b=hash(i+vec2(1.0,0.0)),c=hash(i+vec2(0.0,1.0)),d=hash(i+vec2(1.0,1.0));
+  return mix(mix(a,b,u.x),mix(c,d,u.x),u.y); }
+float fbm(vec2 p){ float v=0.0,a=0.5; for(int i=0;i<6;i++){ v+=a*noise(p); p*=2.02; a*=0.5;} return v; }
+void main(){
+  vec2 p=(gl_FragCoord.xy-0.5*u_res.xy)/u_res.y;
+  vec3 deep=vec3(0.016,0.028,0.055), c1=vec3(0.05,0.72,0.75), c2=vec3(0.10,0.42,0.56);
+  float t=u_time*0.02;
+  vec2 q=vec2(fbm(p*1.35+vec2(0.0,t)),fbm(p*1.35+vec2(5.2,-t*0.8)));
+  vec2 r=vec2(fbm(p*1.35+2.1*q+vec2(1.7,9.2)+t*0.55),fbm(p*1.35+2.1*q+vec2(8.3,2.8)-t*0.55));
+  float f=fbm(p*1.35+2.5*r);
+  vec3 col=deep;
+  col=mix(col,c2*0.8,smoothstep(0.28,0.96,r.x)*0.55);
+  col=mix(col,c1,smoothstep(0.44,0.92,f)*0.6);
+  col+=c1*smoothstep(0.72,0.98,f)*0.3;
+  col*=1.0-0.5*length(p*vec2(0.7,1.1));
+  gl_FragColor=vec4(pow(max(col,0.0),vec3(0.94)),1.0);
+}
+</script>
+<script>
+(function(){
+  var cv=document.getElementById('band'), gl=cv&&(cv.getContext('webgl')||cv.getContext('experimental-webgl'));
+  var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  if(gl){
+    function sh(t,s){var o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);if(!gl.getShaderParameter(o,gl.COMPILE_STATUS))console.error(gl.getShaderInfoLog(o));return o;}
+    var pr=gl.createProgram();
+    gl.attachShader(pr,sh(gl.VERTEX_SHADER,'attribute vec2 p;void main(){gl_Position=vec4(p,0.0,1.0);}'));
+    gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,document.getElementById('fs').textContent));
+    gl.linkProgram(pr);gl.useProgram(pr);
+    var b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
+    var lp=gl.getAttribLocation(pr,'p');gl.enableVertexAttribArray(lp);gl.vertexAttribPointer(lp,2,gl.FLOAT,false,0,0);
+    var uR=gl.getUniformLocation(pr,'u_res'),uT=gl.getUniformLocation(pr,'u_time');
+    var DPR=Math.min(1.5,devicePixelRatio||1);
+    function size(){var r=cv.getBoundingClientRect();cv.width=Math.max(2,Math.floor(r.width*DPR));cv.height=Math.max(2,Math.floor(r.height*DPR));gl.viewport(0,0,cv.width,cv.height);}
+    new ResizeObserver(size).observe(cv.parentElement); size();
+    var t0=performance.now();
+    (function loop(now){gl.uniform2f(uR,cv.width,cv.height);gl.uniform1f(uT,reduce?6.0:(now-t0)/1000);gl.drawArrays(gl.TRIANGLES,0,3);if(!reduce)requestAnimationFrame(loop);})(t0);
+  }
+  /* magnetic primary buttons */
+  if(!reduce && matchMedia('(pointer:fine)').matches){
+    document.querySelectorAll('.btn-primary:not([disabled])').forEach(function(btn){var host=btn.parentElement;
+      host.addEventListener('pointermove',function(e){var r=btn.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2,dx=e.clientX-cx,dy=e.clientY-cy;
+        if(Math.hypot(dx,dy)<r.width*0.7){btn.style.transform='translate('+(dx*.26)+'px,'+(dy*.4)+'px)';}else{btn.style.transform='';}});
+      host.addEventListener('pointerleave',function(){btn.style.transform='';});});
+  }
+})();
+</script>
+</body>
+</html>

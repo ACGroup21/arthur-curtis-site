@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arthur Curtis — Two futures</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#04070f;--ink:#eef4fc;--muted:#9fb1ca;--muted-2:#6b7c98;--cyan:#3fe0ff;--violet:#8f7bff;--line:rgba(120,160,220,.15);
+    --sans:'Inter',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:radial-gradient(1000px 600px at 50% -10%,rgba(34,211,238,.08),transparent 60%),var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1320px;margin:0 auto;padding:0 34px}
+  header{padding:56px 0 30px;text-align:center}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan)}
+  h1{font-size:clamp(30px,4.4vw,46px);font-weight:800;letter-spacing:-.02em;margin-top:14px}
+  h1 .g{background:linear-gradient(100deg,var(--cyan),var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .sub{color:var(--muted);font-size:16.5px;max-width:620px;margin:16px auto 0}
+
+  .duo{display:grid;grid-template-columns:1fr 1fr;gap:26px;padding:26px 0 70px;align-items:start}
+  @media(max-width:1000px){.duo{grid-template-columns:1fr;gap:44px}}
+  .col{min-width:0}
+  .tag{display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2)}
+  .tag .d{width:8px;height:8px;border-radius:50%}
+  .tag.evo .d{background:var(--cyan)} .tag.front .d{background:var(--violet);box-shadow:0 0 10px var(--violet)}
+  .col h2{font-size:24px;font-weight:800;letter-spacing:-.01em;margin:9px 0 4px}
+  .col .desc{color:var(--muted);font-size:14.5px;line-height:1.55;min-height:44px}
+  .frame{margin-top:16px;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#05101f;box-shadow:0 30px 70px -30px rgba(0,0,0,.8)}
+  .fbar{height:34px;display:flex;align-items:center;gap:12px;padding:0 13px;border-bottom:1px solid var(--line);background:rgba(10,18,34,.7)}
+  .fbar .dots{display:flex;gap:6px}.fbar .dots i{width:9px;height:9px;border-radius:50%;background:rgba(140,160,200,.3)}
+  .fbar .u{font-family:var(--mono);font-size:11px;color:var(--muted-2)}
+  .vp{position:relative;width:100%;overflow:hidden;background:#04070f}
+  .vp iframe{position:absolute;top:0;left:0;border:0;width:1400px;height:900px;transform-origin:top left}
+  .open{display:inline-flex;align-items:center;gap:8px;margin-top:14px;font-size:14px;font-weight:600;color:var(--cyan)}
+  .open:hover{gap:12px}
+  .points{margin-top:16px;list-style:none;display:flex;flex-direction:column;gap:9px}
+  .points li{font-size:13.5px;color:var(--muted);display:flex;gap:9px;line-height:1.5}
+  .points li b{color:var(--ink);font-weight:600}
+  .points .mk{color:var(--cyan);flex:none}
+  footer{text-align:center;padding:20px 0 60px;color:var(--muted-2);font-family:var(--mono);font-size:11px;letter-spacing:.06em}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="eyebrow">Two futures · pick a direction</div>
+    <h1>Evolution <span class="g">vs</span> full frontier</h1>
+    <p class="sub">Same mission — taking workforce development into the future — at two levels of ambition. Both are live and interactive: move the slider, hover the primary button (it's magnetic), watch the field move.</p>
+  </div>
+</header>
+
+<div class="wrap duo">
+  <div class="col">
+    <span class="tag evo"><span class="d"></span>Option A · Evolution</span>
+    <h2>The site you have, leveled up</h2>
+    <p class="desc">Same bones as today — copy left, live calculator right — but the vision leads, the star-field gains a violet depth, and everything glows a notch harder.</p>
+    <div class="frame">
+      <div class="fbar"><div class="dots"><i></i><i></i><i></i></div><span class="u">arthurcurtis.com · evolution</span></div>
+      <div class="vp"><iframe title="Evolution concept" src="evolution-concept.html"></iframe></div>
+    </div>
+    <a class="open" href="evolution-concept.html" target="_blank" rel="noopener">Open full-screen →</a>
+    <ul class="points">
+      <li><span class="mk">›</span><span><b>Low risk.</b> Recognisable to anyone who's seen the site; ships fast.</span></li>
+      <li><span class="mk">›</span><span><b>Vision-led copy</b> over the familiar calculator hero.</span></li>
+      <li><span class="mk">›</span><span><b>Cyan + a touch of violet</b> — richer, not radical.</span></li>
+    </ul>
+  </div>
+
+  <div class="col">
+    <span class="tag front"><span class="d"></span>Option B · Full frontier</span>
+    <h2>Intelligence, made visible</h2>
+    <p class="desc">A ground-up hero: a living particle-network field (à la the "digital head with flux"), the vision as the headline, and the calculator demoted to a glowing "Levy → Workforce" console.</p>
+    <div class="frame">
+      <div class="fbar"><div class="dots"><i></i><i></i><i></i></div><span class="u">arthurcurtis.com · frontier</span></div>
+      <div class="vp"><iframe title="Frontier concept" src="futuristic-concept.html"></iframe></div>
+    </div>
+    <a class="open" href="futuristic-concept.html" target="_blank" rel="noopener">Open full-screen →</a>
+    <ul class="points">
+      <li><span class="mk">›</span><span><b>High ambition.</b> Reads like a company inventing the future, not selling a service.</span></li>
+      <li><span class="mk">›</span><span><b>The hero is a data-intelligence scene</b>, cyan + violet, cursor-reactive.</span></li>
+      <li><span class="mk">›</span><span><b>More build</b>: a real design system + motion, rolled across the site.</span></li>
+    </ul>
+  </div>
+</div>
+
+<footer>Concepts · not the live site · move your cursor over each to feel the motion</footer>
+
+<script>
+function fit(){ document.querySelectorAll('.vp').forEach(function(v){ var f=v.querySelector('iframe'); var s=v.clientWidth/1400; f.style.transform='scale('+s+')'; v.style.height=(900*s)+'px'; }); }
+fit(); addEventListener('resize',fit); addEventListener('load',fit);
+</script>
+</body>
+</html>
