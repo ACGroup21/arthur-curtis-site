@@ -8,25 +8,33 @@
    ============================================================ */
 window.AC = (function(){
 
+  var RULES_2627 = 'https://www.gov.uk/government/publications/apprenticeship-funding-rules-and-assessment-plan-guidance-2026-to-2027';
+
   /* --- dated funding rulebook (subset) --- */
   var RULES = {
-    updated: '2026-07-02',
+    updated: '2026-08-26',
     levyRate: 0.005,          // 0.5% of pay bill
     allowance: 15000,         // annual levy allowance
-    topUp: 0.10,              // 10% government top-up
+    topUp: 0,                 // REMOVED on new funds from Aug 2026
+    topUpBefore: 0.10,        // what funds banked before the boundary received
     expiryMonths: 12,         // funds expire 12 months after they land (from Aug 2026, rolling, oldest-first)
     expiryMonthsPrev: 24,     // funds banked before Aug 2026 keep the previous 24-month clock
     expiryChanged: 'August 2026',
     avgApprenticeCost: 9000,  // indicative average band (for headline maths only)
     ni: { employerRate: 0.15, ust: 50270, secondaryThreshold: 5000, underAge: 25 },
     l7: { fundedMaxAge: 21, careLeaverEhcpMaxAge: 24, changeDate: 'Jan 2026' },
-    coInvest: { govNonLevy: 0.95, employer: 0.05, fullFundedAges: '16–21' },
+    /* From Aug 2026 the employer share depends on WHO you are and HOW OLD the
+       apprentice is - one number cannot express it. 25% is the levy-short rate;
+       a non-levy employer pays 5%. Fully funded runs to 24, for everyone. */
+    coInvest: { govNonLevy: 0.95, employer: 0.05, employerNonLevyFrom: 0.05,
+                employerLevyShortFrom: 0.25, fullyFundedToAge: 24,
+                fullyFundedToAgeBefore: 21 },
     incentive: 1000,          // £1,000 employer incentive (16–18, or 19–24 care leaver/EHCP)
     hiringPayment: 2000,      // £2,000 hiring payment — non-levy, NEW 16–24 apprentice
     hiringPaymentFrom: '1 October 2026',
     careLeaverBursary: 3000,  // paid to the APPRENTICE (care leaver, under 25), NOT the employer
     learningSupportMonthly: 150,
-    verifiedOn: '16 August 2026'  // gov.uk verification date — shown in-app for trust
+    verifiedOn: '26 August 2026'  // gov.uk verification date — shown in-app for trust
   };
 
   function levy(payBill){
@@ -59,7 +67,7 @@ window.AC = (function(){
 
   /* ---- assess every lever for one hire — the core of "What can you claim?" ----
      c: {ageBand:'16-18'|'19-21'|'22-24'|'25+', salary, careLeaver, ehcp,
-         smallEmployer, levyPayer, level7, newHire}
+         levyPayer, level7, newHire}  - employer size no longer affects funding
      Returns a list of levers with eligibility, value, the condition, and source. */
   function assess(c){
     c = c || {};
@@ -90,17 +98,28 @@ window.AC = (function(){
       cond:'Non-levy employer, NEW apprentice 16–24, start on/after 1 Oct 2026.',
       src:'https://www.gov.uk/government/news/new-apprenticeship-funding-to-transform-investment-in-skills' });
 
-    var full = !!c.smallEmployer && (is1618 || (is1924 && clEhcp));
+    /* Funding rules 2026-27 r.214: for starts from 1 Aug 2026 the government funds
+       the whole band for ANY apprentice aged 16-24 at the start - non-levy (214.1)
+       and levy payers whose account is short (214.2) alike. No employer-size test
+       and no care-leaver/EHCP condition: those belonged to the superseded rule. */
+    var full = age1624;
     out.push({ key:'fund100', name:'100% training funded', who:'funding', kind:'funding',
       eligible: full,
-      cond:'Employer under 50 staff + apprentice 16–18 (or 19–24 care leaver/EHCP).',
-      src:'https://www.gov.uk/guidance/apprenticeship-funding-rules' });
+      cond:'Apprentice aged 16–24 at the start of training — whatever your size, and whether or not you pay the levy.',
+      src:RULES_2627 });
 
+    /* Only a 25+ apprentice carries co-investment at all, and the rate turns on
+       whether you are a levy payer - 25% is NOT the non-levy rate. */
     if(!c.levyPayer){
-      out.push({ key:'coinv', name:'95% co-investment', who:'funding', kind:'funding',
+      out.push({ key:'coinv', name:'95% government funding', who:'funding', kind:'funding',
         eligible: !full,
-        cond:'Non-levy — government pays 95%, you pay 5% (when not 100% funded).',
-        src:'https://www.apprenticeships.gov.uk/employers/funding-an-apprenticeship-non-levy' });
+        cond:'Non-levy and the apprentice is 25+ — government pays 95%, you pay 5% (r.213.2).',
+        src:RULES_2627 });
+    } else {
+      out.push({ key:'coinvlevy', name:'75% government funding if your account runs dry', who:'funding', kind:'funding',
+        eligible: !full,
+        cond:'Levy payer with insufficient funds and the apprentice is 25+ — government pays 75%, you pay 25% (r.213.1). With funds in your account, the band is paid from it.',
+        src:RULES_2627 });
     }
 
     if(c.level7){
@@ -157,6 +176,7 @@ window.AC = (function(){
       levyRate: pick(c,'levy.rate.value'),
       allowance: pick(c,'levy.allowance.value'),
       topUp: pick(c,'levy.topUp.value'),
+      topUpBefore: pick(c,'levy.topUp.valueBefore'),
       expiryMonths: pick(c,'expiry.monthsFrom.value'),
       expiryMonthsPrev: pick(c,'expiry.monthsBefore.value'),
       expiryChanged: pick(c,'expiry.changed'),
@@ -171,7 +191,10 @@ window.AC = (function(){
       l7: { fundedMaxAge: pick(c,'level7.fundedMaxAge'), careLeaverEhcpMaxAge: pick(c,'level7.careLeaverEhcpMaxAge'),
             changeDate: pick(c,'level7.changed') },
       coInvest: { govNonLevy: pick(c,'coInvest.govNonLevy.value'), employer: pick(c,'coInvest.employerBefore.value'),
-                  fullFundedAges: pick(c,'coInvest.fullyFundedAges') },
+                  employerNonLevyFrom: pick(c,'coInvest.employerNonLevyFrom.value'),
+                  employerLevyShortFrom: pick(c,'coInvest.employerFrom.value'),
+                  fullyFundedToAge: pick(c,'coInvest.fullyFundedToAge.value'),
+                  fullyFundedToAgeBefore: pick(c,'coInvest.fullyFundedToAge.valueBefore') },
       __version: pick(c,'meta.version'), __asOf: pick(c,'meta.asOf'), __canonical: c
     };
   }

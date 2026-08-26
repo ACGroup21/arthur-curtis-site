@@ -70,7 +70,6 @@
 
     <div class="toggles">
       <label class="tg"><input type="checkbox" id="newHire" checked> New hire (not existing staff)</label>
-      <label class="tg"><input type="checkbox" id="small"> Under 50 employees</label>
       <label class="tg"><input type="checkbox" id="levy"> We pay the levy</label>
       <label class="tg"><input type="checkbox" id="level7"> Level 7 programme</label>
       <label class="tg"><input type="checkbox" id="careLeaver"> Care leaver</label>
@@ -101,7 +100,7 @@
   <div class="packs">
     <details><summary>Hiring a care leaver — what it means <span class="pl">+</span></summary><div class="a">A care leaver is someone who's been in local-authority care (an 'eligible', 'relevant' or 'former relevant' child). If they're under 25 at the start, <b style="color:var(--ink)">they</b> receive a £3,000 bursary (paid in three instalments over the first year, and it's tax- and NI-free for them) — and as the employer you may get the £1,000 incentive, extended eligibility to 100% funded training, and the NI relief. Beyond the money: care-experienced young people are one of the most under-represented groups in work, so it's a genuine social-value hire. Confirm status is evidenced by the local authority. <a href="https://www.gov.uk/government/publications/apprenticeships-bursary-for-care-leavers/apprenticeships-care-leavers-bursary-policy-summary" target="_blank" rel="noopener">gov.uk guidance →</a></div></details>
     <details><summary>Apprentices with an EHC plan <span class="pl">+</span></summary><div class="a">An Education, Health and Care (EHC) plan is a legal document for a young person with special educational needs or a disability. A 19–24 apprentice with an EHCP unlocks the same extended eligibility as a care leaver: the £1,000 incentive, small-employer 100% funding, and (for Level 7) funding up to age 24. Learning Support funding of £150/month is also available where reasonable adjustments are needed to complete the training. <a href="https://www.gov.uk/government/publications/support-for-apprentices-with-a-learning-difficulty-or-disability/support-for-apprentices-with-learning-difficulties-and-disabilities" target="_blank" rel="noopener">gov.uk guidance →</a></div></details>
-    <details><summary>Small employer (under 50 staff) <span class="pl">+</span></summary><div class="a">If you employ fewer than 50 people, the government fully funds the training (100% up to the band maximum) for a 16–18 apprentice, or a 19–24 care leaver / EHCP apprentice. For everyone else, non-levy employers co-invest 5% and the government pays 95%. <a href="https://www.gov.uk/guidance/apprenticeship-funding-rules" target="_blank" rel="noopener">gov.uk funding rules →</a></div></details>
+    <details><summary>Who pays for the training <span class="pl">+</span></summary><div class="a">For starts from 1 August 2026 the government funds the training in full (up to the band maximum) for <strong>any apprentice aged 16–24</strong> at the start — whatever your size, and whether or not you pay the levy. Only a 25+ apprentice carries a contribution: 5% if you are non-levy, or 25% if you pay the levy and your account cannot cover the month. <strong>Employer size no longer affects this</strong> — the old under-50 rule was replaced. <a href="https://www.gov.uk/guidance/apprenticeship-funding-rules" target="_blank" rel="noopener">gov.uk funding rules →</a></div></details>
   </div>
 
   <p class="note">Indicative eligibility guide — not financial advice, and eligibility must be confirmed with your provider / gov.uk. Amounts and rules change; the "verified" date above shows when we last checked. One-off payments (£1,000 incentive, £2,000 hiring payment) go to the employer; the £3,000 bursary goes to the apprentice. <a href="https://acgroup21.github.io/arthur-curtis-site/" target="_blank" rel="noopener">Talk to us</a> for a plan on your real numbers.</p>
@@ -119,7 +118,7 @@
     var s=AC.scenario.get();
     if(s.salary) $('salary').value=s.salary;
     if(s.ageBand) $('age').value=s.ageBand;
-    [['careLeaver','careLeaver'],['ehcp','ehcp'],['smallEmployer','small'],['levyPayer','levy'],['newHire','newHire'],['level7','level7']].forEach(function(p){
+    [['careLeaver','careLeaver'],['ehcp','ehcp'],['levyPayer','levy'],['newHire','newHire'],['level7','level7']].forEach(function(p){
       if(typeof s[p[0]]==='boolean') $(p[1]).checked=s[p[0]];
     });
   }
@@ -130,7 +129,6 @@
       ageBand:$('age').value,
       salary:+$('salary').value,
       newHire:$('newHire').checked,
-      smallEmployer:$('small').checked,
       levyPayer:$('levy').checked,
       level7:$('level7').checked,
       careLeaver:$('careLeaver').checked,
@@ -177,12 +175,12 @@
       wrap.appendChild(row);
     });
 
-    AC.scenario.set({salary:c.salary, ageBand:c.ageBand, careLeaver:c.careLeaver, ehcp:c.ehcp, smallEmployer:c.smallEmployer, levyPayer:c.levyPayer, newHire:c.newHire, level7:c.level7});
+    AC.scenario.set({salary:c.salary, ageBand:c.ageBand, careLeaver:c.careLeaver, ehcp:c.ehcp, levyPayer:c.levyPayer, newHire:c.newHire, level7:c.level7});
     if(AC.spine) AC.spine.refresh();
   }
 
   function syncToggles(){ document.querySelectorAll('.tg input').forEach(function(cb){ cb.closest('.tg').classList.toggle('on',cb.checked); }); }
-  ['salary','age','newHire','small','levy','level7','careLeaver','ehcp'].forEach(function(id){
+  ['salary','age','newHire','levy','level7','careLeaver','ehcp'].forEach(function(id){
     $(id).addEventListener('input',render); $(id).addEventListener('change',render);
   });
   document.querySelectorAll('.tg input').forEach(function(cb){ cb.addEventListener('change',syncToggles); });
