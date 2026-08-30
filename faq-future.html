@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arthur Curtis — FAQs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ground:#04070f;--surface:#0b1426;--surface-2:#0a1120;
+    --ink:#eef4fc;--muted:#9fb1ca;--muted-2:#6b7c98;
+    --accent:#00B8C0;--energy:#009ba3;--indigo:#2f7d9c;
+    --line:rgba(120,160,220,.14);--line-2:rgba(120,160,220,.24);
+    --warn:#f0b45e;
+    --sans:'Inter',system-ui,-apple-system,sans-serif;--mono:'JetBrains Mono',monospace;
+    --r:16px;--r-pill:32px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--sans);color:var(--ink);background:var(--ground);line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+    background-image:radial-gradient(1100px 700px at 80% -8%,rgba(0,155,163,.13),transparent 60%),radial-gradient(900px 640px at -6% 12%,rgba(47,125,156,.11),transparent 55%)}
+  a{color:var(--accent);text-decoration:none}
+  .wrap{max-width:900px;margin:0 auto;padding:0 40px}
+  @media(max-width:640px){.wrap{padding:0 22px}}
+  .eb{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);display:inline-flex;align-items:center;gap:10px}
+  .eb::before{content:"";width:22px;height:1px;background:var(--accent)}
+
+  nav{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:18px 40px;backdrop-filter:blur(10px);background:linear-gradient(180deg,rgba(4,7,15,.72),transparent);max-width:none}
+  @media(max-width:640px){nav{padding:14px 22px}}
+  .brand .mark{height:28px;width:auto;display:block}
+  .nlinks{display:flex;align-items:center;gap:28px}
+  .nlinks a{font-size:14px;color:var(--muted);font-weight:500}.nlinks a:hover,.nlinks a[aria-current]{color:var(--ink)}
+  .nlinks .book{border:1px solid var(--line-2);border-radius:var(--r-pill);padding:9px 17px;color:var(--ink);font-weight:600;font-size:13.5px}
+  @media(max-width:820px){.nlinks a:not(.book){display:none}}
+
+  header.hero{padding:148px 0 20px}
+  header.hero h1{font-size:clamp(38px,5.4vw,64px);font-weight:800;letter-spacing:-.03em;line-height:1;margin:20px 0 0}
+  header.hero h1 .g{background:linear-gradient(100deg,#7fe6ea,#fff 46%,#2fb8c2);-webkit-background-clip:text;background-clip:text;color:transparent}
+  header.hero .lead{font-size:clamp(16.5px,1.8vw,19px);color:#c3d1e6;line-height:1.62;margin-top:22px;max-width:56ch}
+
+  .grp{margin-top:44px}
+  .grp .gh{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);padding-bottom:12px;border-bottom:1px solid var(--line)}
+  details.q{border-bottom:1px solid var(--line)}
+  details.q summary{list-style:none;cursor:pointer;display:flex;align-items:flex-start;gap:14px;padding:18px 0;font-size:17px;font-weight:600;color:var(--ink)}
+  details.q summary::-webkit-details-marker{display:none}
+  details.q summary .plus{flex:none;width:22px;height:22px;border-radius:6px;border:1px solid var(--line-2);color:var(--accent);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:15px;transition:transform .25s,border-color .2s;margin-top:1px}
+  details.q[open] summary .plus{transform:rotate(45deg);border-color:var(--accent)}
+  details.q summary:hover{color:#fff}
+  .a{padding:0 0 20px 36px;color:var(--muted);font-size:15px;line-height:1.65;max-width:64ch}
+  .a b{color:var(--ink);font-weight:600}
+  .a .src{margin-top:12px;display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;font-family:var(--mono);font-size:11.5px;color:var(--muted-2)}
+  .a .src a{white-space:nowrap}
+  .a .ver{color:var(--muted-2)}
+
+  .note{margin-top:40px;display:flex;gap:13px;background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px}
+  .note .mk{flex:none;width:26px;height:26px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:rgba(240,180,94,.12);border:1px solid rgba(240,180,94,.32);color:var(--warn);font-weight:800}
+  .note p{font-size:14px;color:var(--muted);line-height:1.55}
+  .note b{color:var(--ink)}
+
+  .cta-band{text-align:center;padding:80px 0 40px;margin-top:40px;border-top:1px solid var(--line)}
+  .cta-band h2{font-size:clamp(24px,3.4vw,34px);font-weight:800;letter-spacing:-.02em}
+  .cta-band p{color:var(--muted);font-size:16px;margin:14px auto 0;max-width:46ch}
+  .btn{font-family:var(--sans);font-weight:600;font-size:15px;cursor:pointer;border:none;border-radius:var(--r-pill);padding:14px 24px;display:inline-flex;align-items:center;gap:9px;margin-top:24px;
+    color:#04141c;background:linear-gradient(100deg,#00B8C0,#5fe0e6);box-shadow:0 0 0 1px rgba(0,184,192,.36),0 14px 40px -14px rgba(0,184,192,.6)}
+
+  footer{border-top:1px solid var(--line);padding:32px 0;margin-top:10px}
+  footer .row{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;align-items:center;font-size:13px;color:var(--muted-2)}
+  .ac-credit{display:inline-flex;align-items:center;gap:8px}
+  .acd-mark{height:16px;width:auto;display:block;flex:none}
+  .acd-txt{font-family:var(--mono);font-size:9px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted-2);line-height:1.35}
+  .acd-txt strong{color:#fff;font-weight:600;letter-spacing:.07em}
+  .acd-txt .acd-blue{color:#3B9EFF}
+  .flag{position:fixed;left:16px;bottom:16px;z-index:40;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:rgba(10,16,32,.7);border:1px solid var(--line);border-radius:30px;padding:7px 13px;backdrop-filter:blur(8px)}
+  .mono{font-family:var(--mono)}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute;pointer-events:none" aria-hidden="true"><symbol id="ac-mark" viewBox="155 272 930 560"><path d="M 267 713 L 254 713 L 253 712 L 250 712 L 244 709 L 241 706 L 240 706 L 236 702 L 236 701 L 235 701 L 230 712 L 228 714 L 221 729 L 219 731 L 211 748 L 209 750 L 199 771 L 197 773 L 191 786 L 189 788 L 180 806 L 220 806 L 221 805 Z M 881 308 L 880 309 L 867 309 L 866 310 L 858 310 L 857 311 L 852 311 L 851 312 L 846 312 L 845 313 L 836 314 L 835 315 L 832 315 L 828 317 L 825 317 L 821 319 L 818 319 L 817 320 L 812 321 L 809 323 L 804 324 L 794 329 L 792 329 L 774 338 L 772 340 L 764 344 L 762 346 L 749 354 L 745 358 L 744 358 L 735 366 L 734 366 L 727 373 L 726 373 L 706 394 L 706 395 L 701 400 L 701 401 L 692 412 L 692 413 L 684 424 L 679 434 L 677 436 L 667 456 L 667 458 L 664 463 L 664 465 L 662 468 L 662 470 L 660 473 L 660 475 L 657 482 L 657 485 L 654 492 L 654 495 L 653 496 L 653 499 L 652 500 L 652 503 L 651 504 L 651 508 L 650 509 L 650 513 L 649 514 L 649 519 L 648 520 L 648 526 L 647 527 L 647 536 L 646 537 L 646 575 L 647 576 L 647 585 L 648 586 L 649 599 L 650 600 L 650 604 L 651 605 L 651 609 L 652 610 L 652 614 L 653 615 L 653 618 L 655 622 L 655 625 L 656 626 L 656 628 L 657 629 L 661 643 L 665 651 L 665 653 L 668 658 L 668 660 L 675 674 L 677 676 L 679 681 L 686 691 L 687 694 L 697 707 L 697 708 L 700 711 L 700 712 L 715 728 L 715 729 L 732 745 L 733 745 L 739 751 L 740 751 L 747 757 L 751 759 L 754 762 L 755 762 L 763 768 L 766 769 L 768 771 L 771 772 L 773 774 L 797 786 L 799 786 L 802 788 L 804 788 L 812 792 L 814 792 L 821 795 L 824 795 L 828 797 L 831 797 L 835 799 L 843 800 L 844 801 L 848 801 L 849 802 L 853 802 L 854 803 L 868 804 L 869 805 L 880 805 L 881 806 L 908 806 L 909 805 L 920 805 L 921 804 L 935 803 L 936 802 L 941 802 L 942 801 L 946 801 L 947 800 L 950 800 L 951 799 L 962 797 L 963 796 L 965 796 L 966 795 L 968 795 L 969 794 L 983 790 L 986 788 L 993 786 L 1000 782 L 1002 782 L 1008 779 L 1005 776 L 999 766 L 999 764 L 997 760 L 997 757 L 996 756 L 996 744 L 986 749 L 984 749 L 979 752 L 972 754 L 969 756 L 967 756 L 966 757 L 964 757 L 963 758 L 961 758 L 954 761 L 943 763 L 942 764 L 938 764 L 937 765 L 933 765 L 932 766 L 928 766 L 927 767 L 921 767 L 920 768 L 910 768 L 909 769 L 884 769 L 883 768 L 873 768 L 872 767 L 859 766 L 858 765 L 849 764 L 848 763 L 841 762 L 837 760 L 834 760 L 833 759 L 825 757 L 822 755 L 820 755 L 817 753 L 815 753 L 791 741 L 789 739 L 786 738 L 781 734 L 775 731 L 772 728 L 771 728 L 768 725 L 763 722 L 757 716 L 756 716 L 734 694 L 734 693 L 726 684 L 726 683 L 716 670 L 715 667 L 710 660 L 708 655 L 706 653 L 702 645 L 702 643 L 698 636 L 698 634 L 696 631 L 695 626 L 693 623 L 693 620 L 690 613 L 690 610 L 688 606 L 688 602 L 687 601 L 687 598 L 686 597 L 686 593 L 685 592 L 684 579 L 683 578 L 683 566 L 682 565 L 682 547 L 683 546 L 683 533 L 684 532 L 685 520 L 686 519 L 686 515 L 687 514 L 687 510 L 688 509 L 689 502 L 691 498 L 691 495 L 692 494 L 694 486 L 698 478 L 698 476 L 711 450 L 713 448 L 714 445 L 716 443 L 722 433 L 725 430 L 725 429 L 729 425 L 729 424 L 733 420 L 733 419 L 740 412 L 740 411 L 749 402 L 750 402 L 759 393 L 760 393 L 772 383 L 773 383 L 784 375 L 787 374 L 789 372 L 796 369 L 798 367 L 800 367 L 809 362 L 811 362 L 821 357 L 823 357 L 824 356 L 826 356 L 833 353 L 840 352 L 844 350 L 853 349 L 854 348 L 867 347 L 868 346 L 879 346 L 880 345 L 899 345 L 900 346 L 911 346 L 912 347 L 918 347 L 919 348 L 924 348 L 925 349 L 929 349 L 930 350 L 937 351 L 941 353 L 944 353 L 945 354 L 953 356 L 965 362 L 967 362 L 973 365 L 975 367 L 980 369 L 982 371 L 985 372 L 987 374 L 997 380 L 1005 387 L 1006 387 L 1013 394 L 1015 394 L 1041 366 L 1041 365 L 1038 362 L 1037 362 L 1028 354 L 1024 352 L 1021 349 L 1020 349 L 1009 341 L 995 334 L 993 332 L 991 332 L 984 328 L 982 328 L 977 325 L 975 325 L 972 323 L 967 322 L 964 320 L 958 319 L 951 316 L 948 316 L 947 315 L 944 315 L 943 314 L 939 314 L 938 313 L 934 313 L 933 312 L 929 312 L 928 311 L 914 310 L 913 309 L 901 309 L 900 308 Z M 436 297 L 416 337 L 414 339 L 414 341 L 412 343 L 404 360 L 402 362 L 392 383 L 390 385 L 374 417 L 372 419 L 365 434 L 363 436 L 353 457 L 351 459 L 342 478 L 340 480 L 333 495 L 331 497 L 316 527 L 314 529 L 308 542 L 306 544 L 305 548 L 312 548 L 313 549 L 316 549 L 323 552 L 325 554 L 326 554 L 335 563 L 336 565 L 348 541 L 350 539 L 362 514 L 364 512 L 371 497 L 373 495 L 381 478 L 383 476 L 392 457 L 394 455 L 400 442 L 402 440 L 416 412 L 418 410 L 422 401 L 424 399 L 430 386 L 435 379 L 437 381 L 443 394 L 445 396 L 492 490 L 494 492 L 525 555 L 527 557 L 528 561 L 532 569 L 534 571 L 540 583 L 540 585 L 542 587 L 589 682 L 591 684 L 651 805 L 652 806 L 691 806 L 692 805 L 694 806 L 694 804 L 663 742 L 661 740 L 637 691 L 634 687 L 634 685 L 630 677 L 628 675 L 604 626 L 602 624 L 601 620 L 599 618 L 598 614 L 595 610 L 595 608 L 593 606 L 593 604 L 591 602 L 585 590 L 585 588 L 581 580 L 579 578 L 540 499 L 538 497 L 512 444 L 510 442 L 471 364 L 469 362 L 437 297 Z" fill="#FEFDFD" fill-rule="evenodd"/>
+  <path d="M 1031 891 L 1030 892 L 1030 939 L 1031 940 L 1031 943 L 1038 943 L 1038 908 L 1039 907 L 1041 908 L 1041 909 L 1048 917 L 1048 918 L 1051 921 L 1051 922 L 1055 926 L 1055 927 L 1058 930 L 1058 931 L 1061 934 L 1061 935 L 1064 938 L 1064 939 L 1067 942 L 1067 943 L 1075 943 L 1075 891 L 1074 892 L 1070 892 L 1069 891 L 1067 892 L 1067 927 L 1066 928 L 1062 923 L 1062 922 L 1059 919 L 1059 918 L 1056 915 L 1056 914 L 1052 910 L 1052 909 L 1040 894 L 1040 893 L 1038 891 L 1036 892 Z M 923 893 L 921 895 L 917 897 L 914 900 L 909 910 L 909 924 L 910 925 L 910 927 L 913 933 L 919 939 L 925 942 L 927 942 L 928 943 L 932 943 L 933 944 L 939 944 L 940 943 L 944 943 L 945 942 L 949 941 L 951 939 L 952 939 L 959 932 L 962 926 L 962 923 L 963 922 L 963 913 L 962 912 L 962 909 L 961 908 L 961 906 L 959 902 L 952 895 L 951 895 L 949 893 L 947 893 L 943 891 L 929 891 L 928 892 Z M 931 898 L 940 898 L 941 899 L 943 899 L 947 901 L 950 904 L 954 911 L 955 919 L 954 920 L 954 923 L 952 927 L 948 932 L 941 936 L 930 936 L 926 934 L 919 927 L 917 923 L 917 912 L 918 911 L 919 907 L 926 900 L 930 899 Z M 833 891 L 832 892 L 832 924 L 833 925 L 833 931 L 832 932 L 832 940 L 833 941 L 832 942 L 833 943 L 840 943 L 840 891 L 839 892 L 837 891 Z M 726 891 L 725 892 L 725 898 L 726 899 L 741 899 L 742 900 L 742 943 L 750 943 L 750 900 L 751 899 L 766 899 L 767 898 L 767 892 L 752 892 L 751 891 L 742 891 L 741 892 L 735 892 L 734 891 L 730 891 L 728 892 Z M 638 891 L 636 893 L 633 899 L 633 901 L 629 908 L 629 910 L 625 917 L 625 919 L 621 926 L 621 928 L 617 935 L 617 937 L 614 943 L 623 943 L 624 939 L 627 934 L 627 932 L 629 930 L 631 930 L 632 931 L 643 931 L 644 930 L 653 930 L 656 934 L 656 936 L 658 939 L 659 943 L 667 943 L 666 938 L 662 931 L 662 929 L 659 924 L 659 922 L 656 917 L 656 915 L 652 908 L 652 906 L 648 899 L 648 897 L 646 893 L 642 891 Z M 640 902 L 642 903 L 646 911 L 646 913 L 649 918 L 649 920 L 650 921 L 650 923 L 649 924 L 632 924 L 631 923 L 634 917 L 634 915 L 637 910 L 637 908 L 639 905 L 639 903 Z M 524 892 L 520 894 L 517 897 L 516 897 L 513 900 L 513 901 L 510 905 L 510 907 L 508 911 L 508 923 L 509 924 L 510 930 L 518 939 L 521 940 L 523 942 L 525 942 L 526 943 L 531 943 L 532 944 L 543 943 L 549 940 L 553 936 L 554 936 L 554 935 L 550 931 L 550 930 L 548 930 L 545 933 L 539 936 L 530 936 L 529 935 L 527 935 L 525 934 L 518 927 L 517 923 L 516 922 L 516 913 L 517 912 L 517 910 L 519 906 L 527 899 L 529 899 L 530 898 L 539 898 L 540 899 L 544 900 L 548 904 L 549 904 L 554 899 L 554 898 L 549 894 L 545 892 L 543 892 L 542 891 L 528 891 L 527 892 Z M 399 891 L 398 892 L 398 924 L 399 925 L 399 929 L 400 930 L 400 932 L 402 936 L 408 941 L 412 943 L 416 943 L 417 944 L 423 944 L 424 943 L 427 943 L 428 942 L 432 941 L 438 935 L 440 931 L 440 929 L 441 928 L 441 925 L 442 924 L 442 892 L 441 891 L 440 892 L 439 891 L 434 891 L 434 923 L 433 924 L 433 927 L 428 934 L 424 936 L 415 936 L 409 932 L 407 928 L 407 926 L 406 925 L 406 891 Z M 286 891 L 285 892 L 285 943 L 310 943 L 311 942 L 317 941 L 324 937 L 325 935 L 329 931 L 331 927 L 331 925 L 332 924 L 332 911 L 331 910 L 331 908 L 330 907 L 329 903 L 322 896 L 321 896 L 319 894 L 317 894 L 313 892 L 307 892 L 306 891 L 297 891 L 296 892 L 289 892 L 288 891 Z M 294 899 L 311 899 L 312 900 L 314 900 L 316 901 L 323 909 L 323 911 L 324 912 L 324 922 L 323 923 L 322 927 L 316 933 L 312 935 L 310 935 L 309 936 L 294 936 L 293 935 L 293 900 Z M 180 891 L 180 895 L 179 896 L 179 898 L 180 899 L 180 902 L 179 903 L 179 908 L 180 909 L 180 925 L 179 926 L 179 933 L 180 934 L 180 943 L 216 943 L 216 936 L 189 936 L 187 934 L 187 922 L 189 920 L 190 921 L 207 921 L 208 920 L 211 920 L 212 921 L 212 913 L 211 914 L 209 913 L 188 913 L 187 912 L 187 900 L 188 899 L 215 899 L 216 898 L 216 892 L 215 891 L 214 892 L 200 892 L 199 891 L 192 891 L 191 892 L 182 892 Z M 1035 733 L 1034 734 L 1031 734 L 1030 735 L 1026 736 L 1019 743 L 1017 747 L 1017 749 L 1016 750 L 1016 761 L 1021 771 L 1026 775 L 1030 777 L 1032 777 L 1033 778 L 1043 778 L 1044 777 L 1046 777 L 1050 775 L 1056 770 L 1059 764 L 1059 762 L 1060 761 L 1060 750 L 1059 749 L 1059 747 L 1057 743 L 1050 736 L 1046 734 L 1043 734 L 1042 733 Z M 314 565 L 309 565 L 308 564 L 306 565 L 301 565 L 295 568 L 290 572 L 286 580 L 286 583 L 285 584 L 285 589 L 286 590 L 286 593 L 287 594 L 288 598 L 293 604 L 284 621 L 284 623 L 270 650 L 269 654 L 267 656 L 258 656 L 257 657 L 253 658 L 246 664 L 243 670 L 243 672 L 242 673 L 242 683 L 243 684 L 243 686 L 245 690 L 252 697 L 254 698 L 256 698 L 257 699 L 262 699 L 263 700 L 265 700 L 266 699 L 270 699 L 276 696 L 282 690 L 284 686 L 284 684 L 285 683 L 285 673 L 284 672 L 283 667 L 277 660 L 282 651 L 282 649 L 284 647 L 284 645 L 294 626 L 294 624 L 301 610 L 303 608 L 308 609 L 309 608 L 313 608 L 314 607 L 318 606 L 324 601 L 324 600 L 327 596 L 327 594 L 328 593 L 328 589 L 329 588 L 329 584 L 328 583 L 327 577 L 324 573 L 324 572 L 321 569 Z" fill="#00B8C0" fill-rule="evenodd"/></symbol></svg>
+
+<nav>
+  <a class="brand" href="#" aria-label="Arthur Curtis"><svg class="mark" viewBox="155 272 930 560" aria-hidden="true"><use href="#ac-mark"></use></svg></a>
+  <div class="nlinks"><a href="#">Vision</a><a href="#">Our Way</a><a href="#">Tools</a><a href="#" aria-current="page">FAQs</a><a class="book" href="#">Book a call</a></div>
+</nav>
+
+<header class="hero"><div class="wrap">
+  <span class="eb">Questions, answered</span>
+  <h1>The levy, <span class="g">in plain English.</span></h1>
+  <p class="lead">Straight answers on the apprenticeship levy and funding — every one traced to its gov.uk source and dated. If a rule moved, we tell you when.</p>
+</div></header>
+
+<main class="wrap">
+
+  <div class="grp">
+    <div class="gh">The levy, in plain terms</div>
+
+    <details class="q"><summary><span class="plus">+</span>What is the apprenticeship levy?</summary>
+      <div class="a">A payroll charge of <b>0.5% of your annual pay bill</b>, collected through PAYE. Every employer gets a <b>£15,000 allowance</b>, so in practice only employers with a pay bill above <b>£3 million</b> actually pay it. What you pay goes into a digital account to spend on apprenticeship training.
+        <div class="src"><a href="https://www.gov.uk/guidance/pay-apprenticeship-levy" target="_blank" rel="noopener">gov.uk — Pay the levy →</a><span class="ver">verified 26 Aug 2026</span></div></div>
+    </details>
+
+    <details class="q"><summary><span class="plus">+</span>Do we even pay the levy?</summary>
+      <div class="a">Only if your annual pay bill is over <b>£3 million</b>. Below that you're a <b>non-levy employer</b> — you don't pay in, but the government still funds most of your apprenticeship training and you contribute a small share (see below).
+        <div class="src"><a href="https://www.gov.uk/guidance/pay-apprenticeship-levy" target="_blank" rel="noopener">gov.uk — Pay the levy →</a><span class="ver">verified 26 Aug 2026</span></div></div>
+    </details>
+
+    <details class="q"><summary><span class="plus">+</span>What changed in August 2026?</summary>
+      <div class="a">Three things worth knowing: the <b>10% government top-up was removed</b> on new funds; unused funds now <b>expire after 12 months</b> (down from 24); and training for <b>16–24-year-olds is now 100% government-funded</b>. We model the current rules and flag every change.
+        <div class="src"><a href="https://www.gov.uk/government/publications/apprenticeship-technical-funding-guide/apprenticeship-technical-funding-guide-from-august-2026" target="_blank" rel="noopener">gov.uk — Technical funding guide (from Aug 2026) →</a><span class="ver">verified 26 Aug 2026</span></div></div>
+    </details>
+
+    <details class="q"><summary><span class="plus">+</span>Does unused levy expire?</summary>
+      <div class="a">Yes. Funds expire <b>12 months</b> after they enter your apprenticeship service account, spent oldest-first. That's for funds entering from August 2026 — anything banked before then keeps the old 24-month clock. It's why planning matters: unspent levy is money that walks out the door.
+        <div class="src"><a href="https://www.gov.uk/government/publications/apprenticeship-technical-funding-guide/apprenticeship-technical-funding-guide-from-august-2026" target="_blank" rel="noopener">gov.uk — Technical funding guide →</a><span class="ver">verified 26 Aug 2026</span></div></div>
+    </details>
+  </div>
+
+  <div class="grp">
+    <div class="gh">Funding — who pays for what</div>
+
+    <details class="q"><summary><span class="plus">+</span>Is there still a 10% top-up on our levy?</summary>
+      <div class="a">No. The <b>10% government top-up was removed</b> for funds entering accounts from <b>1 August 2026</b>. What you declare is what reaches your account — nothing is added on top for new funds.
+        <div class="src"><a href="https://www.gov.uk/government/publications/apprenticeship-technical-funding-guide/apprenticeship-technical-funding-guide-from-august-2026" target="_blank" rel="noopener">gov.uk — Technical funding guide →</a><span class="ver">verified 26 Aug 2026</span></div></div>
+    </details>
+
+    <details class="q"><summary><span class="plus">+</span>We're not a levy payer — what does it cost us?</summary>
+      <div class="a">For apprentices aged <b>16–24, training is 100% government-funded</b> — you pay nothing toward it. For those aged <b>25 and over</b>, you co-invest <b>5%</b> and the government pays <b>95%</b>.
+        <div class="src"><a href="https://www.gov.uk/government/publications/apprenticeship-technical-funding-guide/apprenticeship-technical-funding-guide-from-august-2026" target="_blank" rel="noopener">gov.uk — Technical funding guide →</a><span class="ver">verified 26 Aug 2026</span></div></div>
+    </details>
+
+    <details class="q"><summary><span class="plus">+</span>What happens if our levy funds run out?</summary>
+      <div class="a">If you're a levy payer and your account is empty, apprentices aged <b>16–24 stay 100% funded</b>. For those aged <b>25+</b>, you co-invest <b>25%</b> and the government pays <b>75%</b> on continued training.
+        <div class="src"><a href="https://www.gov.uk/government/publications/apprenticeship-technical-funding-guide/apprenticeship-technical-funding-guide-from-august-2026" target="_blank" rel="noopener">gov.uk — Technical funding guide →</a><span class="ver">verified 26 Aug 2026</span></div></div>
+    </details>
+
+    <details class="q"><summary><span class="plus">+</span>Can we give our levy to another employer?</summary>
+      <div class="a">Yes — you can <b>transfer up to 50%</b> of your annual funds to other employers (for example, in your supply chain), covering their apprenticeship training up to the funding band. It's a way to put levy to work rather than letting it expire.
+        <div class="src"><a href="https://www.gov.uk/guidance/transferring-your-apprenticeship-levy-to-another-business" target="_blank" rel="noopener">gov.uk — Transferring your levy →</a><span class="ver">verified 26 Aug 2026</span></div></div>
+    </details>
+  </div>
+
+  <div class="grp">
+    <div class="gh">Money in — incentives &amp; savings</div>
+
+    <details class="q"><summary><span class="plus">+</span>Is there any money for taking on an apprentice?</summary>
+      <div class="a">Yes — a <b>£1,000</b> payment to support the apprentice in the workplace, if at the start of training they're <b>16–18</b>, or <b>19–24 with an EHC plan or care-experienced</b>. It's paid in two £500 instalments and is separate from the training funding.
+        <div class="src"><a href="https://www.gov.uk/employing-an-apprentice/get-funding" target="_blank" rel="noopener">gov.uk — Get funding →</a><span class="ver">verified 26 Aug 2026</span></div></div>
+    </details>
+
+    <details class="q"><summary><span class="plus">+</span>What's the new £2,000 hiring payment?</summary>
+      <div class="a">From <b>1 October 2026</b>, a hiring incentive of <b>up to £2,000</b> for <b>non-levy</b> employers taking on a new apprentice aged <b>16–24</b>. It's a distinct, newer scheme — we'll flag which one applies to your situation.
+        <div class="src"><a href="https://www.gov.uk/employing-an-apprentice/get-funding" target="_blank" rel="noopener">gov.uk — Get funding →</a><span class="ver">verified 26 Aug 2026</span></div></div>
+    </details>
+
+    <details class="q"><summary><span class="plus">+</span>Do we save on National Insurance?</summary>
+      <div class="a">Yes. For apprentices <b>under 25</b> on an approved apprenticeship, employers pay <b>0% secondary National Insurance</b> on earnings up to the Apprentice Upper Secondary Threshold of <b>£50,270</b> a year. Above that, the normal employer rate resumes.
+        <div class="src"><a href="https://www.gov.uk/guidance/rates-and-thresholds-for-employers-2026-to-2027" target="_blank" rel="noopener">gov.uk — Rates &amp; thresholds 2026–27 →</a><span class="ver">verified 26 Aug 2026</span></div></div>
+    </details>
+
+    <details class="q"><summary><span class="plus">+</span>Do apprentices have to be young or new hires?</summary>
+      <div class="a">No. Apprenticeships fund <b>new and existing staff, at any age</b> — they're a way to develop your current team, not just entry-level recruits. How much the government funds depends on the apprentice's age and prior learning, not on whether they're new.
+        <div class="src"><a href="https://www.gov.uk/government/publications/apprenticeship-technical-funding-guide/apprenticeship-technical-funding-guide-from-august-2026" target="_blank" rel="noopener">gov.uk — Technical funding guide →</a><span class="ver">verified 26 Aug 2026</span></div></div>
+    </details>
+  </div>
+
+  <div class="grp">
+    <div class="gh">Getting started</div>
+
+    <details class="q"><summary><span class="plus">+</span>How much time out for training is required?</summary>
+      <div class="a">An apprentice must spend an average of at least <b>6 hours a week</b> on off-the-job training across the practical period — learning that's part of their working hours, not evenings and weekends. It's the biggest real cost of an apprenticeship, and we cost it honestly.
+        <div class="src"><a href="https://www.gov.uk/guidance/apprenticeship-funding-rules" target="_blank" rel="noopener">gov.uk — Apprenticeship funding rules →</a><span class="ver">verified 26 Aug 2026</span></div></div>
+    </details>
+
+    <details class="q"><summary><span class="plus">+</span>How long does an apprenticeship take?</summary>
+      <div class="a">At least <b>8 months</b>, but most run <b>12–48 months</b> depending on the standard and level. Each standard has a typical duration — and in the 2-5 Model, two apprenticeships bookend a five-year climb from junior to senior.
+        <div class="src"><a href="https://www.gov.uk/guidance/apprenticeship-funding-rules" target="_blank" rel="noopener">gov.uk — Apprenticeship funding rules →</a><span class="ver">verified 26 Aug 2026</span></div></div>
+    </details>
+
+    <details class="q"><summary><span class="plus">+</span>How do we know a course is actually funded?</summary>
+      <div class="a">Every apprenticeship standard has a <b>funding band</b> (the maximum the government will pay) and a status — approved, or being defunded. Our tools check the standard, its band, duration and any age catches for you, so you're not planning against a course that's about to lose funding.
+        <div class="src"><a href="https://www.gov.uk/government/publications/apprenticeship-funding-bands" target="_blank" rel="noopener">gov.uk — Funding bands →</a><span class="ver">verified 26 Aug 2026</span></div></div>
+    </details>
+  </div>
+
+  <div class="note">
+    <span class="mk">!</span>
+    <p>These answers describe the ESFA's rules for <b>England</b> and are verified against gov.uk on <b>26 August 2026</b>. They're guidance, not financial advice — your actual funding depends on your real pay bill, your apprentices' ages and start dates, and the standards you choose. Always confirm against your apprenticeship service account.</p>
+  </div>
+
+</main>
+
+<section class="cta-band"><div class="wrap">
+  <span class="eb" style="justify-content:center">Still have a question?</span>
+  <h2>Get a real number, not a brochure.</h2>
+  <p>Answer it against your own levy in two minutes — or ask us directly.</p>
+  <a class="btn" href="#">Open the tools →</a>
+</div></section>
+
+<footer><div class="wrap row">
+  <span class="ac-credit"><svg class="acd-mark" viewBox="61 47 278 310" aria-hidden="true"><path d="M 96 322 L 200 82 L 304 322" fill="none" stroke="#FFFFFF" stroke-width="34" stroke-linecap="round" stroke-linejoin="round"/><circle cx="200" cy="238" r="23" fill="#3B9EFF"/></svg><span class="acd-txt">Built&nbsp;by <strong>AC&nbsp;<span class="acd-blue">Digital</span></strong></span></span>
+  <span>© 2026 Arthur Curtis · Making people better</span>
+  <span class="mono" style="font-size:11px">hello@arthurcurtis.com · LinkedIn</span>
+</div></footer>
+
+<div class="flag">Concept · FAQs</div>
+</body>
+</html>
