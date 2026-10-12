@@ -23,12 +23,12 @@
   #fcRange::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 0 0 5px rgba(34,211,238,.22),0 4px 12px rgba(0,0,0,.5);cursor:pointer}
   #fcRange::-moz-range-thumb{width:24px;height:24px;border:none;border-radius:50%;background:#fff;cursor:pointer;box-shadow:0 0 0 5px rgba(34,211,238,.22)}
   .fc-ticks{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--muted-2)}
-  .fc-stage{position:relative;width:100%;height:300px;border-radius:14px;overflow:hidden;margin-top:18px;background:radial-gradient(120% 130% at 50% 120%,rgba(34,211,238,.05),transparent),#050e1c;border:1px solid var(--line)}
+  .fc-stage{position:relative;width:100%;height:210px;border-radius:14px;overflow:hidden;margin-top:18px;background:radial-gradient(120% 130% at 50% 120%,rgba(34,211,238,.05),transparent),#050e1c;border:1px solid var(--line)}
   .fc-stage canvas{display:block;width:100%;height:100%}
   .fc-cta{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-top:18px;padding:18px 20px;border-radius:14px;border:1px solid rgba(34,211,238,.28);background:linear-gradient(150deg,rgba(34,211,238,.09),rgba(37,99,235,.05))}
   .fc-cta .t .h{font-size:16px;font-weight:700} .fc-cta .t .h b{color:#f0c65a}
   .fc-cta .t .s{font-size:12.5px;color:var(--muted);margin-top:3px}
-  .fc-stage .cp-hint{position:absolute;right:12px;bottom:10px;font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;color:var(--muted-2);opacity:.75;pointer-events:none}
+  .fc-stage .cp-hint{position:absolute;right:12px;top:9px;font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;color:var(--muted-2);opacity:.75;pointer-events:none}
   .fc-stage .cp-pop{position:absolute;z-index:6;width:220px;max-width:74%;background:rgba(9,18,34,.97);border:1px solid rgba(34,211,238,.4);border-radius:11px;padding:12px 14px;box-shadow:0 14px 40px -12px rgba(0,0,0,.85);opacity:0;transform:translateY(6px) scale(.98);transform-origin:top left;pointer-events:none;transition:opacity .18s,transform .18s}
   .fc-stage .cp-pop.on{opacity:1;transform:none;pointer-events:auto}
   .fc-stage .cp-pop .ph{font-family:var(--mono);font-size:11px;letter-spacing:.03em;font-weight:600;margin-bottom:6px}
@@ -46,6 +46,23 @@
   .fc-progress i{width:7px;height:7px;border-radius:50%;background:rgba(120,160,220,.25);transition:background .2s}
   .fc-progress i.on{background:var(--cyan)} .fc-progress i.done{background:var(--gold)}
   @media(max-width:480px){.fc-stepbtn{padding:8px 10px;font-size:12px}}
+  /* by-role counter rows */
+  .fc-roles{margin-top:20px}
+  .fc-roles-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:11px}
+  .fc-roles-head .t{font-size:14px;font-weight:700}
+  .fc-roles-head .fn{font-family:var(--mono);font-size:11.5px;color:var(--muted-2)}
+  .fc-roles-head .fn b{color:var(--cyan)}
+  .fc-rows{display:flex;flex-direction:column;gap:8px}
+  .fc-row{display:flex;align-items:center;gap:12px;padding:10px 13px;border:1px solid var(--line);border-radius:11px;background:rgba(255,255,255,.015);transition:border-color .15s,background .15s}
+  .fc-row.has{border-color:rgba(240,198,90,.45);background:rgba(240,198,90,.05)}
+  .fc-row .nm{flex:1;font-size:13.5px;font-weight:600}
+  .fc-row .nm .sub{font-family:var(--mono);font-size:10px;color:var(--muted-2);font-weight:400;margin-left:7px}
+  .fc-row .ct2{display:flex;align-items:center;gap:9px}
+  .fc-rbtn{width:30px;height:30px;border-radius:8px;border:1px solid rgba(120,160,220,.26);background:rgba(255,255,255,.03);color:var(--ink);cursor:pointer;font-size:17px;line-height:1;display:flex;align-items:center;justify-content:center}
+  .fc-rbtn:hover:not(:disabled){border-color:var(--cyan);color:var(--cyan)}
+  .fc-rbtn:disabled{opacity:.25;cursor:not-allowed}
+  .fc-rnum{font-family:var(--mono);font-size:16px;font-weight:700;min-width:18px;text-align:center;font-variant-numeric:tabular-nums}
+  .fc-row.has .fc-rnum{color:var(--gold)}
 </style>
 </head>
 <body>
@@ -77,12 +94,17 @@
     </div>
     <div class="fc-progress" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
 
-    <div class="fc-stage"><canvas id="fcCanvas"></canvas><div class="cp-hint">▸ tap a person to choose &middot; tap a stage to learn</div><div class="cp-pop" id="fcPop"></div></div>
+    <div class="fc-stage"><canvas id="fcCanvas"></canvas><div class="cp-hint">▸ tap a stage to learn more</div><div class="cp-pop" id="fcPop"></div></div>
+
+    <div class="fc-roles">
+      <div class="fc-roles-head"><span class="t">Choose your cohort by role</span><span class="fn"><b id="fcFundN">0</b> funded places</span></div>
+      <div class="fc-rows" id="fcRows"></div>
+    </div>
 
     <div class="fc-cta">
       <div class="t">
         <div class="h">Your first cohort: <b id="fcCohN">0</b> people · ~£<span id="fcCohSpend">0</span></div>
-        <div class="s">An average estimate at ~£9k each. We help you choose the roles and start them right.</div>
+        <div class="s">At ~£9k each, levy-funded. Choose the roles above; we help you shape and start them right.</div>
       </div>
       <a class="btn btn-primary" href="https://acgroup21.github.io/arthur-curtis-site/contact.html" target="_blank" rel="noopener">Make it real — talk to us →</a>
     </div>
@@ -108,7 +130,7 @@
 
   function refresh(){
     var r=levy(currentPB); $('fcPbOut').textContent=fmt(currentPB); anim($('fcPot'),r.pot); anim($('fcApp'),r.app);
-    drop(); syncCohort(); repaint();
+    updateFunded(); renderRows(); syncCohort(); repaint();
     try{ AC.scenario.set({payBill:currentPB}); }catch(e){}
   }
   $('fcRange').addEventListener('input',function(){ currentPB=posToPB(+this.value); refresh(); });
@@ -117,79 +139,62 @@
   el.addEventListener('blur',function(){ var v=parseInt((el.textContent||'').replace(/[^0-9]/g,''),10)||PB_MIN; v=Math.max(PB_MIN,Math.min(PB_MAX,v)); currentPB=v; rng.value=pbToPos(v); refresh(); });
   el.addEventListener('focus',function(){ var g=document.createRange();g.selectNodeContents(el);var s=getSelection();s.removeAllRanges();s.addRange(g); });
 
-  /* ---- winding 2-5 pathway + selectable first-cohort roster (all-canvas) ---- */
+  /* ---- 2-5 pathway (labels in a lane) + by-role cohort selection ---- */
   var cv=$('fcCanvas'), cx=cv.getContext('2d'), DPR=Math.min(2,devicePixelRatio||1), MONO="'JetBrains Mono',monospace", SANS="'Inter',sans-serif";
   var CYAN='#22d3ee', GOLD='#f0c65a';
   var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
-  var cap=16, poolN=0, cohN=0, figs=[];
+  var cap=16, funded=0, cohN=0;
+  var ROLES=[
+    {n:'Management',s:'L5',c:0},{n:'Finance',s:'L4',c:1},{n:'Data / digital',s:'L4',c:1},
+    {n:'Operations',s:'L2',c:2},{n:'Customer service',s:'L2',c:1}
+  ];
   var MILES=[{t:0,tt:'Start',s:'Junior'},{t:0.36,tt:'Yr 2',s:'Competent'},{t:0.60,tt:'Yr 3',s:'Applying'},{t:1,tt:'Yr 5',s:'Senior'}];
   var stageIdx=0, markerT=MILES[0].t, targetT=MILES[0].t;
   function fit(){var r=cv.getBoundingClientRect();if(!r.width)return;cv.width=Math.floor(r.width*DPR);cv.height=Math.floor(r.height*DPR);}
-  function person(x,y,s,a){cx.globalAlpha=a;cx.beginPath();cx.arc(x,y-s*0.6,s*0.27,0,7);cx.fill();cx.beginPath();cx.moveTo(x-s*0.44,y+s*0.5);cx.quadraticCurveTo(x-s*0.44,y-s*0.16,x,y-s*0.16);cx.quadraticCurveTo(x+s*0.44,y-s*0.16,x+s*0.44,y+s*0.5);cx.closePath();cx.fill();cx.globalAlpha=1;}
-  function drop(){ var r=levy(currentPB); poolN=Math.min(r.app,cap); var def=Math.round(poolN*0.4);
-    figs=[]; for(var i=0;i<poolN;i++) figs.push({pop:reduce?1:0,delay:reduce?0:120+i*45,sel:i<def,rx:null,ry:null,rr:0}); }
-  function syncCohort(){ cohN=0; for(var i=0;i<figs.length;i++) if(figs[i]&&figs[i].sel) cohN++;
-    $('fcCohN').textContent=cohN; anim($('fcCohSpend'),cohN*9000); }
+  function roleTotal(){ var t=0; for(var i=0;i<ROLES.length;i++) t+=ROLES[i].c; return t; }
+  function updateFunded(){ var r=levy(currentPB); funded=Math.min(r.app,cap); var over=roleTotal()-funded; for(var i=ROLES.length-1;i>=0&&over>0;i--){ var take=Math.min(ROLES[i].c,over); ROLES[i].c-=take; over-=take; } var fn=$('fcFundN'); if(fn) fn.textContent=funded; }
+  function syncCohort(){ cohN=roleTotal(); $('fcCohN').textContent=cohN; anim($('fcCohSpend'),cohN*9000); }
+  function renderRows(){ var w=$('fcRows'); if(!w) return; w.innerHTML=''; var full=roleTotal()>=funded;
+    ROLES.forEach(function(r,i){ var el=document.createElement('div'); el.className='fc-row'+(r.c>0?' has':'');
+      el.innerHTML='<div class="nm">'+r.n+'<span class="sub">'+r.s+'</span></div><div class="ct2"><button class="fc-rbtn" data-m="'+i+'"'+(r.c<=0?' disabled':'')+'>&minus;</button><span class="fc-rnum">'+r.c+'</span><button class="fc-rbtn" data-p="'+i+'"'+(full?' disabled':'')+'>+</button></div>';
+      w.appendChild(el); });
+    w.querySelectorAll('[data-p]').forEach(function(b){ b.onclick=function(){ if(roleTotal()<funded){ ROLES[+b.dataset.p].c++; renderRows(); syncCohort(); repaint(); } }; });
+    w.querySelectorAll('[data-m]').forEach(function(b){ b.onclick=function(){ var rr=ROLES[+b.dataset.m]; if(rr.c>0){ rr.c--; renderRows(); syncCohort(); repaint(); } }; }); }
   function repaint(){ if(reduce) draw(0); }
-  function pathPt(t,W,H){ var mx=W*0.09, myT=H*0.10, myB=H*0.06, pH=H*0.60;
+  function pathPt(t,W,H){ var mx=W*0.09, myT=H*0.14, myB=H*0.07, pH=H*0.58;
     var x=mx + t*(W-2*mx); var y=(pH-myB) - t*(pH-myT-myB);
-    y += Math.sin(t*Math.PI*2.7+0.5)*pH*0.16*(1-t*0.35); return {x:x,y:y}; }
+    y += Math.sin(t*Math.PI*2.6+0.5)*pH*0.15*(1-t*0.35); return {x:x,y:y}; }
   function draw(dt){
     var W=cv.width,H=cv.height; if(!W)return; cx.clearRect(0,0,W,H);
     if(reduce) markerT=targetT; else { markerT += (targetT-markerT)*Math.min(1,dt*0.009); if(Math.abs(targetT-markerT)<0.0008) markerT=targetT; }
     /* subtle terrain */
-    var N=12; for(var b=0;b<N;b++){ var by=H*0.05+b*(H*0.6/N); cx.beginPath();
-      for(var xx=-10;xx<=W+10;xx+=8){ var yy=by+Math.sin(xx*0.011+b*0.7)*7*DPR+Math.sin(xx*0.03+b*1.2)*3.5*DPR; xx<=-10?cx.moveTo(xx,yy):cx.lineTo(xx,yy);}
-      cx.strokeStyle='rgba(70,110,150,'+(0.045+0.015*Math.sin(b))+')'; cx.lineWidth=1*DPR; cx.stroke(); }
+    var N=10; for(var b=0;b<N;b++){ var by=H*0.06+b*(H*0.56/N); cx.beginPath();
+      for(var xx=-10;xx<=W+10;xx+=8){ var yy=by+Math.sin(xx*0.012+b*0.7)*6*DPR+Math.sin(xx*0.03+b*1.2)*3*DPR; xx<=-10?cx.moveTo(xx,yy):cx.lineTo(xx,yy);}
+      cx.strokeStyle='rgba(70,110,150,'+(0.05+0.015*Math.sin(b))+')'; cx.lineWidth=1*DPR; cx.stroke(); }
     /* trail (faint full route) */
     function trace(a,b){cx.beginPath();for(var f=a;f<=b+0.0001;f+=0.012){var p=pathPt(Math.min(f,b),W,H);f===a?cx.moveTo(p.x,p.y):cx.lineTo(p.x,p.y);}}
-    trace(0,1); cx.strokeStyle='rgba(34,211,238,.12)'; cx.lineWidth=11*DPR; cx.lineCap='round'; cx.stroke();
-    trace(0,1); var lg=cx.createLinearGradient(0,H*0.6,W,0); lg.addColorStop(0,'rgba(70,120,160,.55)'); lg.addColorStop(.7,'rgba(34,211,238,.6)'); lg.addColorStop(1,'rgba(240,198,90,.6)'); cx.strokeStyle=lg; cx.lineWidth=2.4*DPR; cx.stroke();
+    trace(0,1); cx.strokeStyle='rgba(34,211,238,.12)'; cx.lineWidth=10*DPR; cx.lineCap='round'; cx.stroke();
+    trace(0,1); var lg=cx.createLinearGradient(0,H*0.58,W,0); lg.addColorStop(0,'rgba(70,120,160,.55)'); lg.addColorStop(.7,'rgba(34,211,238,.6)'); lg.addColorStop(1,'rgba(240,198,90,.6)'); cx.strokeStyle=lg; cx.lineWidth=2.4*DPR; cx.stroke();
     /* progress — how far the cohort has walked */
     trace(0,markerT); cx.strokeStyle='rgba(240,198,90,.92)'; cx.lineWidth=3.2*DPR; cx.lineCap='round'; cx.stroke();
-    /* milestones */
+    /* milestones + evenly-gapped lane labels */
+    var laneY=H*0.88, mx=W*0.09, span=W-2*mx, n=MILES.length;
     cx.textAlign='center';
-    MILES.forEach(function(m,i){ var p=pathPt(m.t,W,H), last=i===MILES.length-1, reached=markerT>=m.t-0.001;
-      if(i===stageIdx){ cx.beginPath(); cx.arc(p.x,p.y,9.5*DPR,0,7); cx.strokeStyle='rgba(240,198,90,.85)'; cx.lineWidth=1.6*DPR; cx.stroke(); }
-      cx.beginPath(); cx.arc(p.x,p.y,5.5*DPR,0,7); cx.fillStyle=(last||reached)?GOLD:CYAN; cx.fill();
-      cx.beginPath(); cx.arc(p.x,p.y,5.5*DPR,0,7); cx.strokeStyle='rgba(5,14,28,.9)'; cx.lineWidth=1.6*DPR; cx.stroke();
-      var up=i%2===0?-1:1, ly=p.y+(up<0?-13*DPR:19*DPR);
-      cx.fillStyle='rgba(238,244,252,.95)'; cx.font='700 '+(10.5*DPR)+'px '+SANS; cx.fillText(m.tt,p.x,ly);
-      cx.fillStyle=last?'rgba(240,198,90,.9)':'rgba(159,177,202,.8)'; cx.font=(8.5*DPR)+'px '+MONO; cx.fillText(m.s,p.x,ly+(up<0?-12*DPR:12*DPR)); });
-    /* the chosen cohort, walking the trail together */
+    MILES.forEach(function(m,i){ var p=pathPt(m.t,W,H), last=i===MILES.length-1, reached=markerT>=m.t-0.001, lx=mx+(i/(n-1))*span;
+      cx.strokeStyle='rgba(120,160,220,.22)';cx.lineWidth=1*DPR;cx.setLineDash([2*DPR,3*DPR]);cx.beginPath();cx.moveTo(p.x,p.y+6*DPR);cx.lineTo(lx,laneY-13*DPR);cx.stroke();cx.setLineDash([]);
+      if(i===stageIdx){ cx.beginPath(); cx.arc(p.x,p.y,9*DPR,0,7); cx.strokeStyle='rgba(240,198,90,.85)'; cx.lineWidth=1.5*DPR; cx.stroke(); }
+      cx.beginPath(); cx.arc(p.x,p.y,4.5*DPR,0,7); cx.fillStyle=(last||reached)?GOLD:CYAN; cx.fill();
+      cx.beginPath(); cx.arc(p.x,p.y,4.5*DPR,0,7); cx.strokeStyle='rgba(5,14,28,.9)'; cx.lineWidth=1.5*DPR; cx.stroke();
+      cx.fillStyle='rgba(238,244,252,.96)'; cx.font='700 '+(10*DPR)+'px '+SANS; cx.fillText(m.tt,lx,laneY);
+      cx.fillStyle=last?'rgba(240,198,90,.9)':'rgba(159,177,202,.8)'; cx.font=(8*DPR)+'px '+MONO; cx.fillText(m.s,lx,laneY+12*DPR); });
+    /* cohort marker = gold dot with the count, on the trail */
     var pc=pathPt(markerT,W,H);
-    var g=cx.createRadialGradient(pc.x,pc.y,1,pc.x,pc.y,22*DPR); g.addColorStop(0,'rgba(240,198,90,.42)'); g.addColorStop(1,'rgba(240,198,90,0)');
-    cx.fillStyle=g; cx.beginPath(); cx.arc(pc.x,pc.y,22*DPR,0,7); cx.fill();
-    var nsel=0; for(var si=0;si<figs.length;si++) if(figs[si]&&figs[si].sel) nsel++;
+    var g=cx.createRadialGradient(pc.x,pc.y,1,pc.x,pc.y,20*DPR); g.addColorStop(0,'rgba(240,198,90,.5)'); g.addColorStop(1,'rgba(240,198,90,0)');
+    cx.fillStyle=g; cx.beginPath(); cx.arc(pc.x,pc.y,20*DPR,0,7); cx.fill();
+    var rad=(cohN>0?13:5)*DPR; cx.beginPath(); cx.arc(pc.x,pc.y,rad,0,7); cx.fillStyle=GOLD; cx.shadowColor='rgba(240,198,90,.6)'; cx.shadowBlur=8*DPR; cx.fill(); cx.shadowBlur=0;
     cx.textAlign='center';
-    var rad=(nsel>0?14:7)*DPR;
-    cx.beginPath(); cx.arc(pc.x,pc.y,rad,0,7); cx.fillStyle=GOLD; cx.shadowColor='rgba(240,198,90,.6)'; cx.shadowBlur=8*DPR; cx.fill(); cx.shadowBlur=0;
-    if(nsel>0){ cx.fillStyle='#1a1405'; cx.font='700 '+(13*DPR)+'px '+MONO; cx.textBaseline='middle'; cx.fillText(String(nsel),pc.x,pc.y+0.5*DPR); cx.textBaseline='alphabetic'; }
-    else { cx.fillStyle='rgba(159,177,202,.9)'; cx.font='600 '+(8.5*DPR)+'px '+MONO; cx.fillText('pick below ↓', pc.x, pc.y+18*DPR); }
-    /* divider */
-    cx.strokeStyle='rgba(120,160,220,.14)'; cx.lineWidth=1*DPR; cx.beginPath(); cx.moveTo(W*0.05,H*0.66); cx.lineTo(W*0.95,H*0.66); cx.stroke();
-    /* roster — tap to add / remove */
-    var ry0=H*0.73, ry1=H*0.95;
-    cx.textAlign='left'; cx.fillStyle='rgba(159,177,202,.8)'; cx.font='600 '+(8.5*DPR)+'px '+MONO;
-    cx.fillText('YOUR TALENT POOL', W*0.05, ry0+3*DPR);
-    cx.fillStyle=GOLD; cx.fillText(nsel+' chosen', W*0.05, ry0+17*DPR);
-    cx.fillStyle=CYAN; cx.fillText(poolN+' funded', W*0.05, ry0+31*DPR);
-    cx.fillStyle='rgba(159,177,202,.55)'; cx.font=(7.5*DPR)+'px '+MONO; cx.fillText('tap to choose', W*0.05, ry0+44*DPR);
-    var per=poolN, cols=Math.min(per,8); if(cols<1)cols=1; var rowsN=Math.ceil(per/cols);
-    var gx0=W*0.30, gx1=W*0.97, gw=gx1-gx0, sw=gw/cols, fs=Math.min(sw*0.44,(ry1-ry0)/Math.max(rowsN,1)*0.56);
-    cx.textAlign='center'; cx.textBaseline='middle';
-    for(var i=0;i<per;i++){ var f=figs[i]; if(f&&f.delay>0){f.delay-=dt;} var e=1; if(f){ if(f.delay<=0)f.pop=Math.min(1,f.pop+(reduce?1:dt*0.006)); e=f.delay>0?0:f.pop; }
-      var c=i%cols, rw=Math.floor(i/cols), x=gx0+sw*(c+0.5), y=ry0+(ry1-ry0)*(rowsN<2?0.5:(rw+0.5)/rowsN);
-      var sel=f&&f.sel, sz=fs*(0.62+0.38*e), dr=sz*0.84;
-      if(f){ f.rx=x/DPR; f.ry=y/DPR; f.rr=dr/DPR; }
-      if(e<=0.02) continue;
-      cx.globalAlpha=e;
-      cx.beginPath(); cx.arc(x,y,dr,0,7);
-      if(sel){ cx.fillStyle=GOLD; cx.shadowColor='rgba(240,198,90,.55)'; cx.shadowBlur=5*DPR; cx.fill(); cx.shadowBlur=0; }
-      else { cx.fillStyle='rgba(34,211,238,.1)'; cx.fill(); cx.lineWidth=1.4*DPR; cx.strokeStyle='rgba(34,211,238,.55)'; cx.stroke(); }
-      cx.fillStyle=sel?'#12100a':'rgba(175,225,238,.92)'; cx.font='700 '+(dr*1.02)+'px '+MONO; cx.fillText(String(i+1),x,y+0.5*DPR);
-      cx.globalAlpha=1; }
-    cx.textBaseline='alphabetic';
+    if(cohN>0){ cx.fillStyle='#1a1405'; cx.font='700 '+(12.5*DPR)+'px '+MONO; cx.textBaseline='middle'; cx.fillText(String(cohN),pc.x,pc.y+0.5*DPR); cx.textBaseline='alphabetic'; }
+    else { cx.fillStyle='rgba(159,177,202,.9)'; cx.font='600 '+(8.5*DPR)+'px '+MONO; cx.fillText('add roles below ↓', pc.x, pc.y-15*DPR); }
   }
   /* stepper — the cohort only moves when you advance a stage */
   function updateStepUI(){ var m=MILES[stageIdx];
@@ -209,7 +214,6 @@
     {c:'#f0c65a',h:'Year 5 · Senior',b:'A further training block takes them junior → senior on ~5 years of contextual experience. You grew the senior instead of hiring one — retention, automated.'}
   ];
   function hitMile(cxp,cyp){ var W=cv.width,H=cv.height,hit=-1,best=1e9; MILES.forEach(function(m,i){ var p=pathPt(m.t,W,H),px=p.x/DPR,py=p.y/DPR,dd=Math.hypot(cxp-px,cyp-py); if(dd<18&&dd<best){best=dd;hit=i;} }); return hit; }
-  function hitFig(cxp,cyp){ var hit=-1,best=1e9; for(var i=0;i<figs.length;i++){ var f=figs[i]; if(!f||f.rx==null)continue; var dd=Math.hypot(cxp-f.rx,cyp-f.ry); if(dd<(f.rr+7)&&dd<best){best=dd;hit=i;} } return hit; }
   function showPop(i){ var p=pathPt(MILES[i].t,cv.width,cv.height),px=p.x/DPR,py=p.y/DPR,sw=cv.getBoundingClientRect().width;
     pop.innerHTML='<div class="ph" style="color:'+INFO[i].c+'">'+INFO[i].h+'</div><div class="pb">'+INFO[i].b+'</div>';
     pop.classList.add('on'); pop.dataset.i=i; var pw=pop.offsetWidth||220;
@@ -217,10 +221,8 @@
   cv.addEventListener('click',function(e){ var r=cv.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top;
     var mi=hitMile(mx,my);
     if(mi>=0){ if(pop.classList.contains('on')&&+pop.dataset.i===mi){ pop.classList.remove('on'); } else { showPop(mi); } e.stopPropagation(); return; }
-    var fi=hitFig(mx,my);
-    if(fi>=0){ figs[fi].sel=!figs[fi].sel; syncCohort(); repaint(); e.stopPropagation(); return; }
     pop.classList.remove('on'); });
-  cv.addEventListener('mousemove',function(e){ var r=cv.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top; cv.style.cursor=(hitMile(mx,my)>=0||hitFig(mx,my)>=0)?'pointer':'default'; });
+  cv.addEventListener('mousemove',function(e){ var r=cv.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top; cv.style.cursor=hitMile(mx,my)>=0?'pointer':'default'; });
   document.addEventListener('click',function(e){ if(!pop.contains(e.target)) pop.classList.remove('on'); });
 
   fit(); addEventListener('resize',function(){fit();repaint();}); refresh(); updateStepUI();

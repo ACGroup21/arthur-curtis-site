@@ -127,12 +127,37 @@
   .cb-badge .cb-badge-meta b{color:var(--cyan);font-weight:700}
   .cb-badge .cb-chev{color:var(--muted-2);font-size:11px;transition:transform .3s}
   .cohort-box.open .cb-chev{transform:rotate(180deg)}
-  .cb-reveal{max-height:0;opacity:0;visibility:hidden;overflow:hidden;padding:0 8px;transition:max-height .42s cubic-bezier(.2,.7,.2,1),opacity .3s ease,visibility 0s linear .42s}
-  .cohort-box.open .cb-reveal{max-height:520px;opacity:1;visibility:visible;padding:4px 8px 8px;transition:max-height .42s cubic-bezier(.2,.7,.2,1),opacity .3s ease,visibility 0s}
+  .cb-reveal{max-height:0;opacity:0;visibility:hidden;overflow:hidden;padding:0 8px;transition:max-height .5s cubic-bezier(.2,.7,.2,1),opacity .3s ease,visibility 0s linear .5s}
+  .cohort-box.open .cb-reveal{max-height:760px;opacity:1;visibility:visible;padding:4px 8px 8px;transition:max-height .5s cubic-bezier(.2,.7,.2,1),opacity .3s ease,visibility 0s}
   @media(prefers-reduced-motion:reduce){.cb-reveal,.cb-chev{transition:none}}
-  .cohort-box .cb-stage{position:relative;height:240px;margin:6px 0 13px;border-radius:11px;overflow:hidden;background:radial-gradient(120% 130% at 50% 0%,rgba(20,40,70,.35),rgba(6,14,26,.5));border:1px solid rgba(120,160,220,.14)}
+  .cohort-box .cb-stage{position:relative;height:180px;margin:6px 0 4px;border-radius:11px;overflow:hidden;background:radial-gradient(120% 130% at 50% 0%,rgba(20,40,70,.35),rgba(6,14,26,.5));border:1px solid rgba(120,160,220,.14)}
+  .cb-stepper{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:2px 0 7px}
+  .cb-stepbtn{font-family:var(--sans);font-size:12px;font-weight:600;cursor:pointer;border:1px solid rgba(34,211,238,.3);background:rgba(34,211,238,.06);color:var(--ink);border-radius:8px;padding:6px 11px;white-space:nowrap}
+  .cb-stepbtn:hover:not(:disabled){border-color:var(--cyan);color:var(--cyan)}
+  .cb-stepbtn:disabled{opacity:.3;cursor:not-allowed}
+  .cb-stepbtn.pri{background:linear-gradient(150deg,rgba(240,198,90,.16),rgba(240,198,90,.05));border-color:rgba(240,198,90,.5)}
+  .cb-stepmid{flex:1;text-align:center;min-width:0;font-size:12.5px;font-weight:700}
+  .cb-stepmid span:last-child{font-family:var(--mono);font-size:10px;color:var(--muted-2);font-weight:400;margin-left:6px}
+  .cb-progress{display:flex;gap:5px;justify-content:center;margin-bottom:4px}
+  .cb-progress i{width:6px;height:6px;border-radius:50%;background:rgba(120,160,220,.25)}
+  .cb-progress i.on{background:var(--cyan)} .cb-progress i.done{background:var(--gold)}
+  .cb-roleshead{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin:12px 2px 8px}
+  .cb-roleshead .t{font-size:13px;font-weight:700}
+  .cb-roleshead .fn{font-family:var(--mono);font-size:11px;color:var(--muted-2)}
+  .cb-roleshead .fn b{color:var(--cyan)}
+  .cb-rows{display:flex;flex-direction:column;gap:6px}
+  .cb-row{display:flex;align-items:center;gap:10px;padding:8px 11px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.015)}
+  .cb-row.has{border-color:rgba(240,198,90,.45);background:rgba(240,198,90,.05)}
+  .cb-row .nm{flex:1;font-size:12.5px;font-weight:600}
+  .cb-row .nm .sub{font-family:var(--mono);font-size:9.5px;color:var(--muted-2);font-weight:400;margin-left:6px}
+  .cb-row .ct2{display:flex;align-items:center;gap:8px}
+  .cb-rbtn{width:27px;height:27px;border-radius:7px;border:1px solid rgba(120,160,220,.26);background:rgba(255,255,255,.03);color:var(--ink);cursor:pointer;font-size:15px;line-height:1;display:flex;align-items:center;justify-content:center}
+  .cb-rbtn:hover:not(:disabled){border-color:var(--cyan);color:var(--cyan)}
+  .cb-rbtn:disabled{opacity:.25;cursor:not-allowed}
+  .cb-rnum{font-family:var(--mono);font-size:14px;font-weight:700;min-width:16px;text-align:center;font-variant-numeric:tabular-nums}
+  .cb-row.has .cb-rnum{color:var(--gold)}
   .cohort-box .cb-stage canvas{display:block;width:100%;height:100%}
-  .cb-stage .cp-hint{position:absolute;right:10px;bottom:8px;font-family:var(--mono);font-size:9px;letter-spacing:.06em;color:var(--muted-2);opacity:.7;pointer-events:none}
+  .cb-stage .cp-hint{position:absolute;right:10px;top:6px;font-family:var(--mono);font-size:9px;letter-spacing:.06em;color:var(--muted-2);opacity:.7;pointer-events:none}
   .cb-stage .cp-pop{position:absolute;z-index:6;width:210px;max-width:82%;background:rgba(9,18,34,.97);border:1px solid rgba(34,211,238,.4);border-radius:10px;padding:11px 13px;box-shadow:0 14px 40px -12px rgba(0,0,0,.85);opacity:0;transform:translateY(6px) scale(.98);transform-origin:top left;pointer-events:none;transition:opacity .18s,transform .18s}
   .cb-stage .cp-pop.on{opacity:1;transform:none;pointer-events:auto}
   .cb-stage .cp-pop .ph{font-family:var(--mono);font-size:10.5px;letter-spacing:.03em;font-weight:600;margin-bottom:5px}
@@ -476,9 +501,17 @@
           <span class="cb-chev" aria-hidden="true">▾</span>
         </button>
         <div class="cb-reveal" id="cbReveal">
-          <div class="cb-fig">~£<span id="cohortSpend">0</span> levy spend · indicative starter cohort at ~£9k each</div>
+          <div class="cb-fig">~£<span id="cohortSpend">0</span> levy spend · ~£9k each, levy-funded</div>
+          <div class="cb-stepper">
+            <button class="cb-stepbtn" id="cbBack" aria-label="Previous stage">&larr;</button>
+            <div class="cb-stepmid"><span id="cbStageName">Start · Junior</span> <span id="cbStageYr">1 of 4</span></div>
+            <button class="cb-stepbtn pri" id="cbNext" aria-label="Next stage">Next &rarr;</button>
+          </div>
+          <div class="cb-progress" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
           <div class="cb-stage"><canvas id="cohortCanvas"></canvas><div class="cp-hint">▸ tap a stage</div><div class="cp-pop" id="cohortPop"></div></div>
-          <a class="btn btn-primary cb-cta" href="tools/app.html#/first-cohort">Select your first cohort →</a>
+          <div class="cb-roleshead"><span class="t">Choose your cohort by role</span><span class="fn"><b id="cohFundN">0</b> funded</span></div>
+          <div class="cb-rows" id="cbRows"></div>
+          <a class="btn btn-primary cb-cta" href="tools/app.html#/first-cohort">Open the full tool →</a>
         </div>
       </div>
 
@@ -647,8 +680,7 @@ function compute(){
   { var fo=$('fundsOut'); if(fo) fo.textContent=(window.AC&&AC.RULES&&AC.RULES.expiryMonths)||12; }
   animateTo($('peopleOut'),r.apprentices);
   animateTo($('monthOut'),r.monthly);
-  var shown=Math.min(r.apprentices,16), cohort=Math.round(shown*0.4);   // first cohort ~40% of the pool (avg estimate)
-  var cn=$('cohortN'); if(cn){ cn.textContent=cohort; animateTo($('cohortSpend'), cohort*9000); }
+  if(window.__cohortSync) window.__cohortSync();   // the by-role cohort owns the count + spend
   var raw=paybill*AC.RULES.levyRate;                  // engine-transparency pipeline — the SAME math, shown openly
   var ep=$('engPay'); if(ep){ ep.textContent=fmt(paybill); animateTo($('engRaw'),raw); animateTo($('engPot'),r.pot); animateTo($('engApp'),r.apprentices); }
   try{ AC.scenario.set({payBill:paybill}); }catch(e){} // carry it into the tools journey
@@ -698,45 +730,48 @@ requestAnimationFrame(()=>{
   var cv=document.getElementById('cohortCanvas'); if(!cv||!window.AC) return;
   var cx=cv.getContext('2d'), DPR=Math.min(2,devicePixelRatio||1), MONO="'JetBrains Mono',monospace", SANS="'Inter',sans-serif";
   var CYAN='#22d3ee', GOLD='#f0c65a', reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var cap=16, poolN=-1, cohN=0, travel=0, figs=[];
+  var cap=16, funded=0, cohN=0, running=false;
+  var ROLES=[
+    {n:'Management',s:'L5',c:0},{n:'Finance',s:'L4',c:1},{n:'Data / digital',s:'L4',c:1},
+    {n:'Operations',s:'L2',c:2},{n:'Customer service',s:'L2',c:1}
+  ];
   var MILES=[{t:0,tt:'Start',s:'Junior'},{t:0.36,tt:'Yr 2',s:'Competent'},{t:0.60,tt:'Yr 3',s:'Applying'},{t:1,tt:'Yr 5',s:'Senior'}];
+  var stageIdx=0, markerT=MILES[0].t, targetT=MILES[0].t;
   function fit(){ var r=cv.getBoundingClientRect(); if(!r.width) return; cv.width=Math.floor(r.width*DPR); cv.height=Math.floor(r.height*DPR); }
   function appN(){ try{ return AC.levy(currentPB).apprentices||0; }catch(e){ return 0; } }
-  function person(x,y,s,a){ cx.globalAlpha=a; cx.beginPath();cx.arc(x,y-s*0.6,s*0.27,0,7);cx.fill(); cx.beginPath();cx.moveTo(x-s*0.44,y+s*0.5);cx.quadraticCurveTo(x-s*0.44,y-s*0.16,x,y-s*0.16);cx.quadraticCurveTo(x+s*0.44,y-s*0.16,x+s*0.44,y+s*0.5);cx.closePath();cx.fill(); cx.globalAlpha=1; }
-  function rebuild(){ poolN=Math.min(appN(),cap); cohN=Math.round(poolN*0.4); figs=[]; for(var i=0;i<poolN;i++) figs.push({pop:reduce?1:0,delay:reduce?0:160+i*50,sel:i<cohN}); }
-  function pathPt(t,W,H){ var mx=W*0.08,myT=H*0.12,myB=H*0.05,pH=H*0.62; var x=mx+t*(W-2*mx); var y=(pH-myB)-t*(pH-myT-myB); y+=Math.sin(t*Math.PI*2.7+0.5)*pH*0.15*(1-t*0.35); return {x:x,y:y}; }
+  function roleTotal(){ var t=0; for(var i=0;i<ROLES.length;i++) t+=ROLES[i].c; return t; }
+  function updateFunded(){ funded=Math.min(appN(),cap); var over=roleTotal()-funded; for(var i=ROLES.length-1;i>=0&&over>0;i--){ var take=Math.min(ROLES[i].c,over); ROLES[i].c-=take; over-=take; } var fn=document.getElementById('cohFundN'); if(fn) fn.textContent=funded; }
+  function syncCohort(){ cohN=roleTotal(); var cn=document.getElementById('cohortN'); if(cn) cn.textContent=cohN; var cs=document.getElementById('cohortSpend'); if(cs) cs.textContent=Math.round(cohN*9000).toLocaleString('en-GB'); }
+  function renderRows(){ var w=document.getElementById('cbRows'); if(!w) return; w.innerHTML=''; var full=roleTotal()>=funded;
+    ROLES.forEach(function(r,i){ var el=document.createElement('div'); el.className='cb-row'+(r.c>0?' has':'');
+      el.innerHTML='<div class="nm">'+r.n+'<span class="sub">'+r.s+'</span></div><div class="ct2"><button class="cb-rbtn" data-m="'+i+'"'+(r.c<=0?' disabled':'')+'>&minus;</button><span class="cb-rnum">'+r.c+'</span><button class="cb-rbtn" data-p="'+i+'"'+(full?' disabled':'')+'>+</button></div>';
+      w.appendChild(el); });
+    w.querySelectorAll('[data-p]').forEach(function(b){ b.onclick=function(){ if(roleTotal()<funded){ ROLES[+b.dataset.p].c++; renderRows(); syncCohort(); repaint(); } }; });
+    w.querySelectorAll('[data-m]').forEach(function(b){ b.onclick=function(){ var rr=ROLES[+b.dataset.m]; if(rr.c>0){ rr.c--; renderRows(); syncCohort(); repaint(); } }; }); }
+  function repaint(){ if(reduce && running) draw(0); }
+  function pathPt(t,W,H){ var mx=W*0.08,myT=H*0.15,myB=H*0.07,pH=H*0.56; var x=mx+t*(W-2*mx); var y=(pH-myB)-t*(pH-myT-myB); y+=Math.sin(t*Math.PI*2.6+0.5)*pH*0.15*(1-t*0.35); return {x:x,y:y}; }
   function draw(dt){
     var W=cv.width,H=cv.height; if(!W) return;
-    var cur=Math.min(appN(),cap); if(cur!==poolN) rebuild();
-    cx.clearRect(0,0,W,H); if(!reduce) travel=(travel+0.00018*dt)%1;
-    var N=10; for(var b=0;b<N;b++){ var by=H*0.05+b*(H*0.62/N); cx.beginPath(); for(var xx=-10;xx<=W+10;xx+=8){ var yy=by+Math.sin(xx*0.012+b*0.7)*6*DPR+Math.sin(xx*0.03+b*1.2)*3*DPR; xx<=-10?cx.moveTo(xx,yy):cx.lineTo(xx,yy);} cx.strokeStyle='rgba(70,110,150,'+(0.05+0.015*Math.sin(b))+')'; cx.lineWidth=1*DPR; cx.stroke(); }
-    function trace(){cx.beginPath();for(var f=0;f<=1.0001;f+=0.012){var p=pathPt(f,W,H);f===0?cx.moveTo(p.x,p.y):cx.lineTo(p.x,p.y);}}
-    trace(); cx.strokeStyle='rgba(34,211,238,.12)'; cx.lineWidth=9*DPR; cx.lineCap='round'; cx.stroke();
-    trace(); var lg=cx.createLinearGradient(0,H*0.62,W,0); lg.addColorStop(0,'rgba(70,120,160,.7)'); lg.addColorStop(.7,'rgba(34,211,238,.95)'); lg.addColorStop(1,'rgba(240,198,90,.95)'); cx.strokeStyle=lg; cx.lineWidth=2.2*DPR; cx.stroke();
+    cx.clearRect(0,0,W,H);
+    if(reduce) markerT=targetT; else { markerT += (targetT-markerT)*Math.min(1,dt*0.009); if(Math.abs(targetT-markerT)<0.0008) markerT=targetT; }
+    var N=9; for(var b=0;b<N;b++){ var by=H*0.06+b*(H*0.56/N); cx.beginPath(); for(var xx=-10;xx<=W+10;xx+=8){ var yy=by+Math.sin(xx*0.012+b*0.7)*6*DPR+Math.sin(xx*0.03+b*1.2)*3*DPR; xx<=-10?cx.moveTo(xx,yy):cx.lineTo(xx,yy);} cx.strokeStyle='rgba(70,110,150,'+(0.05+0.015*Math.sin(b))+')'; cx.lineWidth=1*DPR; cx.stroke(); }
+    function trace(a,bb){cx.beginPath();for(var f=a;f<=bb+0.0001;f+=0.012){var p=pathPt(Math.min(f,bb),W,H);f===a?cx.moveTo(p.x,p.y):cx.lineTo(p.x,p.y);}}
+    trace(0,1); cx.strokeStyle='rgba(34,211,238,.12)'; cx.lineWidth=9*DPR; cx.lineCap='round'; cx.stroke();
+    trace(0,1); var lg=cx.createLinearGradient(0,H*0.56,W,0); lg.addColorStop(0,'rgba(70,120,160,.55)'); lg.addColorStop(.7,'rgba(34,211,238,.6)'); lg.addColorStop(1,'rgba(240,198,90,.6)'); cx.strokeStyle=lg; cx.lineWidth=2.2*DPR; cx.stroke();
+    trace(0,markerT); cx.strokeStyle='rgba(240,198,90,.92)'; cx.lineWidth=3*DPR; cx.lineCap='round'; cx.stroke();
+    var laneY=H*0.88, mx=W*0.08, span=W-2*mx, n=MILES.length;
     cx.textAlign='center';
-    MILES.forEach(function(m,i){ var p=pathPt(m.t,W,H),last=i===MILES.length-1; cx.beginPath();cx.arc(p.x,p.y,5*DPR,0,7);cx.fillStyle=last?GOLD:CYAN;cx.fill(); cx.beginPath();cx.arc(p.x,p.y,5*DPR,0,7);cx.strokeStyle='rgba(5,16,31,.9)';cx.lineWidth=1.6*DPR;cx.stroke();
-      var up=i%2===0?-1:1, ly=p.y+(up<0?-11*DPR:17*DPR);
-      cx.fillStyle='rgba(238,244,252,.95)';cx.font='700 '+(9.5*DPR)+'px '+SANS;cx.fillText(m.tt,p.x,ly);
-      cx.fillStyle=last?'rgba(240,198,90,.9)':'rgba(150,170,200,.8)';cx.font=(7.5*DPR)+'px '+MONO;cx.fillText(m.s,p.x,ly+(up<0?-10*DPR:11*DPR)); });
-    var tp=pathPt(travel,W,H); var g=cx.createRadialGradient(tp.x,tp.y,1,tp.x,tp.y,16*DPR); g.addColorStop(0,'rgba(240,198,90,.55)');g.addColorStop(1,'rgba(240,198,90,0)'); cx.fillStyle=g;cx.beginPath();cx.arc(tp.x,tp.y,16*DPR,0,7);cx.fill();
-    var mrad=(cohN>0?12:4)*DPR; cx.beginPath();cx.arc(tp.x,tp.y,mrad,0,7);cx.fillStyle=GOLD;cx.shadowColor='rgba(240,198,90,.6)';cx.shadowBlur=7*DPR;cx.fill();cx.shadowBlur=0;
-    if(cohN>0){ cx.fillStyle='#1a1405';cx.font='700 '+(11*DPR)+'px '+MONO;cx.textAlign='center';cx.textBaseline='middle';cx.fillText(String(cohN),tp.x,tp.y+0.5*DPR);cx.textBaseline='alphabetic'; }
-    cx.strokeStyle='rgba(120,160,220,.14)';cx.lineWidth=1*DPR;cx.beginPath();cx.moveTo(W*0.05,H*0.66);cx.lineTo(W*0.95,H*0.66);cx.stroke();
-    var ry0=H*0.72,ry1=H*0.985;
-    cx.textAlign='left';cx.fillStyle='rgba(150,170,200,.8)';cx.font='600 '+(7.5*DPR)+'px '+MONO; cx.fillText('COHORT',W*0.05,ry0+4*DPR);
-    cx.fillStyle=GOLD;cx.fillText(cohN+' start',W*0.05,ry0+16*DPR); cx.fillStyle=CYAN;cx.fillText(poolN+' pool',W*0.05,ry0+28*DPR);
-    var per=poolN,cols=Math.min(per>0?per:1,8),rowsN=Math.ceil(per/cols);
-    var gx0=W*0.28,gx1=W*0.97,gw=gx1-gx0,sw=gw/cols,fs=Math.min(sw*0.46,(ry1-ry0)/Math.max(rowsN,1)*0.6);
-    cx.textAlign='center';cx.textBaseline='middle';
-    for(var i=0;i<per;i++){ var f=figs[i]; if(f&&f.delay>0)f.delay-=dt; var e=1; if(f){ if(f.delay<=0)f.pop=Math.min(1,f.pop+(reduce?1:dt*0.006)); e=f.delay>0?0:f.pop; }
-      var c=i%cols,rw=Math.floor(i/cols),x=gx0+sw*(c+0.5),y=ry0+(ry1-ry0)*(rowsN<2?0.5:(rw+0.5)/rowsN),sel=i<cohN,sz=fs*(0.62+0.38*e),dr=sz*0.84;
-      if(e<=0.02) continue; cx.globalAlpha=e;
-      cx.beginPath();cx.arc(x,y,dr,0,7);
-      if(sel){ cx.fillStyle=GOLD;cx.shadowColor='rgba(240,198,90,.55)';cx.shadowBlur=4*DPR;cx.fill();cx.shadowBlur=0; }
-      else { cx.fillStyle='rgba(34,211,238,.1)';cx.fill();cx.lineWidth=1.3*DPR;cx.strokeStyle='rgba(34,211,238,.55)';cx.stroke(); }
-      cx.fillStyle=sel?'#12100a':'rgba(175,225,238,.92)';cx.font='700 '+(dr*1.02)+'px '+MONO;cx.fillText(String(i+1),x,y+0.5*DPR);
-      cx.globalAlpha=1; }
-    cx.textBaseline='alphabetic';
+    MILES.forEach(function(m,i){ var p=pathPt(m.t,W,H),last=i===MILES.length-1,reached=markerT>=m.t-0.001, lx=mx+(i/(n-1))*span;
+      cx.strokeStyle='rgba(120,160,220,.22)';cx.lineWidth=1*DPR;cx.setLineDash([2*DPR,3*DPR]);cx.beginPath();cx.moveTo(p.x,p.y+5*DPR);cx.lineTo(lx,laneY-12*DPR);cx.stroke();cx.setLineDash([]);
+      if(i===stageIdx){ cx.beginPath();cx.arc(p.x,p.y,8*DPR,0,7);cx.strokeStyle='rgba(240,198,90,.85)';cx.lineWidth=1.5*DPR;cx.stroke(); }
+      cx.beginPath();cx.arc(p.x,p.y,4*DPR,0,7);cx.fillStyle=(last||reached)?GOLD:CYAN;cx.fill(); cx.beginPath();cx.arc(p.x,p.y,4*DPR,0,7);cx.strokeStyle='rgba(5,16,31,.9)';cx.lineWidth=1.4*DPR;cx.stroke();
+      cx.fillStyle='rgba(238,244,252,.96)';cx.font='700 '+(9.5*DPR)+'px '+SANS;cx.fillText(m.tt,lx,laneY);
+      cx.fillStyle=last?'rgba(240,198,90,.9)':'rgba(150,170,200,.8)';cx.font=(7.5*DPR)+'px '+MONO;cx.fillText(m.s,lx,laneY+11*DPR); });
+    var pc=pathPt(markerT,W,H); var g=cx.createRadialGradient(pc.x,pc.y,1,pc.x,pc.y,18*DPR); g.addColorStop(0,'rgba(240,198,90,.5)');g.addColorStop(1,'rgba(240,198,90,0)'); cx.fillStyle=g;cx.beginPath();cx.arc(pc.x,pc.y,18*DPR,0,7);cx.fill();
+    var rad=(cohN>0?12:4)*DPR; cx.beginPath();cx.arc(pc.x,pc.y,rad,0,7);cx.fillStyle=GOLD;cx.shadowColor='rgba(240,198,90,.6)';cx.shadowBlur=7*DPR;cx.fill();cx.shadowBlur=0;
+    cx.textAlign='center';
+    if(cohN>0){ cx.fillStyle='#1a1405';cx.font='700 '+(11.5*DPR)+'px '+MONO;cx.textBaseline='middle';cx.fillText(String(cohN),pc.x,pc.y+0.5*DPR);cx.textBaseline='alphabetic'; }
+    else { cx.fillStyle='rgba(150,170,200,.9)';cx.font='600 '+(8*DPR)+'px '+MONO;cx.fillText('add roles below ↓',pc.x,pc.y-14*DPR); }
   }
   var pop=document.getElementById('cohortPop');
   var INFO=[ {c:'#7fdbe8',h:'Start \u00b7 Junior (Year 0)',b:'They join and begin training \u2014 levy-funded from day one, no upfront cost. Off-the-job learning runs alongside real work.'},
@@ -748,15 +783,23 @@ requestAnimationFrame(()=>{
   if(pop){ cv.addEventListener('click',function(e){ var r=cv.getBoundingClientRect(),i=hitMile(e.clientX-r.left,e.clientY-r.top); if(i>=0){ if(pop.classList.contains('on')&&+pop.dataset.i===i)pop.classList.remove('on'); else showPop(i); e.stopPropagation(); } else pop.classList.remove('on'); });
     cv.addEventListener('mousemove',function(e){ var r=cv.getBoundingClientRect(); cv.style.cursor=hitMile(e.clientX-r.left,e.clientY-r.top)>=0?'pointer':'default'; });
     document.addEventListener('click',function(e){ if(!pop.contains(e.target)) pop.classList.remove('on'); }); }
-  rebuild();
-  var running=false, rafId=0, last=0;
+  var rafId=0, last=0;
   function loop(now){ if(!running) return; if(!document.body.contains(cv)){ running=false; return; } var dt=Math.min(48,now-last); last=now; draw(dt); rafId=requestAnimationFrame(loop); }
   addEventListener('resize',function(){ fit(); if(reduce && running) draw(16); });
-  // lazy: only size + animate once the cohort panel is opened (keeps the homepage light)
+  /* stepper — the cohort moves only when you advance a stage */
+  function updateStepUI(){ var m=MILES[stageIdx]; var sn=document.getElementById('cbStageName'); if(sn) sn.textContent=m.tt+' · '+m.s; var sy=document.getElementById('cbStageYr'); if(sy) sy.textContent=(stageIdx+1)+' of '+MILES.length; var bk=document.getElementById('cbBack'),nx=document.getElementById('cbNext'); if(bk) bk.disabled=stageIdx===0; if(nx) nx.disabled=stageIdx===MILES.length-1; var dots=document.querySelectorAll('.cb-progress i'); for(var k=0;k<dots.length;k++) dots[k].className=k<stageIdx?'done':(k===stageIdx?'on':''); }
+  function gotoStage(i){ stageIdx=Math.max(0,Math.min(MILES.length-1,i)); targetT=MILES[stageIdx].t; updateStepUI(); if(pop) showPop(stageIdx); repaint(); }
+  var bBack=document.getElementById('cbBack'),bNext=document.getElementById('cbNext');
+  if(bNext) bNext.addEventListener('click',function(e){ e.stopPropagation(); if(stageIdx<MILES.length-1) gotoStage(stageIdx+1); });
+  if(bBack) bBack.addEventListener('click',function(e){ e.stopPropagation(); if(stageIdx>0) gotoStage(stageIdx-1); });
+  // the by-role cohort owns #cohortN / #cohortSpend; compute() calls this on pay-bill change
+  window.__cohortSync=function(){ updateFunded(); renderRows(); syncCohort(); repaint(); };
+  // lazy: only size + animate once the panel is opened (keeps the homepage light)
   window.__cohortViz={
-    reveal:function(){ fit(); rebuild(); if(reduce){ draw(16); } else if(!running){ running=true; last=performance.now(); rafId=requestAnimationFrame(loop); } },
+    reveal:function(){ fit(); updateFunded(); renderRows(); syncCohort(); updateStepUI(); if(reduce){ draw(16); } else if(!running){ running=true; last=performance.now(); rafId=requestAnimationFrame(loop); } },
     hide:function(){ running=false; if(rafId) cancelAnimationFrame(rafId); }
   };
+  updateFunded(); renderRows(); syncCohort(); updateStepUI();
 })();
 
 /* ---------- cohort panel: collapsed behind a "See your first cohort" badge ---------- */
