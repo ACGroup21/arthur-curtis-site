@@ -33,6 +33,19 @@
   .fc-stage .cp-pop.on{opacity:1;transform:none;pointer-events:auto}
   .fc-stage .cp-pop .ph{font-family:var(--mono);font-size:11px;letter-spacing:.03em;font-weight:600;margin-bottom:6px}
   .fc-stage .cp-pop .pb{font-size:12px;line-height:1.5;color:var(--muted)}
+  .fc-stepper{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:18px}
+  .fc-stepbtn{font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;border:1px solid rgba(34,211,238,.3);background:rgba(34,211,238,.06);color:var(--ink);border-radius:9px;padding:9px 14px;white-space:nowrap;transition:border-color .15s,color .15s,opacity .15s}
+  .fc-stepbtn:hover:not(:disabled){border-color:var(--cyan);color:var(--cyan)}
+  .fc-stepbtn:disabled{opacity:.3;cursor:not-allowed}
+  .fc-stepbtn.pri{background:linear-gradient(150deg,rgba(240,198,90,.16),rgba(240,198,90,.05));border-color:rgba(240,198,90,.5)}
+  .fc-stepbtn.pri:hover:not(:disabled){border-color:#f0c65a;color:#f0c65a}
+  .fc-stepmid{flex:1;text-align:center;min-width:0}
+  .fc-stepmid .sn{font-size:14px;font-weight:700}
+  .fc-stepmid .sy{font-family:var(--mono);font-size:10.5px;color:var(--muted-2);margin-top:1px}
+  .fc-progress{display:flex;gap:6px;justify-content:center;margin-top:8px}
+  .fc-progress i{width:7px;height:7px;border-radius:50%;background:rgba(120,160,220,.25);transition:background .2s}
+  .fc-progress i.on{background:var(--cyan)} .fc-progress i.done{background:var(--gold)}
+  @media(max-width:480px){.fc-stepbtn{padding:8px 10px;font-size:12px}}
 </style>
 </head>
 <body>
@@ -57,7 +70,14 @@
     <input type="range" id="fcRange" min="0" max="1000" step="1" value="326">
     <div class="fc-ticks"><span>£3m</span><span>£75m</span><span>£2bn</span></div>
 
-    <div class="fc-stage"><canvas id="fcCanvas"></canvas><div class="cp-hint">▸ tap a stage</div><div class="cp-pop" id="fcPop"></div></div>
+    <div class="fc-stepper">
+      <button class="fc-stepbtn" id="fcBack" aria-label="Previous stage">&larr; Back</button>
+      <div class="fc-stepmid"><div class="sn" id="fcStageName">Start &middot; Junior</div><div class="sy" id="fcStageYr">Stage 1 of 4</div></div>
+      <button class="fc-stepbtn pri" id="fcNext" aria-label="Advance cohort to the next stage">Next stage &rarr;</button>
+    </div>
+    <div class="fc-progress" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+
+    <div class="fc-stage"><canvas id="fcCanvas"></canvas><div class="cp-hint">▸ tap a person to choose &middot; tap a stage to learn</div><div class="cp-pop" id="fcPop"></div></div>
 
     <div class="fc-cta">
       <div class="t">
@@ -88,8 +108,7 @@
 
   function refresh(){
     var r=levy(currentPB); $('fcPbOut').textContent=fmt(currentPB); anim($('fcPot'),r.pot); anim($('fcApp'),r.app);
-    var shown=Math.min(r.app,16), coh=Math.round(shown*0.4); $('fcCohN').textContent=coh; anim($('fcCohSpend'),coh*9000);
-    drop();
+    drop(); syncCohort(); repaint();
     try{ AC.scenario.set({payBill:currentPB}); }catch(e){}
   }
   $('fcRange').addEventListener('input',function(){ currentPB=posToPB(+this.value); refresh(); });
@@ -98,58 +117,90 @@
   el.addEventListener('blur',function(){ var v=parseInt((el.textContent||'').replace(/[^0-9]/g,''),10)||PB_MIN; v=Math.max(PB_MIN,Math.min(PB_MAX,v)); currentPB=v; rng.value=pbToPos(v); refresh(); });
   el.addEventListener('focus',function(){ var g=document.createRange();g.selectNodeContents(el);var s=getSelection();s.removeAllRanges();s.addRange(g); });
 
-  /* ---- winding 2-5 pathway + first-cohort roster (all-canvas) ---- */
+  /* ---- winding 2-5 pathway + selectable first-cohort roster (all-canvas) ---- */
   var cv=$('fcCanvas'), cx=cv.getContext('2d'), DPR=Math.min(2,devicePixelRatio||1), MONO="'JetBrains Mono',monospace", SANS="'Inter',sans-serif";
   var CYAN='#22d3ee', GOLD='#f0c65a';
   var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
-  var cap=16, poolN=0, cohN=0, travel=0, figs=[];
+  var cap=16, poolN=0, cohN=0, figs=[];
   var MILES=[{t:0,tt:'Start',s:'Junior'},{t:0.36,tt:'Yr 2',s:'Competent'},{t:0.60,tt:'Yr 3',s:'Applying'},{t:1,tt:'Yr 5',s:'Senior'}];
+  var stageIdx=0, markerT=MILES[0].t, targetT=MILES[0].t;
   function fit(){var r=cv.getBoundingClientRect();if(!r.width)return;cv.width=Math.floor(r.width*DPR);cv.height=Math.floor(r.height*DPR);}
   function person(x,y,s,a){cx.globalAlpha=a;cx.beginPath();cx.arc(x,y-s*0.6,s*0.27,0,7);cx.fill();cx.beginPath();cx.moveTo(x-s*0.44,y+s*0.5);cx.quadraticCurveTo(x-s*0.44,y-s*0.16,x,y-s*0.16);cx.quadraticCurveTo(x+s*0.44,y-s*0.16,x+s*0.44,y+s*0.5);cx.closePath();cx.fill();cx.globalAlpha=1;}
-  function drop(){ var r=levy(currentPB); poolN=Math.min(r.app,cap); cohN=Math.round(poolN*0.4);
-    figs=[]; for(var i=0;i<poolN;i++) figs.push({pop:reduce?1:0,delay:reduce?0:180+i*55,sel:i<cohN}); }
+  function drop(){ var r=levy(currentPB); poolN=Math.min(r.app,cap); var def=Math.round(poolN*0.4);
+    figs=[]; for(var i=0;i<poolN;i++) figs.push({pop:reduce?1:0,delay:reduce?0:120+i*45,sel:i<def,rx:null,ry:null,rr:0}); }
+  function syncCohort(){ cohN=0; for(var i=0;i<figs.length;i++) if(figs[i]&&figs[i].sel) cohN++;
+    $('fcCohN').textContent=cohN; anim($('fcCohSpend'),cohN*9000); }
+  function repaint(){ if(reduce) draw(0); }
   function pathPt(t,W,H){ var mx=W*0.09, myT=H*0.10, myB=H*0.06, pH=H*0.60;
     var x=mx + t*(W-2*mx); var y=(pH-myB) - t*(pH-myT-myB);
     y += Math.sin(t*Math.PI*2.7+0.5)*pH*0.16*(1-t*0.35); return {x:x,y:y}; }
   function draw(dt){
-    var W=cv.width,H=cv.height; if(!W)return; cx.clearRect(0,0,W,H); if(!reduce) travel=(travel+0.00016*dt)%1;
+    var W=cv.width,H=cv.height; if(!W)return; cx.clearRect(0,0,W,H);
+    if(reduce) markerT=targetT; else { markerT += (targetT-markerT)*Math.min(1,dt*0.009); if(Math.abs(targetT-markerT)<0.0008) markerT=targetT; }
     /* subtle terrain */
     var N=12; for(var b=0;b<N;b++){ var by=H*0.05+b*(H*0.6/N); cx.beginPath();
       for(var xx=-10;xx<=W+10;xx+=8){ var yy=by+Math.sin(xx*0.011+b*0.7)*7*DPR+Math.sin(xx*0.03+b*1.2)*3.5*DPR; xx<=-10?cx.moveTo(xx,yy):cx.lineTo(xx,yy);}
       cx.strokeStyle='rgba(70,110,150,'+(0.045+0.015*Math.sin(b))+')'; cx.lineWidth=1*DPR; cx.stroke(); }
-    /* trail */
-    function trace(){cx.beginPath();for(var f=0;f<=1.0001;f+=0.012){var p=pathPt(f,W,H);f===0?cx.moveTo(p.x,p.y):cx.lineTo(p.x,p.y);}}
-    trace(); cx.strokeStyle='rgba(34,211,238,.12)'; cx.lineWidth=11*DPR; cx.lineCap='round'; cx.stroke();
-    trace(); var lg=cx.createLinearGradient(0,H*0.6,W,0); lg.addColorStop(0,'rgba(70,120,160,.7)'); lg.addColorStop(.7,'rgba(34,211,238,.95)'); lg.addColorStop(1,'rgba(240,198,90,.95)'); cx.strokeStyle=lg; cx.lineWidth=2.4*DPR; cx.stroke();
+    /* trail (faint full route) */
+    function trace(a,b){cx.beginPath();for(var f=a;f<=b+0.0001;f+=0.012){var p=pathPt(Math.min(f,b),W,H);f===a?cx.moveTo(p.x,p.y):cx.lineTo(p.x,p.y);}}
+    trace(0,1); cx.strokeStyle='rgba(34,211,238,.12)'; cx.lineWidth=11*DPR; cx.lineCap='round'; cx.stroke();
+    trace(0,1); var lg=cx.createLinearGradient(0,H*0.6,W,0); lg.addColorStop(0,'rgba(70,120,160,.55)'); lg.addColorStop(.7,'rgba(34,211,238,.6)'); lg.addColorStop(1,'rgba(240,198,90,.6)'); cx.strokeStyle=lg; cx.lineWidth=2.4*DPR; cx.stroke();
+    /* progress — how far the cohort has walked */
+    trace(0,markerT); cx.strokeStyle='rgba(240,198,90,.92)'; cx.lineWidth=3.2*DPR; cx.lineCap='round'; cx.stroke();
     /* milestones */
     cx.textAlign='center';
-    MILES.forEach(function(m,i){ var p=pathPt(m.t,W,H), last=i===MILES.length-1;
-      cx.beginPath(); cx.arc(p.x,p.y,5.5*DPR,0,7); cx.fillStyle=last?GOLD:CYAN; cx.fill();
+    MILES.forEach(function(m,i){ var p=pathPt(m.t,W,H), last=i===MILES.length-1, reached=markerT>=m.t-0.001;
+      if(i===stageIdx){ cx.beginPath(); cx.arc(p.x,p.y,9.5*DPR,0,7); cx.strokeStyle='rgba(240,198,90,.85)'; cx.lineWidth=1.6*DPR; cx.stroke(); }
+      cx.beginPath(); cx.arc(p.x,p.y,5.5*DPR,0,7); cx.fillStyle=(last||reached)?GOLD:CYAN; cx.fill();
       cx.beginPath(); cx.arc(p.x,p.y,5.5*DPR,0,7); cx.strokeStyle='rgba(5,14,28,.9)'; cx.lineWidth=1.6*DPR; cx.stroke();
       var up=i%2===0?-1:1, ly=p.y+(up<0?-13*DPR:19*DPR);
       cx.fillStyle='rgba(238,244,252,.95)'; cx.font='700 '+(10.5*DPR)+'px '+SANS; cx.fillText(m.tt,p.x,ly);
       cx.fillStyle=last?'rgba(240,198,90,.9)':'rgba(159,177,202,.8)'; cx.font=(8.5*DPR)+'px '+MONO; cx.fillText(m.s,p.x,ly+(up<0?-12*DPR:12*DPR)); });
-    /* travelling cohort marker */
-    var tp=pathPt(travel,W,H); var g=cx.createRadialGradient(tp.x,tp.y,1,tp.x,tp.y,18*DPR); g.addColorStop(0,'rgba(240,198,90,.8)'); g.addColorStop(1,'rgba(240,198,90,0)');
-    cx.fillStyle=g; cx.beginPath(); cx.arc(tp.x,tp.y,18*DPR,0,7); cx.fill();
-    cx.fillStyle=GOLD; cx.beginPath(); cx.arc(tp.x,tp.y,4.5*DPR,0,7); cx.fill();
-    if(cohN>0){ cx.fillStyle='rgba(240,198,90,.95)'; cx.font='600 '+(9*DPR)+'px '+MONO; cx.textAlign='left'; cx.fillText('cohort of '+cohN, tp.x+11*DPR, tp.y-8*DPR); }
+    /* the chosen cohort, walking the trail together */
+    var pc=pathPt(markerT,W,H);
+    var g=cx.createRadialGradient(pc.x,pc.y,1,pc.x,pc.y,22*DPR); g.addColorStop(0,'rgba(240,198,90,.42)'); g.addColorStop(1,'rgba(240,198,90,0)');
+    cx.fillStyle=g; cx.beginPath(); cx.arc(pc.x,pc.y,22*DPR,0,7); cx.fill();
+    var nsel=0; for(var si=0;si<figs.length;si++) if(figs[si]&&figs[si].sel) nsel++;
+    cx.textAlign='center';
+    var rad=(nsel>0?14:7)*DPR;
+    cx.beginPath(); cx.arc(pc.x,pc.y,rad,0,7); cx.fillStyle=GOLD; cx.shadowColor='rgba(240,198,90,.6)'; cx.shadowBlur=8*DPR; cx.fill(); cx.shadowBlur=0;
+    if(nsel>0){ cx.fillStyle='#1a1405'; cx.font='700 '+(13*DPR)+'px '+MONO; cx.textBaseline='middle'; cx.fillText(String(nsel),pc.x,pc.y+0.5*DPR); cx.textBaseline='alphabetic'; }
+    else { cx.fillStyle='rgba(159,177,202,.9)'; cx.font='600 '+(8.5*DPR)+'px '+MONO; cx.fillText('pick below ↓', pc.x, pc.y+18*DPR); }
     /* divider */
     cx.strokeStyle='rgba(120,160,220,.14)'; cx.lineWidth=1*DPR; cx.beginPath(); cx.moveTo(W*0.05,H*0.66); cx.lineTo(W*0.95,H*0.66); cx.stroke();
-    /* roster */
+    /* roster — tap to add / remove */
     var ry0=H*0.73, ry1=H*0.95;
     cx.textAlign='left'; cx.fillStyle='rgba(159,177,202,.8)'; cx.font='600 '+(8.5*DPR)+'px '+MONO;
-    cx.fillText('AT THE TRAILHEAD', W*0.05, ry0+3*DPR);
-    cx.fillStyle=GOLD; cx.fillText(cohN+' start', W*0.05, ry0+17*DPR);
-    cx.fillStyle=CYAN; cx.fillText(poolN+' in pool', W*0.05, ry0+31*DPR);
-    var per=poolN, cols=Math.min(per,12); if(cols<1)cols=1; var rowsN=Math.ceil(per/cols);
-    var gx0=W*0.30, gx1=W*0.97, gw=gx1-gx0, sw=gw/cols, fs=Math.min(sw*0.48,(ry1-ry0)/Math.max(rowsN,1)*0.62);
+    cx.fillText('YOUR TALENT POOL', W*0.05, ry0+3*DPR);
+    cx.fillStyle=GOLD; cx.fillText(nsel+' chosen', W*0.05, ry0+17*DPR);
+    cx.fillStyle=CYAN; cx.fillText(poolN+' funded', W*0.05, ry0+31*DPR);
+    cx.fillStyle='rgba(159,177,202,.55)'; cx.font=(7.5*DPR)+'px '+MONO; cx.fillText('tap to choose', W*0.05, ry0+44*DPR);
+    var per=poolN, cols=Math.min(per,8); if(cols<1)cols=1; var rowsN=Math.ceil(per/cols);
+    var gx0=W*0.30, gx1=W*0.97, gw=gx1-gx0, sw=gw/cols, fs=Math.min(sw*0.44,(ry1-ry0)/Math.max(rowsN,1)*0.56);
+    cx.textAlign='center'; cx.textBaseline='middle';
     for(var i=0;i<per;i++){ var f=figs[i]; if(f&&f.delay>0){f.delay-=dt;} var e=1; if(f){ if(f.delay<=0)f.pop=Math.min(1,f.pop+(reduce?1:dt*0.006)); e=f.delay>0?0:f.pop; }
       var c=i%cols, rw=Math.floor(i/cols), x=gx0+sw*(c+0.5), y=ry0+(ry1-ry0)*(rowsN<2?0.5:(rw+0.5)/rowsN);
-      var sel=i<cohN; cx.fillStyle=sel?GOLD:CYAN; cx.shadowColor=sel?'rgba(240,198,90,.6)':'rgba(34,211,238,.5)'; cx.shadowBlur=5*DPR;
-      person(x,y,fs*(0.6+0.4*e),e); cx.shadowBlur=0; }
+      var sel=f&&f.sel, sz=fs*(0.62+0.38*e), dr=sz*0.84;
+      if(f){ f.rx=x/DPR; f.ry=y/DPR; f.rr=dr/DPR; }
+      if(e<=0.02) continue;
+      cx.globalAlpha=e;
+      cx.beginPath(); cx.arc(x,y,dr,0,7);
+      if(sel){ cx.fillStyle=GOLD; cx.shadowColor='rgba(240,198,90,.55)'; cx.shadowBlur=5*DPR; cx.fill(); cx.shadowBlur=0; }
+      else { cx.fillStyle='rgba(34,211,238,.1)'; cx.fill(); cx.lineWidth=1.4*DPR; cx.strokeStyle='rgba(34,211,238,.55)'; cx.stroke(); }
+      cx.fillStyle=sel?'#12100a':'rgba(175,225,238,.92)'; cx.font='700 '+(dr*1.02)+'px '+MONO; cx.fillText(String(i+1),x,y+0.5*DPR);
+      cx.globalAlpha=1; }
+    cx.textBaseline='alphabetic';
   }
-  /* clickable checkpoints — expand on click, dismiss on click elsewhere */
+  /* stepper — the cohort only moves when you advance a stage */
+  function updateStepUI(){ var m=MILES[stageIdx];
+    $('fcStageName').textContent=m.tt+' · '+m.s;
+    $('fcStageYr').textContent='Stage '+(stageIdx+1)+' of '+MILES.length;
+    $('fcBack').disabled=stageIdx===0; $('fcNext').disabled=stageIdx===MILES.length-1;
+    var dots=document.querySelectorAll('.fc-progress i'); for(var k=0;k<dots.length;k++) dots[k].className=k<stageIdx?'done':(k===stageIdx?'on':''); }
+  function gotoStage(i){ stageIdx=Math.max(0,Math.min(MILES.length-1,i)); targetT=MILES[stageIdx].t; updateStepUI(); showPop(stageIdx); repaint(); }
+  $('fcNext').addEventListener('click',function(e){ e.stopPropagation(); if(stageIdx<MILES.length-1) gotoStage(stageIdx+1); });
+  $('fcBack').addEventListener('click',function(e){ e.stopPropagation(); if(stageIdx>0) gotoStage(stageIdx-1); });
+  /* clickable checkpoints + selectable roster */
   var pop=$('fcPop');
   var INFO=[
     {c:'#7fdbe8',h:'Start · Junior (Year 0)',b:'They join and begin training — levy-funded from day one, no upfront cost to you. Off-the-job learning runs alongside real work.'},
@@ -158,17 +209,21 @@
     {c:'#f0c65a',h:'Year 5 · Senior',b:'A further training block takes them junior → senior on ~5 years of contextual experience. You grew the senior instead of hiring one — retention, automated.'}
   ];
   function hitMile(cxp,cyp){ var W=cv.width,H=cv.height,hit=-1,best=1e9; MILES.forEach(function(m,i){ var p=pathPt(m.t,W,H),px=p.x/DPR,py=p.y/DPR,dd=Math.hypot(cxp-px,cyp-py); if(dd<18&&dd<best){best=dd;hit=i;} }); return hit; }
-  function showPop(i){ var W=cv.width,H=cv.height,p=pathPt(MILES[i].t,W,H),px=p.x/DPR,py=p.y/DPR,sw=cv.getBoundingClientRect().width;
+  function hitFig(cxp,cyp){ var hit=-1,best=1e9; for(var i=0;i<figs.length;i++){ var f=figs[i]; if(!f||f.rx==null)continue; var dd=Math.hypot(cxp-f.rx,cyp-f.ry); if(dd<(f.rr+7)&&dd<best){best=dd;hit=i;} } return hit; }
+  function showPop(i){ var p=pathPt(MILES[i].t,cv.width,cv.height),px=p.x/DPR,py=p.y/DPR,sw=cv.getBoundingClientRect().width;
     pop.innerHTML='<div class="ph" style="color:'+INFO[i].c+'">'+INFO[i].h+'</div><div class="pb">'+INFO[i].b+'</div>';
     pop.classList.add('on'); pop.dataset.i=i; var pw=pop.offsetWidth||220;
     pop.style.left=Math.max(6,Math.min(px-pw*0.12,sw-pw-6))+'px'; pop.style.top=(py+14)+'px'; }
-  cv.addEventListener('click',function(e){ var r=cv.getBoundingClientRect(),i=hitMile(e.clientX-r.left,e.clientY-r.top);
-    if(i>=0){ if(pop.classList.contains('on')&&+pop.dataset.i===i){ pop.classList.remove('on'); } else { showPop(i); } e.stopPropagation(); }
-    else pop.classList.remove('on'); });
-  cv.addEventListener('mousemove',function(e){ var r=cv.getBoundingClientRect(); cv.style.cursor=hitMile(e.clientX-r.left,e.clientY-r.top)>=0?'pointer':'default'; });
+  cv.addEventListener('click',function(e){ var r=cv.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top;
+    var mi=hitMile(mx,my);
+    if(mi>=0){ if(pop.classList.contains('on')&&+pop.dataset.i===mi){ pop.classList.remove('on'); } else { showPop(mi); } e.stopPropagation(); return; }
+    var fi=hitFig(mx,my);
+    if(fi>=0){ figs[fi].sel=!figs[fi].sel; syncCohort(); repaint(); e.stopPropagation(); return; }
+    pop.classList.remove('on'); });
+  cv.addEventListener('mousemove',function(e){ var r=cv.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top; cv.style.cursor=(hitMile(mx,my)>=0||hitFig(mx,my)>=0)?'pointer':'default'; });
   document.addEventListener('click',function(e){ if(!pop.contains(e.target)) pop.classList.remove('on'); });
 
-  fit(); addEventListener('resize',fit); refresh();
+  fit(); addEventListener('resize',function(){fit();repaint();}); refresh(); updateStepUI();
   if(reduce){ draw(16); }
   else { var last=performance.now();
     (function loop(n){ if(!document.body.contains(cv)) return; var dt=Math.min(48,n-last); last=n; draw(dt); requestAnimationFrame(loop); })(performance.now()); }

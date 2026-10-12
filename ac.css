@@ -67,6 +67,8 @@ img{max-width:100%}
 @media(max-width:640px){.ac-nav-in{padding:0 20px}}
 .ac-brand{display:flex;align-items:center;font-size:16px}
 .ac-brand .ac-wordmark{font-size:16px}
+.ac-brand-wm{height:34px;width:auto;display:block}
+.ac-brand-bird{height:36px;width:auto;display:none;filter:drop-shadow(0 4px 14px rgba(0,184,192,.3))}
 .ac-nav-links{position:static;display:flex;align-items:center;justify-content:flex-start;gap:26px;background:none;padding:0;margin:0;inset:auto;backdrop-filter:none;box-shadow:none}
 .ac-nav-links a{font-size:14px;color:var(--muted);font-weight:500;transition:color .2s}
 .ac-nav-links a:hover,.ac-nav-links a[aria-current="page"]{color:var(--ink)}
@@ -83,6 +85,10 @@ img{max-width:100%}
   .ac-nav-links a[aria-current="page"]::after{display:none}
   .ac-nav-cta{margin-top:12px;text-align:center;justify-content:center;border:1px solid var(--accent) !important}
   .ac-burger{display:inline-flex}
+  /* when small: the hummingbird becomes the brand, so swap it in and drop the floating one */
+  .ac-brand-wm{display:none}
+  .ac-brand-bird{display:block}
+  .ac-mascot{display:none}
 }
 
 /* ---------- sections ---------- */

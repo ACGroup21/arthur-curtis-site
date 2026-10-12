@@ -28,6 +28,9 @@
   .lnav-brand .fw{height:16px;width:auto;display:block}\
   .lnav-wm{font-weight:800;letter-spacing:.13em;font-size:15px;color:var(--ink);white-space:nowrap;display:inline-flex;align-items:baseline;gap:.45em}\
   .lnav-wm .ed{color:var(--cyan);font-weight:600;letter-spacing:.22em;font-size:.64em}\
+  .lnav-wm-img{height:30px;width:auto;display:block}\
+  .lnav-bird{height:32px;width:auto;display:none;filter:drop-shadow(0 4px 14px rgba(34,211,238,.3))}\
+  @media(max-width:560px){.lnav-wm-img{display:none}.lnav-bird{display:block}.ac-mascot{display:none}}\
   .lnav-right{display:flex;gap:8px}\
   .lnav-btn{font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--ink);border-radius:9px;padding:8px 13px;display:flex;align-items:center;gap:7px}\
   .lnav-btn:hover{border-color:var(--cyan);color:var(--cyan)}\
@@ -66,7 +69,7 @@
     head.classList.add('lnav'); head.innerHTML='';
 
     var brand=el('a','lnav-brand'); brand.href=SITE;
-    brand.innerHTML='<span class="lnav-wm">Arthur&nbsp;Curtis<span class="ed">Education</span></span>';
+    brand.innerHTML='<img class="lnav-wm-img" src="../assets/wordmark-white.svg" alt="Arthur Curtis Education"><img class="lnav-bird" src="../assets/hummingbird-white.png" alt="">';
     head.appendChild(brand);
 
     var right=el('div','lnav-right',

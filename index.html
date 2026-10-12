@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="ac.css?v=4">
+<link rel="stylesheet" href="ac.css?v=5">
 <style>
   :root{
     --navy:#0b1426;        /* deep brand navy */
@@ -583,7 +583,7 @@
 <script>
 /* ---------- NAV scroll ---------- */
 const nav=document.getElementById('nav');
-addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>30));
+if(nav) addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>30));
 
 /* ---------- reveal on scroll ---------- */
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')}),{threshold:.15});
@@ -795,7 +795,7 @@ const FS=[
 })();
 </script>
 <script>window.AC_PAGE='home';</script>
-<script src="ac-shell.js?v=4"></script>
+<script src="ac-shell.js?v=5"></script>
 <script src="comfort.js?v=3"></script>
 <script>
 (function(){
