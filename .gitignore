@@ -41,3 +41,13 @@ assets/concept-clean.svg
 
 # Hero backdrop exploration sandbox - kept local, not published
 hero-options.html
+
+# Direction-B / cohort / hero exploration sandboxes - kept local, not published
+home-b.html
+hero-dial.html
+cohort-visual-demos.html
+cohort-visual-integrated.html
+employers-pathfirst.html
+
+# Local dev tooling config - not published
+.claude/

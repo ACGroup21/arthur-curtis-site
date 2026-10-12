@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="lite.css?v=3">
+<link rel="stylesheet" href="lite.css?v=4">
 <link rel="icon" type="image/svg+xml" href="../assets/fundable-favicon.svg">
 </head>
 <body>
@@ -61,7 +61,7 @@
 
 <script src="engine.js?v=5"></script>
 <script src="spine.js?v=3"></script>
-<script src="nav.js?v=9"></script>
+<script src="nav.js?v=12"></script>
 <script src="../comfort.js?v=3"></script>
 <script>
   var $=function(id){return document.getElementById(id);};
@@ -77,7 +77,7 @@
   $('clockTitle').textContent=EM;
   $('subtitle').textContent='As of '+AC.RULES.expiryChanged+', new levy funds expire just '+EM+' months after they land — down from '+EMprev+'. Here\'s how much walks out the door each year if you don\'t spend it.';
   $('axisRight').textContent='← older · expiring at '+EM+' mo →';
-  $('foot').innerHTML='Indicative only. <span data-trace="levy.rate" data-label="The 0.5% levy rate">0.5%</span> of pay bill, less the <span data-trace="levy.allowance" data-label="The £15,000 allowance">£15,000</span> allowance, plus the <span data-trace="levy.topUp" data-label="The 10% government top-up">10%</span> government top-up. From '+AC.RULES.expiryChanged+' new levy funds expire <span data-trace="expiry.monthsFrom" data-label="The '+EM+'-month expiry clock">'+EM+'</span> months after they enter your apprenticeship service account, oldest first; funds banked before then keep the previous '+EMprev+'-month clock. Figures for guidance — <a href="https://acgroup21.github.io/arthur-curtis-site/" target="_blank" rel="noopener">talk to us</a> for a plan on your real numbers.';
+  $('foot').innerHTML='Indicative only. <span data-trace="levy.rate" data-label="The 0.5% levy rate">0.5%</span> of pay bill, less the <span data-trace="levy.allowance" data-label="The £15,000 allowance">£15,000</span> allowance. From'+AC.RULES.expiryChanged+' new levy funds expire <span data-trace="expiry.monthsFrom" data-label="The '+EM+'-month expiry clock">'+EM+'</span> months after they enter your apprenticeship service account, oldest first; funds banked before then keep the previous '+EMprev+'-month clock. Figures for guidance — <a href="https://acgroup21.github.io/arthur-curtis-site/" target="_blank" rel="noopener">talk to us</a> for a plan on your real numbers.';
 
   /* build the runway (EM months) once */
   var runway=$('runway'), segs=[];

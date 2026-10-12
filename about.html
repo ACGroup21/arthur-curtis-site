@@ -1,105 +1,85 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>About — Arthur Curtis</title>
-<meta name="description" content="Arthur Curtis is an independent, tooling-led levy and apprenticeship consultancy. Our north star is trust: a number you'd stake a budget on. Making people better.">
+<title>Arthur Curtis &mdash; About</title>
+<meta name="description" content="Why Arthur Curtis exists: turning the apprenticeship levy from a wasted tax into a system that builds people — planned, funded and proven.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=4">
-<link rel="icon" type="image/png" href="assets/favicon-hummingbird.png?v=3">
-</head>
-<body>
-<a class="skip-link" href="#main">Skip to content</a>
-<canvas id="bgCanvas"></canvas>
-<div class="grain"></div>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="ac.css?v=4">
+<style>
+  .hero{position:relative;overflow:hidden;padding-block:clamp(50px,8vw,92px) clamp(30px,5vw,50px)}
+  .hero::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+    background:radial-gradient(120% 90% at 80% 6%,rgba(0,184,192,.13),transparent 58%),radial-gradient(90% 80% at -6% 16%,rgba(47,125,156,.12),transparent 55%)}
+  .hero .ac-wrap{position:relative;z-index:1}
+  .hero h1{max-width:14ch;margin-top:20px}
+  .hero .ac-lead{margin-top:22px}
 
-<nav id="nav">
-  <a href="index.html"><img src="assets/ac-education-mark.svg" class="logo" alt="Arthur Curtis Education"></a>
-  <div class="links">
-    <a href="approach.html">Approach</a>
-    <a href="tools.html">Tools</a>
-    <a href="employers.html">For employers</a>
-    <a href="about.html">About</a>
-    <a href="methodology.html">Methodology</a>
-    <a class="btn btn-primary" href="contact.html">Book a call</a>
-  </div>
-</nav>
+  .prose{margin-top:20px;max-width:64ch}
+  .prose p{color:var(--muted);font-size:16.5px;line-height:1.65}
+  .prose p + p{margin-top:15px}
+  .prose b{color:var(--ink);font-weight:600}
+  .ph-tag{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--indigo);border:1px dashed var(--line-2);border-radius:20px;padding:2px 8px;display:inline-block;vertical-align:middle}
+  .draft-note{margin-top:16px;border:1px dashed var(--line-2);border-radius:var(--r);padding:18px 20px;color:var(--muted-2);font-size:14.5px;line-height:1.6;background:rgba(47,125,156,.05)}
+  .draft-note b{color:var(--muted)}
 
-<main id="main" tabindex="-1">
+  .team{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:34px}
+  @media(max-width:760px){.team{grid-template-columns:1fr}}
+  .member{border:1px solid var(--line);border-radius:var(--r);padding:22px;background:var(--surface-2)}
+  .member .av{width:64px;height:64px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-weight:600;font-size:20px;color:var(--accent);background:linear-gradient(140deg,rgba(0,184,192,.16),rgba(47,125,156,.1));border:1px solid rgba(0,184,192,.24)}
+  .member h3{font-size:18px;font-weight:700;margin:16px 0 0}
+  .member .role{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin-top:4px}
+  .member p{color:var(--muted);font-size:13.5px;margin-top:10px;line-height:1.55}
 
-<header class="page-hero">
-  <div class="wrap">
-    <span class="eyebrow"><span class="dot"></span>About</span>
-    <h1>Making people <span class="grad">better.</span></h1>
-    <p class="sub">Arthur Curtis is an independent, tooling-led levy and apprenticeship consultancy. We exist to make one of the most misunderstood budgets in British business actually work.</p>
-  </div>
-</header>
+  .values{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:30px}
+  @media(max-width:760px){.values{grid-template-columns:1fr}}
+  .v{border:1px solid var(--line);border-radius:var(--r);padding:20px;background:var(--surface-2)}
+  .v h3{font-size:16px;font-weight:700;margin:0}
+  .v p{color:var(--muted);font-size:14px;margin-top:7px;line-height:1.5}
+</style>
 
-<section class="block">
-  <div class="wrap">
-    <div class="reveal">
-      <div class="kicker">Why we exist</div>
-      <h2 class="h2">The levy is a good idea, badly used.</h2>
+<main>
+  <section class="hero">
+    <div class="ac-wrap">
+      <span class="ac-eyebrow">About Arthur Curtis</span>
+      <h1 class="ac-h1">Making people <span class="ac-grad">better.</span></h1>
+      <p class="ac-lead">We take education and workforce development into the future &mdash; turning the apprenticeship levy from a tax most employers waste into a system that builds people, planned and proven.</p>
+    </div>
+  </section>
+
+  <section class="ac-section">
+    <div class="ac-wrap">
+      <span class="ac-eyebrow">Our story</span>
+      <h2 class="ac-h2 ac-section-t">Why we exist.</h2>
       <div class="prose">
-        <p>Every large employer in the country pays the apprenticeship levy. Most let a meaningful chunk of it expire — not through carelessness, but because the rules are dense and the advice on offer usually comes from someone with training to sell.</p>
-        <p>We started Arthur Curtis to fix that from the other side: <b>independent, and led by tools instead of slides.</b> If we tell you your levy funds fourteen apprentices, you can check it yourself in the same calculator we used. The recommendation and the proof live in the same place.</p>
-        <p>The name on the door is a promise about standards. The work behind it is software — and the discipline to only ever show you a number we'd stake our own name on.</p>
+        <p>Every levy-paying employer contributes to developing the workforce. Most of it expires unspent &mdash; not for lack of will, but for lack of a clear, trustworthy way to turn funding into a plan.</p>
+        <p>Arthur Curtis closes that gap: real, working tools that show you exactly what your levy can build, and a development model &mdash; <b>the 2-5 Model</b> &mdash; that turns training into retention.</p>
+      </div>
+      <div class="draft-note"><span class="ph-tag" style="margin-right:9px">draft</span>Arthur Curtis grew out of a simple frustration: the funding to develop people was already there, but no clear, trustworthy way to turn it into a plan. So we built one &mdash; honest tools that show their working, and a development model that turns training into retention. <span style="color:var(--muted-2)">&mdash; the founder&rsquo;s own story replaces this draft.</span></div>
+    </div>
+  </section>
+
+  <section class="ac-section">
+    <div class="ac-wrap">
+      <span class="ac-eyebrow">The team</span>
+      <h2 class="ac-h2 ac-section-t">Who&rsquo;s behind it. <span class="ph-tag">bios &middot; draft</span></h2>
+      <div class="team">
+        <div class="member"><div class="av">OH</div><h3>Omari Harry</h3><div class="role">Founder</div><p>Sets the vision and leads the mission behind Arthur Curtis &mdash; taking education and workforce development into the future.</p></div>
+        <div class="member"><div class="av">AO</div><h3>Amanda Ogede</h3><div class="role">Commercial Partner</div><p>Leads commercial strategy and partnerships &mdash; turning the model into relationships that last.</p></div>
+        <div class="member"><div class="av">BD</div><h3>Bisi Daramola</h3><div class="role">Marketing Partner</div><p>Leads marketing and brand &mdash; telling the Arthur Curtis story and getting the tools to the people who need them.</p></div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section class="block">
-  <div class="wrap">
-    <div class="reveal">
-      <div class="kicker">What we believe</div>
-      <h2 class="h2">Trust is the whole product.</h2>
-    </div>
-    <ul class="checks reveal">
-      <li><span class="ck">✓</span><span class="t"><b>Independence over incentive.</b> We don't deliver training, so we've no reason to point you anywhere but the right answer.</span></li>
-      <li><span class="ck">✓</span><span class="t"><b>Show the working.</b> Every figure traces back to gov.uk or a dated funding rulebook. If we can't source it, we don't say it. <a href="methodology.html" style="color:var(--cyan)">See how →</a></span></li>
-      <li><span class="ck">✓</span><span class="t"><b>Tools before talk.</b> We'd rather hand you working software than a presentation about it.</span></li>
-      <li><span class="ck">✓</span><span class="t"><b>People, not headcount.</b> The goal is careers and capability that outlast the funding — "making people better" is the brief, not a tagline.</span></li>
-    </ul>
-  </div>
-</section>
-
-<section class="block">
-  <div class="wrap">
-    <div class="reveal">
-      <div class="kicker">How we work with you</div>
-      <h2 class="h2">Independent by design.</h2>
-      <div class="prose">
-        <p>We sit on your side of the table. That means we plan the spend, engineer the funding, and prove the outcome — then help you choose and hold providers to account, rather than being one.</p>
-        <p>It's a deliberately smaller promise than "we'll do everything," and a more honest one. The result is a levy strategy your finance director and your HR director can both put their name to.</p>
+  <section class="ac-section">
+    <div class="ac-wrap">
+      <span class="ac-eyebrow">What we stand for</span>
+      <h2 class="ac-h2 ac-section-t">The non-negotiables.</h2>
+      <div class="values">
+        <div class="v"><h3>Trust is the north star</h3><p>Every number traces to its source and its date. If a rule moves, we say so. Guidance you can stake a plan on.</p></div>
+        <div class="v"><h3>Show the working</h3><p>No black box. We show how each figure is built &mdash; so you can defend it, not just trust it.</p></div>
+        <div class="v"><h3>Build people, not just plans</h3><p>The point isn&rsquo;t a report. It&rsquo;s a workforce that grows &mdash; and stays.</p></div>
       </div>
     </div>
-  </div>
-</section>
-
-<section class="cta-band">
-  <div class="wrap">
-    <h2>Let's make your levy mean something.</h2>
-    <p>Start with a two-minute answer, or a proper conversation. Either works.</p>
-    <a class="btn btn-primary btn-lg" href="contact.html">Get in touch →</a>
-  </div>
-</section>
-
+  </section>
 </main>
 
-<footer>
-  <div class="wrap row">
-    <div class="foot-brands"><img src="assets/viral-white-accent.png?v=1" alt="viral by arthur curtis" width="505" height="160" loading="lazy" decoding="async" style="height:36px;width:auto;opacity:1"><span class="foot-by"><img class="acd-mark" src="assets/ac-a-logo-white.svg" alt="AC Digital"><span class="acd-txt">Built&nbsp;by <strong>AC&nbsp;<span class="acd-blue">Digital</span></strong></span></span></div>
-    <span>© 2026 Arthur Curtis · Making people better</span>
-    <span><a href="contact.html">hello@arthurcurtis.com</a> · <a href="https://www.linkedin.com/company/arthur-curtis-education/" target="_blank" rel="noopener">LinkedIn</a></span>
-  </div>
-</footer>
-
-<script src="site.js"></script>
-<script src="mobilenav.js?v=1"></script>
-<script src="comfort.js?v=3"></script>
-</body>
-</html>
+<script>window.AC_PAGE='about';</script>
+<script src="ac-shell.js?v=4"></script>

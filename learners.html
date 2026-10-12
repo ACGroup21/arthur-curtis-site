@@ -1,0 +1,239 @@
+<title>Arthur Curtis &mdash; For learners</title>
+<meta name="description" content="Real work, real training, no debt. Understand how apprenticeships work, where they lead — the 2-5 pathway to senior — and join our talent pool.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="ac.css?v=4">
+<style>
+  /* learner lane = gold accent */
+  .ac-eyebrow{color:var(--gold)}
+  .ac-eyebrow::before{background:var(--gold)}
+
+  .hero{position:relative;overflow:hidden;padding-block:clamp(50px,8vw,92px) clamp(36px,6vw,64px)}
+  .hero::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+    background:radial-gradient(120% 90% at 74% 16%,rgba(240,198,90,.12),transparent 55%),radial-gradient(90% 80% at 10% 92%,rgba(0,184,192,.12),transparent 60%)}
+  .hero .ac-wrap{position:relative;z-index:1}
+  .hero h1{max-width:15ch;margin-top:20px}
+  .hero h1 .g{background:linear-gradient(100deg,#ffe6a6,#fff 46%,#f0c65a);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero .ac-lead{margin-top:22px}
+  .hero .cta{display:flex;gap:14px;flex-wrap:wrap;margin-top:32px}
+  .ac-btn-gold{color:#2a2005;background:linear-gradient(100deg,#f0c65a,#ffe6a6);box-shadow:0 0 0 1px rgba(240,198,90,.36),0 14px 40px -14px rgba(240,198,90,.5)}
+  .ac-btn-gold:hover{transform:translateY(-1px);box-shadow:0 0 0 1px rgba(240,198,90,.5),0 18px 50px -12px rgba(240,198,90,.6)}
+
+  /* what-is cards */
+  .whatis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:34px}
+  @media(max-width:860px){.whatis{grid-template-columns:1fr 1fr}}
+  @media(max-width:480px){.whatis{grid-template-columns:1fr}}
+  .wi{border:1px solid var(--line);border-radius:var(--r);padding:22px;background:var(--surface-2)}
+  .wi .ic{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;background:rgba(240,198,90,.1);border:1px solid rgba(240,198,90,.28);margin-bottom:14px}
+  .wi .ic svg{width:20px;height:20px;stroke:var(--gold);fill:none;stroke-width:1.6}
+  .wi h3{font-size:16px;font-weight:700;margin:0}
+  .wi p{color:var(--muted);font-size:13.5px;line-height:1.55;margin:7px 0 0}
+
+  /* pathway timeline */
+  .pathway{margin-top:34px;border:1px solid var(--line);border-radius:var(--r);background:radial-gradient(120% 100% at 50% 0%,rgba(30,26,10,.4),var(--surface-2));padding:30px 26px}
+  .track{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative;margin-top:8px}
+  .track::before{content:"";position:absolute;left:6%;right:6%;top:11px;height:2px;background:linear-gradient(90deg,var(--indigo),var(--accent),var(--gold));border-radius:2px}
+  @media(max-width:680px){.track{grid-template-columns:1fr;gap:20px}.track::before{left:11px;right:auto;top:6%;bottom:6%;width:2px;height:auto}}
+  .mile{position:relative;padding-top:34px;text-align:center}
+  @media(max-width:680px){.mile{padding-top:0;padding-left:34px;text-align:left}}
+  .mile .dot{position:absolute;top:2px;left:50%;transform:translateX(-50%);width:20px;height:20px;border-radius:50%;background:var(--accent);border:3px solid var(--ground);box-shadow:0 0 12px rgba(0,184,192,.5)}
+  @media(max-width:680px){.mile .dot{left:1px;transform:none}}
+  .mile.last .dot{background:var(--gold);box-shadow:0 0 14px rgba(240,198,90,.6)}
+  .mile .yr{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);font-weight:600}
+  .mile .st{font-size:16px;font-weight:700;margin-top:4px}
+  .mile .d{font-size:12.5px;color:var(--muted);margin-top:5px;line-height:1.5;max-width:22ch;margin-inline:auto}
+  @media(max-width:680px){.mile .d{margin-inline:0;max-width:none}}
+  .pathway .thesis{margin-top:26px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:14.5px;line-height:1.6;max-width:70ch}
+  .pathway .thesis b{color:var(--ink)}
+
+  /* how-to steps */
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:34px}
+  @media(max-width:760px){.steps{grid-template-columns:1fr}}
+  .hstep{border:1px solid var(--line);border-radius:var(--r);padding:22px;background:var(--surface-2)}
+  .hstep .n{font-family:var(--mono);font-weight:600;font-size:14px;color:var(--gold);width:34px;height:34px;border:1px solid rgba(240,198,90,.4);border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+  .hstep h3{font-size:16px;font-weight:700;margin:0}
+  .hstep p{color:var(--muted);font-size:13.5px;line-height:1.55;margin:7px 0 0}
+  .hstep a{color:var(--accent);font-weight:600}
+
+  /* talent-pool form */
+  .join{border:1px solid rgba(240,198,90,.28);border-radius:var(--r);background:linear-gradient(160deg,rgba(240,198,90,.06),rgba(0,184,192,.03));padding:clamp(24px,4vw,40px);margin-top:12px}
+  .join .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:22px}
+  @media(max-width:620px){.join .grid{grid-template-columns:1fr}}
+  .fld{display:flex;flex-direction:column;gap:7px}
+  .fld.wide{grid-column:1/-1}
+  .fld label{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-2)}
+  .fld label .req{color:var(--gold)}
+  .fld input,.fld select,.fld textarea{font-family:var(--sans);font-size:15px;color:var(--ink);background:rgba(4,7,15,.5);border:1px solid var(--line-2);border-radius:10px;padding:12px 14px;outline:none;transition:border-color .2s}
+  .fld input:focus,.fld select:focus,.fld textarea:focus{border-color:var(--gold)}
+  .fld textarea{resize:vertical;min-height:78px}
+  .join .actions{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:22px}
+  .join .note{font-size:12px;color:var(--muted-2);line-height:1.5}
+  .join .note a{color:var(--accent)}
+  .ok{display:none;border:1px solid rgba(87,209,166,.35);background:rgba(87,209,166,.08);border-radius:12px;padding:18px 20px;margin-top:8px;color:#bfeeda;font-size:14.5px;line-height:1.6}
+  .ok.on{display:block}
+  .ok b{color:#fff}
+
+  .close{text-align:center;padding-block:clamp(56px,8vw,92px);border-bottom:none}
+  .close h2{margin:0 auto;max-width:20ch}
+  .close .ac-lead{margin:16px auto 0;text-align:center}
+</style>
+
+<main>
+  <section class="hero">
+    <div class="ac-wrap">
+      <span class="ac-eyebrow">For learners</span>
+      <h1 class="ac-h1">Build a career, <span class="g">funded.</span></h1>
+      <p class="ac-lead">Real work, real training, and <b>no tuition debt</b>. An apprenticeship is a proper job with a qualification built in &mdash; here&rsquo;s how it works, where it can take you, and how to get on our radar.</p>
+      <div class="cta">
+        <a class="ac-btn ac-btn-gold" href="#join">Join the talent pool &rarr;</a>
+        <a class="ac-btn ac-btn-ghost" href="#pathway">See where it leads</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ac-section">
+    <div class="ac-wrap">
+      <span class="ac-eyebrow">The basics</span>
+      <h2 class="ac-h2 ac-section-t">What an apprenticeship actually is.</h2>
+      <div class="whatis">
+        <div class="wi">
+          <div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3v4M12 17v4M3 12h4M17 12h4"/><circle cx="12" cy="12" r="4"/></svg></div>
+          <h3>You earn while you learn</h3><p>A paid job from day one. You&rsquo;re an employee, not a student &mdash; with a wage, holiday and a team.</p>
+        </div>
+        <div class="wi">
+          <div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5z"/><path d="M6 10v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/></svg></div>
+          <h3>A real qualification</h3><p>You train to a national standard and finish with a recognised qualification &mdash; the same one across every employer.</p>
+        </div>
+        <div class="wi">
+          <div class="ic"><svg viewBox="0 0 24 24"><path d="M4 7h16v12H4z"/><path d="M9 7V5a3 3 0 0 1 6 0v2M4 12h16"/></svg></div>
+          <h3>No tuition debt</h3><p>The training is funded &mdash; through the apprenticeship levy employers pay, and government funding. You don&rsquo;t pay for it.</p>
+        </div>
+        <div class="wi">
+          <div class="ic"><svg viewBox="0 0 24 24"><path d="M3 12h4l2-6 4 12 2-6h6"/></svg></div>
+          <h3>Time set aside to learn</h3><p>Part of every week is protected off-the-job training &mdash; so you&rsquo;re building skills, not just doing the work.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ac-section" id="pathway">
+    <div class="ac-wrap">
+      <span class="ac-eyebrow">Our Way &middot; the 2-5 pathway</span>
+      <h2 class="ac-h2 ac-section-t">Where an apprenticeship can take you.</h2>
+      <p class="ac-lead" style="margin-top:14px">We don&rsquo;t see an apprenticeship as a one-off course. It&rsquo;s the first leg of a route from junior to senior &mdash; funded the whole way.</p>
+      <div class="pathway">
+        <div class="track">
+          <div class="mile"><span class="dot"></span><div class="yr">Start &middot; Year 0</div><div class="st">Junior</div><div class="d">You join and begin training alongside real work.</div></div>
+          <div class="mile"><span class="dot"></span><div class="yr">Year 2</div><div class="st">Competent</div><div class="d">Trained to the standard and working independently.</div></div>
+          <div class="mile"><span class="dot"></span><div class="yr">Year 3</div><div class="st">Applying</div><div class="d">Embedding the skills, taking on more, mentoring newer starters.</div></div>
+          <div class="mile last"><span class="dot"></span><div class="yr">Year 5</div><div class="st">Senior</div><div class="d">A further funded block takes you junior &rarr; senior.</div></div>
+        </div>
+        <p class="thesis">Competent by year two, senior by year five &mdash; on around five years of real, on-the-job experience. It&rsquo;s a <b>career built by doing</b>, and it&rsquo;s how good employers grow their own seniors instead of hiring them in. <a href="ourway.html" style="color:var(--gold);font-weight:600">More on Our Way &rarr;</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="ac-section">
+    <div class="ac-wrap">
+      <span class="ac-eyebrow">Getting started</span>
+      <h2 class="ac-h2 ac-section-t">Three ways to take the first step.</h2>
+      <div class="steps">
+        <div class="hstep">
+          <div class="n">1</div>
+          <h3>Find what fits you</h3><p>Apprenticeships run from entry level to degree level, across almost every sector. Work out the kind of role and level that suits where you are.</p>
+        </div>
+        <div class="hstep">
+          <div class="n">2</div>
+          <h3>Look for vacancies</h3><p>Search live openings on the government&rsquo;s <a href="https://www.gov.uk/apply-apprenticeship" target="_blank" rel="noopener">Find an apprenticeship</a> service, and check employers you&rsquo;d like to work for.</p>
+        </div>
+        <div class="hstep">
+          <div class="n">3</div>
+          <h3>Get on our radar</h3><p>Join our talent pool below. When we&rsquo;re helping an employer build a cohort in your area, we&rsquo;ll know you&rsquo;re looking.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ac-section" id="join">
+    <div class="ac-wrap">
+      <span class="ac-eyebrow">Join the talent pool</span>
+      <h2 class="ac-h2 ac-section-t">Tell us what you&rsquo;re after.</h2>
+      <p class="ac-lead" style="margin-top:14px">No account, no CV needed yet &mdash; just enough for us to match you to the right opportunities. It takes a minute.</p>
+      <div class="join">
+        <form id="poolForm" novalidate>
+          <div class="grid">
+            <div class="fld"><label for="tp-name">Your name <span class="req">*</span></label><input id="tp-name" name="name" type="text" autocomplete="name" required></div>
+            <div class="fld"><label for="tp-email">Email <span class="req">*</span></label><input id="tp-email" name="email" type="email" autocomplete="email" required></div>
+            <div class="fld"><label for="tp-area">Area you&rsquo;re interested in</label><input id="tp-area" name="area" type="text" placeholder="e.g. business admin, digital, engineering"></div>
+            <div class="fld"><label for="tp-stage">Where are you now?</label>
+              <select id="tp-stage" name="stage">
+                <option value="">Choose one&hellip;</option>
+                <option>School / college leaver</option>
+                <option>In work, want to retrain</option>
+                <option>Returning to work</option>
+                <option>Not sure yet</option>
+              </select>
+            </div>
+            <div class="fld"><label for="tp-region">Where are you based?</label><input id="tp-region" name="region" type="text" placeholder="Town or region"></div>
+            <div class="fld"><label for="tp-age">Age range (optional)</label>
+              <select id="tp-age" name="age">
+                <option value="">Prefer not to say</option>
+                <option>16&ndash;18</option><option>19&ndash;24</option><option>25+</option>
+              </select>
+            </div>
+            <div class="fld wide"><label for="tp-note">Anything else?</label><textarea id="tp-note" name="note" placeholder="A line about what you&rsquo;re looking for."></textarea></div>
+          </div>
+          <div class="actions">
+            <button type="submit" class="ac-btn ac-btn-gold">Join the pool &rarr;</button>
+            <p class="note">Submitting opens your email app with the details ready to send to us. Prefer to write directly? <a href="mailto:hello@arthurcurtis.com">hello@arthurcurtis.com</a></p>
+          </div>
+        </form>
+        <div class="ok" id="poolOk"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="close">
+    <div class="ac-wrap">
+      <span class="ac-eyebrow" style="justify-content:center">One clear route</span>
+      <h2 class="ac-h2 ac-section-t">A job, a qualification, and somewhere to go next.</h2>
+      <p class="ac-lead">That&rsquo;s what an apprenticeship should be. We help make sure it is.</p>
+    </div>
+  </section>
+</main>
+
+<script>
+(function(){
+  var form=document.getElementById('poolForm'), ok=document.getElementById('poolOk');
+  if(!form) return;
+  function val(id){ var el=document.getElementById(id); return el?el.value.trim():''; }
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var name=val('tp-name'), email=val('tp-email');
+    [['tp-name',name],['tp-email',email]].forEach(function(p){
+      var el=document.getElementById(p[0]); if(el) el.style.borderColor = p[1] ? '' : 'var(--bad)';
+    });
+    var emailOk=/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email);
+    if(!name || !emailOk){ if(!emailOk){var ee=document.getElementById('tp-email'); if(ee) ee.style.borderColor='var(--bad)';} return; }
+    var lines=[
+      'Name: '+name,
+      'Email: '+email,
+      'Area of interest: '+(val('tp-area')||'-'),
+      'Where they are now: '+(val('tp-stage')||'-'),
+      'Based: '+(val('tp-region')||'-'),
+      'Age range: '+(val('tp-age')||'-'),
+      'Note: '+(val('tp-note')||'-')
+    ];
+    var subject='Talent pool - '+name;
+    var body='I\'d like to join the Arthur Curtis talent pool.\n\n'+lines.join('\n');
+    var mailto='mailto:hello@arthurcurtis.com?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
+    ok.innerHTML='<b>Nearly there.</b> Your email app should now be opening with your details ready to send to <b>hello@arthurcurtis.com</b> &mdash; just hit send and you&rsquo;re in the pool. If nothing opened, copy the details below into an email to us:<br><br><span style="font-family:var(--mono);font-size:12.5px;color:var(--muted);white-space:pre-wrap">'+lines.join('\n')+'</span>';
+    ok.classList.add('on');
+    try{ window.location.href=mailto; }catch(err){}
+    ok.scrollIntoView({behavior:'smooth',block:'center'});
+  });
+})();
+</script>
+<script>window.AC_PAGE='learners';</script>
+<script src="ac-shell.js?v=4"></script>

@@ -34,7 +34,7 @@ window.AC = (function(){
     hiringPaymentFrom: '1 October 2026',
     careLeaverBursary: 3000,  // paid to the APPRENTICE (care leaver, under 25), NOT the employer
     learningSupportMonthly: 150,
-    verifiedOn: '26 August 2026'  // gov.uk verification date — shown in-app for trust
+    verifiedOn: '7 October 2026'  // gov.uk verification date — shown in-app for trust
   };
 
   function levy(payBill){
@@ -93,10 +93,15 @@ window.AC = (function(){
       src:'https://www.gov.uk/employing-an-apprentice/get-funding' });
 
     var hire = (!c.levyPayer) && age1624 && !!c.newHire;
-    out.push({ key:'hire2000', name:'£2,000 hiring payment', who:'employer', kind:'oneoff', from:RULES.hiringPaymentFrom,
+    /* Live since 1 Oct 2026 (verified gov.uk 7 Oct 2026). The "(from …)" tag only
+       shows before the start date. Paid as 2 × £1,000: 90 days and 1 year in,
+       each only if the apprentice is still employed then. */
+    var hireLive = new Date() >= new Date(2026, 9, 1);
+    out.push({ key:'hire2000', name:'£2,000 hiring payment', who:'employer', kind:'oneoff',
+      from: hireLive ? null : RULES.hiringPaymentFrom,
       eligible: hire, value: hire ? RULES.hiringPayment : 0,
-      cond:'Non-levy employer, NEW apprentice 16–24, start on/after 1 Oct 2026.',
-      src:'https://www.gov.uk/government/news/new-apprenticeship-funding-to-transform-investment-in-skills' });
+      cond:'Non-levy employer, NEW apprentice 16–24 (not employed by you for more than 90 days before), practical period starting on/after 1 Oct 2026, on the PAYE scheme in your apprenticeship service account. Paid as 2 × £1,000 — at 90 days and at 1 year, if they are still employed.',
+      src:'https://www.gov.uk/employing-an-apprentice/get-funding' });
 
     /* Funding rules 2026-27 r.214: for starts from 1 Aug 2026 the government funds
        the whole band for ANY apprentice aged 16-24 at the start - non-levy (214.1)

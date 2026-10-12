@@ -1,0 +1,123 @@
+/* ============================================================
+   AC — the one design system (Deep identity)
+   Tokens + base + components. Every page links this.
+   Identity = the wordmark. Dark-committed. No splash.
+   ============================================================ */
+:root{
+  color-scheme: dark;
+  /* ground + surfaces */
+  --ground:#04070f; --surface:#0b1426; --surface-2:#0a1120; --raise:#101c33;
+  /* ink */
+  --ink:#eef4fc; --muted:#9fb1ca; --muted-2:#6b7c98;
+  /* brand */
+  --accent:#00B8C0; --accent-2:#5fe0e6; --energy:#009ba3; --indigo:#2f7d9c;
+  --gold:#f0c65a; --acd-blue:#3B9EFF;
+  /* semantic */
+  --good:#57d1a6; --warn:#f0b45e; --bad:#f07a90;
+  /* lines */
+  --line:rgba(120,160,220,.14); --line-2:rgba(120,160,220,.26);
+  /* type */
+  --sans:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,'SFMono-Regular',monospace;
+  /* shape */
+  --r:16px; --r-sm:10px; --r-pill:32px;
+  --shadow:0 30px 80px -34px rgba(0,0,0,.8);
+  --nav-h:66px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+img{max-width:100%}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+.ac-wrap{max-width:1160px;margin:0 auto;padding-inline:40px}
+@media(max-width:640px){.ac-wrap{padding-inline:20px}}
+.ac-mono{font-family:var(--mono)}
+
+/* eyebrow */
+.ac-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);display:inline-flex;align-items:center;gap:10px}
+.ac-eyebrow::before{content:"";width:22px;height:1px;background:var(--accent)}
+
+/* headings */
+.ac-h1{font-size:clamp(30px,5vw,58px);font-weight:800;letter-spacing:-.03em;line-height:1.0;margin:0;text-wrap:balance}
+.ac-h2{font-size:clamp(24px,3.2vw,36px);font-weight:800;letter-spacing:-.02em;margin:0;text-wrap:balance}
+.ac-h3{font-size:19px;font-weight:700;letter-spacing:-.01em;margin:0}
+.ac-lead{color:var(--muted);font-size:clamp(15px,1.7vw,18px);line-height:1.6;max-width:56ch}
+.ac-lead b{color:var(--ink);font-weight:600}
+.ac-grad{background:linear-gradient(100deg,#7fe6ea,#fff 46%,#2fb8c2);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+/* ---------- wordmark (the identity) ---------- */
+.ac-wordmark{font-weight:800;letter-spacing:.14em;line-height:1;display:inline-flex;align-items:baseline;gap:.5em;white-space:nowrap;color:var(--ink)}
+.ac-wordmark .ed{color:var(--accent);font-weight:600;letter-spacing:.24em;font-size:.66em}
+.ac-wordmark--stack{flex-direction:column;align-items:flex-start;gap:.42em;letter-spacing:.16em}
+.ac-wordmark--stack .ed{font-size:.5em}
+
+/* ---------- buttons ---------- */
+.ac-btn{font-family:var(--sans);font-weight:600;font-size:15px;cursor:pointer;border:none;border-radius:var(--r-pill);padding:13px 22px;display:inline-flex;align-items:center;gap:9px;transition:transform .35s cubic-bezier(.34,1.4,.6,1),box-shadow .3s,border-color .2s;text-decoration:none}
+.ac-btn:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.ac-btn-primary{color:#04141c;background:linear-gradient(100deg,var(--accent),var(--accent-2));box-shadow:0 0 0 1px rgba(0,184,192,.36),0 14px 40px -14px rgba(0,184,192,.6)}
+.ac-btn-primary:hover{box-shadow:0 0 0 1px rgba(0,184,192,.5),0 18px 50px -12px rgba(0,184,192,.7);transform:translateY(-1px)}
+.ac-btn-ghost{color:var(--ink);background:rgba(8,16,32,.5);border:1px solid var(--line-2)}
+.ac-btn-ghost:hover{border-color:var(--accent)}
+
+/* ---------- nav (injected by ac-shell.js) ---------- */
+.ac-nav{position:sticky;top:0;z-index:50;background:rgba(4,7,15,.72);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.ac-nav-in{max-width:1160px;margin:0 auto;padding:0 40px;height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;gap:20px}
+@media(max-width:640px){.ac-nav-in{padding:0 20px}}
+.ac-brand{display:flex;align-items:center;font-size:16px}
+.ac-brand .ac-wordmark{font-size:16px}
+.ac-nav-links{position:static;display:flex;align-items:center;justify-content:flex-start;gap:26px;background:none;padding:0;margin:0;inset:auto;backdrop-filter:none;box-shadow:none}
+.ac-nav-links a{font-size:14px;color:var(--muted);font-weight:500;transition:color .2s}
+.ac-nav-links a:hover,.ac-nav-links a[aria-current="page"]{color:var(--ink)}
+.ac-nav-links a[aria-current="page"]{position:relative}
+.ac-nav-links a[aria-current="page"]::after{content:"";position:absolute;left:0;right:0;bottom:-6px;height:2px;background:var(--accent);border-radius:2px}
+.ac-nav-cta{border:1px solid var(--line-2);border-radius:var(--r-pill);padding:9px 17px !important;color:var(--ink) !important;font-weight:600 !important;font-size:13.5px !important}
+.ac-nav-cta:hover{border-color:var(--accent);box-shadow:0 0 22px rgba(0,184,192,.22)}
+.ac-burger{display:none;background:none;border:1px solid var(--line-2);border-radius:9px;width:40px;height:38px;cursor:pointer;align-items:center;justify-content:center;color:var(--ink)}
+.ac-burger svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8}
+@media(max-width:820px){
+  .ac-nav-links{position:fixed;top:var(--nav-h);left:0;right:0;flex-direction:column;align-items:stretch;gap:0;background:rgba(6,11,24,.98);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding:8px 20px 18px;transform:translateY(-8px);opacity:0;pointer-events:none;transition:.22s}
+  .ac-nav-links.open{transform:none;opacity:1;pointer-events:auto}
+  .ac-nav-links a{padding:13px 4px;font-size:16px;border-bottom:1px solid var(--line)}
+  .ac-nav-links a[aria-current="page"]::after{display:none}
+  .ac-nav-cta{margin-top:12px;text-align:center;justify-content:center;border:1px solid var(--accent) !important}
+  .ac-burger{display:inline-flex}
+}
+
+/* ---------- sections ---------- */
+.ac-section{padding-block:78px;border-bottom:1px solid var(--line);position:relative}
+.ac-section-t{margin-top:14px}
+
+/* ---------- cards / feature ---------- */
+.ac-card{border:1px solid var(--line);border-radius:var(--r);padding:24px;background:var(--surface-2);transition:transform .3s,border-color .3s}
+.ac-card:hover{transform:translateY(-4px);border-color:rgba(0,184,192,.35)}
+.ac-chip{font-family:var(--mono);font-size:11px;letter-spacing:.02em;color:var(--muted);background:rgba(120,160,220,.06);border:1px solid var(--line);border-radius:var(--r-pill);padding:4px 11px;display:inline-block}
+.ac-chip b{color:var(--accent)}
+
+/* ---------- footer (injected by ac-shell.js) ---------- */
+.ac-foot{border-top:1px solid var(--line);padding-block:34px 40px;color:var(--muted-2);position:relative;z-index:2}
+.ac-foot-in{max-width:1160px;margin:0 auto;padding:0 40px;display:flex;justify-content:space-between;gap:22px;flex-wrap:wrap;align-items:center;font-size:13px}
+@media(max-width:640px){.ac-foot-in{padding:0 20px}}
+.ac-foot .ac-wordmark{font-size:14px}
+.ac-foot-links{position:static;max-width:1160px;margin:0 auto;padding:0 40px 22px;display:flex;flex-wrap:wrap;gap:9px 20px;background:none;backdrop-filter:none}
+.ac-foot-links a{font-size:13px;color:var(--muted);font-weight:500}
+.ac-foot-links a:hover{color:var(--accent)}
+@media(max-width:640px){.ac-foot-links{padding:0 20px 20px}}
+.ac-credit{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:9px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted-2)}
+.ac-credit b{color:#fff;font-weight:600;letter-spacing:.07em}
+.ac-credit .blue{color:var(--acd-blue)}
+.ac-credit .acd{width:15px;height:16px;flex:none}
+
+/* hummingbird mascot — the brand creature, bottom corner */
+.ac-mascot{position:fixed;right:18px;bottom:16px;z-index:36;width:clamp(46px,5.2vw,64px);line-height:0;opacity:.92;transition:transform .45s cubic-bezier(.2,.7,.2,1),opacity .3s;animation:acFloat 4.8s ease-in-out infinite}
+.ac-mascot img{width:100%;display:block;filter:drop-shadow(0 7px 20px rgba(0,184,192,.28))}
+.ac-mascot:hover{opacity:1;transform:translateY(-4px) scale(1.05)}
+.ac-mascot:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:8px}
+@keyframes acFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@media(prefers-reduced-motion:reduce){.ac-mascot{animation:none}}
+@media(max-width:600px){.ac-mascot{right:12px;bottom:12px;width:42px}}
+
+/* utility */
+.ac-rule{height:1px;background:linear-gradient(90deg,transparent,var(--energy),var(--indigo),transparent);opacity:.55;border:0}
+[hidden]{display:none !important}

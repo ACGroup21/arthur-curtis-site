@@ -8,19 +8,20 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="ac.css?v=4">
 <style>
   :root{
-    --navy:#0B1B3A;        /* deep brand navy */
+    --navy:#0b1426;        /* deep brand navy */
     --navy-2:#0a1730;
-    --bg:#05101f;          /* near-black canvas */
-    --bg-2:#040b16;
-    --blue:#0284c7;   /* azure — cooler than cobalt so gradients never read purple on the navy */
-    --cyan:#22d3ee;        /* single accent */
-    --cyan-soft:#67e8f9;
-    --ink:#eaf2fb;
-    --muted:#8ba0b6;
-    --muted-2:#5f7388;
-    --line:rgba(120,160,210,0.14);
+    --bg:#04070f;          /* Deep ground — unified with the frame */
+    --bg-2:#0a1120;
+    --blue:#2f7d9c;   /* indigo — matches the frame gradient */
+    --cyan:#00B8C0;        /* single accent — Deep teal */
+    --cyan-soft:#5fe0e6;
+    --ink:#eef4fc;
+    --muted:#9fb1ca;
+    --muted-2:#6b7c98;
+    --line:rgba(120,160,220,0.14);
     --glass:rgba(255,255,255,0.035);
     --sans:'Inter',system-ui,-apple-system,sans-serif;
     --mono:'JetBrains Mono',monospace;
@@ -116,6 +117,13 @@
   .cohort-box .cb-note{font-size:11px;color:var(--muted-2);line-height:1.4;margin:0 0 13px}
   .cohort-box .cb-cta{display:flex;justify-content:center;width:100%;gap:8px}
   .cohort-box .cb-cta:hover{gap:12px}
+  .cohort-box .cb-stage{position:relative;height:200px;margin:6px 0 13px;border-radius:11px;overflow:hidden;background:radial-gradient(120% 130% at 50% 0%,rgba(20,40,70,.35),rgba(6,14,26,.5));border:1px solid rgba(120,160,220,.14)}
+  .cohort-box .cb-stage canvas{display:block;width:100%;height:100%}
+  .cb-stage .cp-hint{position:absolute;right:10px;bottom:8px;font-family:var(--mono);font-size:9px;letter-spacing:.06em;color:var(--muted-2);opacity:.7;pointer-events:none}
+  .cb-stage .cp-pop{position:absolute;z-index:6;width:210px;max-width:82%;background:rgba(9,18,34,.97);border:1px solid rgba(34,211,238,.4);border-radius:10px;padding:11px 13px;box-shadow:0 14px 40px -12px rgba(0,0,0,.85);opacity:0;transform:translateY(6px) scale(.98);transform-origin:top left;pointer-events:none;transition:opacity .18s,transform .18s}
+  .cb-stage .cp-pop.on{opacity:1;transform:none;pointer-events:auto}
+  .cb-stage .cp-pop .ph{font-family:var(--mono);font-size:10.5px;letter-spacing:.03em;font-weight:600;margin-bottom:5px}
+  .cb-stage .cp-pop .pb{font-size:11.5px;line-height:1.5;color:var(--muted)}
   .outcomes{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px}
   .oc{background:var(--glass);border:1px solid var(--line);border-radius:13px;padding:14px 15px}
   .oc .k{font-size:11.5px;color:var(--muted);letter-spacing:.05em;margin-bottom:7px;display:flex;align-items:center;gap:7px}
@@ -343,37 +351,70 @@
 
 <div class="grain"></div>
 <canvas id="bgCanvas"></canvas>
-<nav id="nav">
-  <a href="index.html"><img src="assets/ac-education-mark.svg" class="logo" alt="Arthur Curtis Education"></a>
-  <div class="links">
-    <a href="approach.html">Approach</a>
-    <a href="tools.html">Tools</a>
-    <a href="employers.html">For employers</a>
-    <a href="about.html">About</a>
-    <a href="methodology.html">Methodology</a>
-    <a class="btn btn-primary" href="contact.html">Book a call</a>
-  </div>
-</nav>
 
 <main id="main" tabindex="-1">
 
+<style>
+  .hero-b{position:relative;overflow:hidden;min-height:clamp(540px,76vh,720px);display:flex;align-items:center;padding:40px 0 56px;border:0;background:var(--bg)}
+  .hero-b .sf{position:absolute;inset:0;width:100%;height:100%;z-index:0;display:block}
+  .hero-b .hb-glow{position:absolute;inset:0;z-index:0;pointer-events:none;background:radial-gradient(52% 46% at 80% 16%,rgba(0,184,192,.16),transparent 62%)}
+  .hero-b .wrap{position:relative;z-index:1;display:block}
+  .hero-b .hero-copy{max-width:none;opacity:1 !important;transform:none !important;animation:none !important;filter:none !important}
+  .hero-b h1{font-size:clamp(34px,6vw,70px);font-weight:800;letter-spacing:-.035em;line-height:.98;margin:22px 0 0;max-width:15ch}
+  .hero-b h1 .t{color:var(--cyan)}
+  .hero-b .uline{height:2px;width:min(260px,52%);margin-top:18px;border-radius:2px;transform:scaleX(0);transform-origin:left;background:linear-gradient(90deg,var(--cyan),rgba(0,184,192,0));animation:ulDraw 1s cubic-bezier(.2,.7,.2,1) .55s forwards}
+  @keyframes ulDraw{to{transform:scaleX(1)}}
+  @media(prefers-reduced-motion:reduce){.hero-b .uline{transform:scaleX(1);animation:none}}
+  .hero-b .sub{color:#c3d1e6;font-size:clamp(15px,1.8vw,19px);line-height:1.6;max-width:52ch;margin-top:24px}
+  .hero-b .sub b{color:#fff;font-weight:600}
+  .hero-b .hero-cta{display:flex;gap:14px;flex-wrap:wrap;margin-top:34px;align-items:center}
+  .hero-b .seelink{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:15px;color:var(--ink);padding:13px 6px;text-decoration:none}
+  .hero-b .seelink .ar{color:var(--cyan);transition:transform .25s}
+  .hero-b .seelink:hover .ar{transform:translateX(5px)}
+  .hero-b .hmeta{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:40px;font-family:var(--mono);font-size:12px;color:var(--muted-2);letter-spacing:.02em}
+  .hero-b .hmeta .live{display:inline-flex;align-items:center;gap:8px;color:var(--muted)}
+  .hero-b .hmeta .d2{width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan);animation:hPulse 2.4s ease-in-out infinite}
+  @keyframes hPulse{0%,100%{opacity:1}50%{opacity:.35}}
+  .hero-b .hmeta .barv{width:1px;height:13px;background:rgba(120,160,220,.26)}
+  .hero-b .hmeta b{color:var(--muted);font-weight:600}
+  #bgCanvas{display:none !important}
+  .numbers .nhead{max-width:62ch}
+  .numbers .levy-card{max-width:640px;margin:28px auto 0}
+</style>
+
+
 <!-- ============ HERO ============ -->
-<header class="hero">
+<header class="hero hero-b">
+  <canvas id="starfield" class="sf" aria-hidden="true"></canvas><div class="hb-glow"></div>
   <div class="wrap">
     <div class="hero-copy">
-      <span class="eyebrow"><span class="dot"></span>Apprenticeship levy, made to work</span>
-      <h1>Watch your<br><span class="grad">levy work.</span></h1>
-      <p class="sub">Most levy-paying employers let millions expire unused. We turn your levy into a managed engine for developing people — planned, funded, and proven.</p>
+      <span class="eyebrow"><span class="dot"></span>Apprenticeship levy &middot; made to work</span>
+      <h1>Turn your levy into a <span class="t">workforce.</span></h1>
+      <div class="uline"></div>
+      <p class="sub">Most levy-paying employers let millions expire unused. We turn yours into a plan that develops people &mdash; <b>funded, sequenced, and proven</b>. Independent advice; we don&rsquo;t sell training.</p>
       <div class="hero-cta">
-        <a class="btn btn-primary" href="tools.html">See your full breakdown →</a>
-        <a class="btn btn-ghost" href="approach.html">How it works</a>
+        <a class="btn btn-primary" href="contact.html">Book a call</a>
+        <a class="seelink" href="#numbers">See the tools <span class="ar">&rarr;</span></a>
       </div>
-      <div class="trust">
-        <span><b>£3bn+</b> of UK levy funding lost to the Treasury unspent</span>
+      <div class="hmeta">
+        <span class="live"><span class="d2"></span>Live &middot; England &middot; ESFA 2026 rules</span>
+        <span class="barv"></span>
+        <span><b>&pound;3bn+</b> expires unspent to the Treasury each year</span>
+        <span class="barv"></span>
+        <span>every figure traced to <b>gov.uk</b></span>
       </div>
     </div>
+  </div>
+</header>
 
-    <!-- live interactive feature -->
+<!-- ============ SEE IT IN NUMBERS (calculator, after the plan point) ============ -->
+<section class="block numbers" id="numbers">
+  <div class="wrap">
+    <div class="nhead">
+      <div class="kicker">See it in numbers</div>
+      <h2 class="h2">Curious what yours could fund?</h2>
+      <p class="lead">Two minutes with the live estimate &mdash; then we build the real plan with you. The tools are how we show our working, free to try.</p>
+    </div>
     <div class="levy-card">
       <div class="lc-top">
         <span class="lc-label">Your annual pay bill</span>
@@ -401,8 +442,8 @@
           <div class="v"><span class="cur" style="color:var(--muted);font-size:18px">£</span><span id="potOut">0</span></div>
         </div>
         <div class="oc">
-          <div class="k"><span class="ico" style="background:var(--blue)"></span>With 10% top-up</div>
-          <div class="v" style="font-size:24px"><span style="color:var(--muted);font-size:16px">£</span><span id="fundsOut">0</span></div>
+          <div class="k"><span class="ico" style="background:var(--blue)"></span>Funds expire in</div>
+          <div class="v" style="font-size:24px"><span id="fundsOut">12</span><span style="color:var(--muted);font-size:16px"> months</span></div>
         </div>
         <div class="oc">
           <div class="k"><span class="ico" style="background:var(--cyan-soft)"></span>Apprenticeships fundable</div>
@@ -418,15 +459,16 @@
         <div class="cb-label">Your first cohort</div>
         <div class="cb-fig"><b id="cohortN">0</b> people · ~£<span id="cohortSpend">0</span> levy spend</div>
         <div class="cb-note">Average estimate — an indicative starter cohort at ~£9k per apprenticeship.</div>
+        <div class="cb-stage"><canvas id="cohortCanvas"></canvas><div class="cp-hint">▸ tap a stage</div><div class="cp-pop" id="cohortPop"></div></div>
         <a class="btn btn-primary cb-cta" href="tools/app.html#/first-cohort">Select your first cohort →</a>
       </div>
 
       <div class="lc-foot">
-        <span class="note">Indicative. 0.5% of pay bill, less £15k allowance, +10% government top-up. Apprenticeships at ~£9k avg.</span>
+        <span class="note">Indicative. 0.5% of pay bill, less £15k allowance. Apprenticeships at ~£9k avg.</span>
       </div>
     </div>
   </div>
-</header>
+</section>
 
 <!-- ============ PROOF STRIP ============ -->
 <div class="proof">
@@ -452,8 +494,6 @@
       <div class="pnode"><div class="pk">Raw levy</div><div class="pv"><span class="cur">£</span><span id="engRaw">0</span></div><div class="pc">The 0.5% levy rate every large employer pays.</div></div>
       <div class="pop"><button class="srctrig" data-sp="sp2">− £15k</button><span class="srcpop" id="sp2"><span class="sk">The £15,000 allowance</span><span class="sc">Offsets the levy each year — so pay bills up to £3m owe nothing.</span><a href="https://www.gov.uk/guidance/pay-apprenticeship-levy" target="_blank" rel="noopener">gov.uk · Pay Apprenticeship Levy →</a><span class="sv ok">Verified 16 Aug 2026</span></span></div>
       <div class="pnode dip"><div class="pk">Into your pot</div><div class="pv"><span class="cur">£</span><span id="engPot">0</span></div><div class="pc">The £15,000 allowance — why pay bills up to £3m owe nothing.</div></div>
-      <div class="pop"><button class="srctrig" data-sp="sp3">+ 10%</button><span class="srcpop" id="sp3"><span class="sk">The 10% top-up</span><span class="sc">Government adds 10% to what enters your apprenticeship account, in England.</span><a href="https://www.gov.uk/guidance/manage-apprenticeship-funds" target="_blank" rel="noopener">gov.uk · Manage apprenticeship funds →</a><span class="sv ok">Verified 16 Aug 2026</span></span></div>
-      <div class="pnode boost"><div class="pk">To spend</div><div class="pv"><span class="cur">£</span><span id="engFunds">0</span></div><div class="pc">Government adds 10% on top, free, in England.</div></div>
       <div class="pop"><button class="srctrig" data-sp="sp4">÷ £9k</button><span class="srcpop" id="sp4"><span class="sk">Indicative average</span><span class="sc">~£9,000 is a typical band, for headline maths only — <b>not a funding rule</b>. Real bands run £1.5k–£27k.</span><a href="https://www.gov.uk/government/publications/apprenticeship-funding-bands" target="_blank" rel="noopener">gov.uk · Apprenticeship funding bands →</a><span class="sv">Indicative — not a funding rule</span></span></div>
       <div class="pnode result"><div class="pk">Apprenticeships</div><div class="pv"><span id="engApp">0</span></div><div class="pc">At ~£9,000 average per standard (bands range £1.5k–£27k).</div></div>
     </div>
@@ -537,13 +577,6 @@
 
 </main>
 
-<footer>
-  <div class="wrap row">
-    <div class="foot-brands"><img src="assets/viral-white-accent.png?v=1" alt="viral by arthur curtis" width="505" height="160" loading="lazy" decoding="async" style="height:36px;width:auto;opacity:1"><span class="foot-by"><img class="acd-mark" src="assets/ac-a-logo-white.svg" alt="AC Digital"><span class="acd-txt">Built&nbsp;by <strong>AC&nbsp;<span class="acd-blue">Digital</span></strong></span></span></div>
-    <span>© 2026 Arthur Curtis · Making people better</span>
-    <span><a href="mailto:hello@arthurcurtis.com">hello@arthurcurtis.com</a> · <a href="https://www.linkedin.com/company/arthur-curtis-education/" target="_blank" rel="noopener">LinkedIn</a></span>
-  </div>
-</footer>
 
 
 <script src="tools/engine.js?v=5"></script>
@@ -592,13 +625,13 @@ function compute(){
   const r=AC.levy(paybill);                          // shared engine — one source of truth
   $('paybillOut').textContent=fmt(paybill);
   animateTo($('potOut'),r.pot);
-  animateTo($('fundsOut'),r.funds);
+  { var fo=$('fundsOut'); if(fo) fo.textContent=(window.AC&&AC.RULES&&AC.RULES.expiryMonths)||12; }
   animateTo($('peopleOut'),r.apprentices);
   animateTo($('monthOut'),r.monthly);
   var shown=Math.min(r.apprentices,16), cohort=Math.round(shown*0.4);   // first cohort ~40% of the pool (avg estimate)
   var cn=$('cohortN'); if(cn){ cn.textContent=cohort; animateTo($('cohortSpend'), cohort*9000); }
   var raw=paybill*AC.RULES.levyRate;                  // engine-transparency pipeline — the SAME math, shown openly
-  var ep=$('engPay'); if(ep){ ep.textContent=fmt(paybill); animateTo($('engRaw'),raw); animateTo($('engPot'),r.pot); animateTo($('engFunds'),r.funds); animateTo($('engApp'),r.apprentices); }
+  var ep=$('engPay'); if(ep){ ep.textContent=fmt(paybill); animateTo($('engRaw'),raw); animateTo($('engPot'),r.pot); animateTo($('engApp'),r.apprentices); }
   try{ AC.scenario.set({payBill:paybill}); }catch(e){} // carry it into the tools journey
 }
 $('paybill').addEventListener('input',function(){ currentPB=posToPB(+this.value); compute(); });
@@ -641,96 +674,51 @@ requestAnimationFrame(()=>{
   compute();
 });
 
-/* ---------- HERO: on settle, levy coins travel from the levy pot into the talent pool ---------- */
+/* ---------- first cohort: winding 2-5 pathway + roster (clickable checkpoints) ---------- */
 (function(){
-  var cv=document.getElementById('heroStream'); if(!cv||!window.AC) return;
-  var cx=cv.getContext('2d'), DPR=Math.min(2,devicePixelRatio||1), MONO="'JetBrains Mono',monospace";
-  var reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var cap=16, cols=8, people=[], targetA=0, inited=false, flowPhase=0;
+  var cv=document.getElementById('cohortCanvas'); if(!cv||!window.AC) return;
+  var cx=cv.getContext('2d'), DPR=Math.min(2,devicePixelRatio||1), MONO="'JetBrains Mono',monospace", SANS="'Inter',sans-serif";
+  var CYAN='#22d3ee', GOLD='#f0c65a', reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var cap=16, poolN=-1, cohN=0, travel=0, figs=[];
+  var MILES=[{t:0,tt:'Start',s:'Junior'},{t:0.36,tt:'Yr 2',s:'Competent'},{t:0.60,tt:'Yr 3',s:'Applying'},{t:1,tt:'Yr 5',s:'Senior'}];
   function fit(){ var r=cv.getBoundingClientRect(); if(!r.width) return; cv.width=Math.floor(r.width*DPR); cv.height=Math.floor(r.height*DPR); }
   function appN(){ try{ return AC.levy(currentPB).apprentices||0; }catch(e){ return 0; } }
-  function L(){ var W=cv.width,H=cv.height, topY=H*0.15, botY=H*0.74;
-    return {W:W,H:H, topY:topY, botY:botY, potX:W*0.135, potW:W*0.15,
-      poolX0:W*0.40, poolX1:W*0.975, tubeY:(topY+botY)/2}; }
-  function slot(i,l){ var pw=l.poolX1-l.poolX0, sw=pw/cols, col=i%cols, row=Math.floor(i/cols);
-    var s=Math.min(sw*0.6,(l.botY-l.topY)/2*0.6), gap=s*1.7, cy=(l.topY+l.botY)/2;
-    return {x:l.poolX0+sw*(col+0.5), y:cy-gap/2+row*gap}; }
-  function drop(anim){
-    targetA=appN(); var show=Math.min(targetA,cap); people=[];
-    for(var i=0;i<show;i++){ people.push({slot:i, pop:anim?0:1, delay:anim?260+i*70:0, anointed:false}); }
-    // first cohort scales with the pool (~40%): 5 in pool -> 2 selected, 13 -> 5
-    var selN=Math.round(show*0.4);
-    var idx=[]; for(var i=0;i<show;i++) idx.push(i);
-    for(var i=idx.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)), t=idx[i]; idx[i]=idx[j]; idx[j]=t; }
-    for(var i=0;i<Math.min(selN,show);i++) people[idx[i]].anointed=true;
-  }
-  function roundRect(x,y,w,h,r){ cx.beginPath();cx.moveTo(x+r,y);cx.arcTo(x+w,y,x+w,y+h,r);cx.arcTo(x+w,y+h,x,y+h,r);cx.arcTo(x,y+h,x,y,r);cx.arcTo(x,y,x+w,y,r);cx.closePath(); }
-  function person(x,y,s,a){ cx.globalAlpha=a;
-    cx.beginPath();cx.arc(x,y-s*0.6,s*0.27,0,7);cx.fill();
-    cx.beginPath();cx.moveTo(x-s*0.44,y+s*0.5);cx.quadraticCurveTo(x-s*0.44,y-s*0.16,x,y-s*0.16);cx.quadraticCurveTo(x+s*0.44,y-s*0.16,x+s*0.44,y+s*0.5);cx.closePath();cx.fill();
-    cx.globalAlpha=1; }
-  function coin(x,y,spin){ cx.save(); cx.translate(x,y); cx.scale(0.35+0.65*Math.abs(Math.cos(spin)),1);
-    cx.fillStyle='#f0c65a'; cx.beginPath();cx.arc(0,0,3.3*DPR,0,7);cx.fill();
-    cx.fillStyle='rgba(255,244,205,.9)'; cx.beginPath();cx.arc(-0.7*DPR,-0.7*DPR,1.2*DPR,0,7);cx.fill(); cx.restore(); }
+  function person(x,y,s,a){ cx.globalAlpha=a; cx.beginPath();cx.arc(x,y-s*0.6,s*0.27,0,7);cx.fill(); cx.beginPath();cx.moveTo(x-s*0.44,y+s*0.5);cx.quadraticCurveTo(x-s*0.44,y-s*0.16,x,y-s*0.16);cx.quadraticCurveTo(x+s*0.44,y-s*0.16,x+s*0.44,y+s*0.5);cx.closePath();cx.fill(); cx.globalAlpha=1; }
+  function rebuild(){ poolN=Math.min(appN(),cap); cohN=Math.round(poolN*0.4); figs=[]; for(var i=0;i<poolN;i++) figs.push({pop:reduce?1:0,delay:reduce?0:160+i*50,sel:i<cohN}); }
+  function pathPt(t,W,H){ var mx=W*0.08,myT=H*0.12,myB=H*0.05,pH=H*0.62; var x=mx+t*(W-2*mx); var y=(pH-myB)-t*(pH-myT-myB); y+=Math.sin(t*Math.PI*2.7+0.5)*pH*0.15*(1-t*0.35); return {x:x,y:y}; }
   function draw(dt){
-    var l=L(), W=l.W, H=l.H; if(!W) return; cx.clearRect(0,0,W,H); flowPhase+=dt;
-    var pw=l.poolX1-l.poolX0, sw=pw/cols, ph=l.botY-l.topY, s=Math.min(sw*0.6, ph/2*0.6);
-    var potL=l.potX-l.potW/2, potR=l.potX+l.potW/2;
-    var th=Math.max(10*DPR, ph*0.17), poolLiqY=l.botY-ph*0.20;
-    // talent pool basin + collected levy liquid (ripple)
-    cx.fillStyle='rgba(34,211,238,.05)'; roundRect(l.poolX0,l.topY,pw,ph,11*DPR); cx.fill();
-    cx.save(); roundRect(l.poolX0,l.topY,pw,ph,11*DPR); cx.clip();
-    cx.fillStyle='rgba(240,198,90,.15)'; cx.fillRect(l.poolX0,poolLiqY,pw,ph);
-    cx.strokeStyle='rgba(255,240,190,.30)'; cx.lineWidth=1*DPR; cx.beginPath();
-    for(var xx=l.poolX0; xx<=l.poolX1; xx+=5*DPR){ var wy=poolLiqY+Math.sin(xx*0.05+flowPhase*0.004)*1.5*DPR; if(xx<=l.poolX0)cx.moveTo(xx,wy);else cx.lineTo(xx,wy); } cx.stroke();
-    cx.restore();
-    cx.strokeStyle='rgba(34,211,238,.18)'; cx.lineWidth=1*DPR; roundRect(l.poolX0,l.topY,pw,ph,11*DPR); cx.stroke();
-    // levy pot with liquid money
-    cx.fillStyle='rgba(240,198,90,.10)'; roundRect(potL,l.topY,l.potW,ph,7*DPR); cx.fill();
-    cx.save(); roundRect(potL,l.topY,l.potW,ph,7*DPR); cx.clip();
-    cx.fillStyle='rgba(240,198,90,.26)'; cx.fillRect(potL,l.topY+ph*0.40,l.potW,ph);
-    cx.strokeStyle='rgba(255,240,190,.55)'; cx.lineWidth=1.2*DPR; cx.beginPath();
-    for(var xx=potL; xx<=potR; xx+=5*DPR){ var wy=l.topY+ph*0.40+Math.sin(xx*0.08+flowPhase*0.005)*1.2*DPR; if(xx<=potL)cx.moveTo(xx,wy);else cx.lineTo(xx,wy); } cx.stroke();
-    cx.restore();
-    cx.strokeStyle='rgba(240,198,90,.5)'; cx.lineWidth=1.4*DPR; roundRect(potL,l.topY,l.potW,ph,7*DPR); cx.stroke();
-    // TAP (rigid, flush to the pot) → HOSE in an L to the pool bottom, coupled at both ends (fire-hose style)
-    var tapEndX=potR+(l.poolX0-potR)*0.30, hoseY=l.botY-ph*0.10, poolConnX=l.poolX0, hoseMidX=(tapEndX+poolConnX)/2;
-    function line3(){ cx.beginPath(); cx.moveTo(potR,l.tubeY); cx.lineTo(tapEndX,l.tubeY); cx.lineTo(tapEndX,hoseY); cx.lineTo(poolConnX,hoseY); }
-    cx.lineJoin='round'; cx.lineCap='butt';
-    line3(); cx.strokeStyle='rgba(240,198,90,.5)'; cx.lineWidth=th; cx.stroke();                   // wall
-    line3(); cx.strokeStyle='rgba(240,198,90,.32)'; cx.lineWidth=Math.max(2*DPR,th-4*DPR); cx.stroke(); // liquid
-    line3(); cx.strokeStyle='rgba(250,224,150,.55)'; cx.lineWidth=Math.max(1.5*DPR,th-8*DPR);    // flow
-    cx.setLineDash([5*DPR,18*DPR]); cx.lineDashOffset=-flowPhase*0.12; cx.stroke(); cx.setLineDash([]);
-    cx.lineJoin='miter';
-    // brass couplings where the hose connects at each end (like a fire hose)
-    cx.fillStyle='rgba(255,228,150,.95)'; cx.strokeStyle='rgba(170,130,45,.8)'; cx.lineWidth=1*DPR;
-    var cw=th+5*DPR, cl=Math.max(4*DPR,th*0.55);
-    cx.fillRect(tapEndX-cw/2, l.tubeY+th*0.7, cw, cl); cx.strokeRect(tapEndX-cw/2, l.tubeY+th*0.7, cw, cl);      // tap ↔ hose
-    cx.fillRect(poolConnX-th*0.7-cl, hoseY-cw/2, cl, cw); cx.strokeRect(poolConnX-th*0.7-cl, hoseY-cw/2, cl, cw); // hose ↔ pool
-    // people appearing in the pool — 5 anointed (gold + halo)
-    for(var i=0;i<people.length;i++){ var pp=people[i];
-      if(pp.delay>0){ pp.delay-=dt; continue; }
-      pp.pop=Math.min(1,pp.pop+dt*0.006);
-      var sp=slot(pp.slot,l), e=1-Math.pow(1-pp.pop,3);
-      cx.fillStyle = pp.anointed ? '#f0c65a' : '#22d3ee';   // selected = tank-gold, rest cyan (no halo)
-      cx.shadowColor = pp.anointed ? 'rgba(240,198,90,.7)' : 'rgba(34,211,238,.55)'; cx.shadowBlur=6*DPR;
-      person(sp.x,sp.y,s*(0.55+0.45*e),e); cx.shadowBlur=0; }
-    // labels — titles at the top of each shape, figures below
-    cx.textAlign='center'; cx.font='600 '+(10.5*DPR)+'px '+MONO;
-    cx.fillStyle='rgba(240,198,90,.9)'; cx.fillText('Levy Pot', l.potX, l.topY-5*DPR);
-    cx.fillStyle='#7fdbe8'; cx.fillText('Talent Pool', (l.poolX0+l.poolX1)/2, l.topY-5*DPR);
-    cx.fillStyle='rgba(240,198,90,.9)'; cx.fillText('Levy Spend', hoseMidX, l.botY+18*DPR);
-    cx.fillStyle='#7fdbe8'; cx.font='600 '+(11*DPR)+'px '+MONO;
-    cx.fillText((targetA||0)+' funded'+(targetA>cap?' · each ≈'+Math.ceil(targetA/cap):''), (l.poolX0+l.poolX1)/2, l.botY+18*DPR);
-    var selN=0; for(var i=0;i<people.length;i++) if(people[i].anointed) selN++;
-    if(selN>0){ cx.fillStyle='rgba(240,198,90,.95)'; cx.font='600 '+(9.5*DPR)+'px '+MONO;
-      cx.fillText('✦ First Cohort: '+selN+' selected · ~£'+fmt(selN*9000)+' (avg £9k each)', (l.poolX0+l.poolX1)/2, l.botY+38*DPR); }
+    var W=cv.width,H=cv.height; if(!W) return;
+    var cur=Math.min(appN(),cap); if(cur!==poolN) rebuild();
+    cx.clearRect(0,0,W,H); if(!reduce) travel=(travel+0.00018*dt)%1;
+    var N=10; for(var b=0;b<N;b++){ var by=H*0.05+b*(H*0.62/N); cx.beginPath(); for(var xx=-10;xx<=W+10;xx+=8){ var yy=by+Math.sin(xx*0.012+b*0.7)*6*DPR+Math.sin(xx*0.03+b*1.2)*3*DPR; xx<=-10?cx.moveTo(xx,yy):cx.lineTo(xx,yy);} cx.strokeStyle='rgba(70,110,150,'+(0.05+0.015*Math.sin(b))+')'; cx.lineWidth=1*DPR; cx.stroke(); }
+    function trace(){cx.beginPath();for(var f=0;f<=1.0001;f+=0.012){var p=pathPt(f,W,H);f===0?cx.moveTo(p.x,p.y):cx.lineTo(p.x,p.y);}}
+    trace(); cx.strokeStyle='rgba(34,211,238,.12)'; cx.lineWidth=9*DPR; cx.lineCap='round'; cx.stroke();
+    trace(); var lg=cx.createLinearGradient(0,H*0.62,W,0); lg.addColorStop(0,'rgba(70,120,160,.7)'); lg.addColorStop(.7,'rgba(34,211,238,.95)'); lg.addColorStop(1,'rgba(240,198,90,.95)'); cx.strokeStyle=lg; cx.lineWidth=2.2*DPR; cx.stroke();
+    cx.textAlign='center';
+    MILES.forEach(function(m,i){ var p=pathPt(m.t,W,H),last=i===MILES.length-1; cx.beginPath();cx.arc(p.x,p.y,5*DPR,0,7);cx.fillStyle=last?GOLD:CYAN;cx.fill(); cx.beginPath();cx.arc(p.x,p.y,5*DPR,0,7);cx.strokeStyle='rgba(5,16,31,.9)';cx.lineWidth=1.6*DPR;cx.stroke();
+      var up=i%2===0?-1:1, ly=p.y+(up<0?-11*DPR:17*DPR);
+      cx.fillStyle='rgba(238,244,252,.95)';cx.font='700 '+(9.5*DPR)+'px '+SANS;cx.fillText(m.tt,p.x,ly);
+      cx.fillStyle=last?'rgba(240,198,90,.9)':'rgba(150,170,200,.8)';cx.font=(7.5*DPR)+'px '+MONO;cx.fillText(m.s,p.x,ly+(up<0?-10*DPR:11*DPR)); });
+    var tp=pathPt(travel,W,H); var g=cx.createRadialGradient(tp.x,tp.y,1,tp.x,tp.y,15*DPR); g.addColorStop(0,'rgba(240,198,90,.8)');g.addColorStop(1,'rgba(240,198,90,0)'); cx.fillStyle=g;cx.beginPath();cx.arc(tp.x,tp.y,15*DPR,0,7);cx.fill(); cx.fillStyle=GOLD;cx.beginPath();cx.arc(tp.x,tp.y,4*DPR,0,7);cx.fill();
+    cx.strokeStyle='rgba(120,160,220,.14)';cx.lineWidth=1*DPR;cx.beginPath();cx.moveTo(W*0.05,H*0.68);cx.lineTo(W*0.95,H*0.68);cx.stroke();
+    var ry0=H*0.75,ry1=H*0.96; cx.textAlign='left'; cx.fillStyle='rgba(150,170,200,.85)';cx.font='600 '+(8*DPR)+'px '+MONO; cx.fillText(cohN+' start \u00b7 '+poolN+' in pool',W*0.05,ry0-2*DPR);
+    var per=poolN,cols=per>0?per:1,gx0=W*0.05,gx1=W*0.97,gw=gx1-gx0,sw=gw/cols,fs=Math.min(sw*0.5,(ry1-ry0)*0.7);
+    for(var i=0;i<per;i++){ var f=figs[i]; if(f&&f.delay>0)f.delay-=dt; var e=1; if(f){ if(f.delay<=0)f.pop=Math.min(1,f.pop+(reduce?1:dt*0.006)); e=f.delay>0?0:f.pop; }
+      var x=gx0+sw*(i+0.5),y=(ry0+ry1)/2+8*DPR,sel=i<cohN; cx.fillStyle=sel?GOLD:CYAN;cx.shadowColor=sel?'rgba(240,198,90,.6)':'rgba(34,211,238,.5)';cx.shadowBlur=4*DPR; person(x,y,fs*(0.6+0.4*e),e); cx.shadowBlur=0; }
   }
-  function init(){ if(inited) return; inited=true; fit(); drop(!reduced); }
-  fit(); addEventListener('resize',fit); addEventListener('load',function(){ setTimeout(init,80); }); setTimeout(init,350);
-  document.getElementById('paybill').addEventListener('change',function(){ drop(!reduced); if(reduced) draw(16); });
-  if(reduced){ init(); draw(16); }
-  else { var last=performance.now(); (function loop(now){ var dt=Math.min(48,now-last); last=now; draw(dt); requestAnimationFrame(loop); })(performance.now()); }
+  var pop=document.getElementById('cohortPop');
+  var INFO=[ {c:'#7fdbe8',h:'Start \u00b7 Junior (Year 0)',b:'They join and begin training \u2014 levy-funded from day one, no upfront cost. Off-the-job learning runs alongside real work.'},
+    {c:'#7fdbe8',h:'Year 2 \u00b7 Competent',b:'Trained to the standard and working independently. Two years in, this is where productivity starts to show.'},
+    {c:'#7fdbe8',h:'Year 3 \u00b7 Applying',b:'A year of applying the new skills \u2014 embedding them, taking on more, mentoring the next intake.'},
+    {c:'#f0c65a',h:'Year 5 \u00b7 Senior',b:'A further training block takes them junior \u2192 senior on ~5 years of experience. You grew the senior instead of hiring one \u2014 retention, automated.'} ];
+  function hitMile(cxp,cyp){ var W=cv.width,H=cv.height,hit=-1,best=1e9; MILES.forEach(function(m,i){ var p=pathPt(m.t,W,H),px=p.x/DPR,py=p.y/DPR,dd=Math.hypot(cxp-px,cyp-py); if(dd<16&&dd<best){best=dd;hit=i;} }); return hit; }
+  function showPop(i){ var W=cv.width,H=cv.height,p=pathPt(MILES[i].t,W,H),px=p.x/DPR,py=p.y/DPR,sw=cv.getBoundingClientRect().width; pop.innerHTML='<div class="ph" style="color:'+INFO[i].c+'">'+INFO[i].h+'</div><div class="pb">'+INFO[i].b+'</div>'; pop.classList.add('on'); pop.dataset.i=i; var pw=pop.offsetWidth||210; pop.style.left=Math.max(5,Math.min(px-pw*0.12,sw-pw-5))+'px'; pop.style.top=(py+12)+'px'; }
+  if(pop){ cv.addEventListener('click',function(e){ var r=cv.getBoundingClientRect(),i=hitMile(e.clientX-r.left,e.clientY-r.top); if(i>=0){ if(pop.classList.contains('on')&&+pop.dataset.i===i)pop.classList.remove('on'); else showPop(i); e.stopPropagation(); } else pop.classList.remove('on'); });
+    cv.addEventListener('mousemove',function(e){ var r=cv.getBoundingClientRect(); cv.style.cursor=hitMile(e.clientX-r.left,e.clientY-r.top)>=0?'pointer':'default'; });
+    document.addEventListener('click',function(e){ if(!pop.contains(e.target)) pop.classList.remove('on'); }); }
+  fit(); addEventListener('resize',fit); rebuild();
+  if(reduce){ draw(16); }
+  else { var last=performance.now(); (function loop(now){ if(!document.body.contains(cv)) return; var dt=Math.min(48,now-last); last=now; draw(dt); requestAnimationFrame(loop); })(performance.now()); }
 })();
 
 /* ============================================================
@@ -806,7 +794,34 @@ const FS=[
   document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeAll(); });
 })();
 </script>
-<script src="mobilenav.js?v=1"></script>
+<script>window.AC_PAGE='home';</script>
+<script src="ac-shell.js?v=4"></script>
 <script src="comfort.js?v=3"></script>
+<script>
+(function(){
+  var cv=document.getElementById('starfield'); if(!cv) return;
+  var cx=cv.getContext('2d'), DPR=Math.min(2,window.devicePixelRatio||1), W=0,H=0,
+      reduce=matchMedia('(prefers-reduced-motion:reduce)').matches, stars=[];
+  var CFG={stars:54,tw:.5,horizon:.34,glow:.08,spd:.17};
+  function seed(){ var band=H*0.56; stars=[]; for(var n=0;n<CFG.stars;n++) stars.push({x:Math.random()*W,y:Math.random()*band,r:(Math.random()*1.3+0.35)*DPR,p:Math.random()*6.28,vx:(Math.random()-.5)*CFG.spd*DPR,vy:(Math.random()-.5)*CFG.spd*.5*DPR}); }
+  function size(){ var r=cv.getBoundingClientRect(); if(!r.width)return; W=cv.width=Math.floor(r.width*DPR); H=cv.height=Math.floor(r.height*DPR); seed(); }
+  size(); addEventListener('resize',size);
+  function draw(now){ if(!W){requestAnimationFrame(draw);return;}
+    cx.clearRect(0,0,W,H); var hy=H*0.58, vpx=W*0.68, band=H*0.56;
+    for(var n=0;n<stars.length;n++){ var s=stars[n];
+      if(!reduce){ s.x+=s.vx; s.y+=s.vy; if(s.x<0)s.x+=W; else if(s.x>W)s.x-=W; if(s.y<0)s.y+=band; else if(s.y>band)s.y-=band; }
+      var tw=reduce?0.6:(0.4+0.6*Math.sin(now*0.0017+s.p));
+      cx.globalAlpha=0.05+tw*CFG.tw; cx.fillStyle=n%5===0?'rgba(0,184,192,1)':'rgba(212,228,248,1)';
+      cx.beginPath(); cx.arc(s.x,s.y,s.r,0,6.29); cx.fill(); }
+    cx.globalAlpha=1;
+    var hg=cx.createLinearGradient(0,0,W,0); hg.addColorStop(0,'rgba(0,184,192,0)'); hg.addColorStop(.55,'rgba(0,184,192,'+CFG.horizon+')'); hg.addColorStop(1,'rgba(0,184,192,0)');
+    cx.strokeStyle=hg; cx.lineWidth=1.3*DPR; cx.beginPath(); cx.moveTo(0,hy); cx.lineTo(W,hy); cx.stroke();
+    var gl=cx.createRadialGradient(vpx,hy,2,vpx,hy,W*0.3); gl.addColorStop(0,'rgba(0,184,192,'+CFG.glow+')'); gl.addColorStop(1,'rgba(0,184,192,0)');
+    cx.fillStyle=gl; cx.fillRect(0,hy-H*0.22,W,H*0.44);
+    if(!reduce) requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+})();
+</script>
 </body>
 </html>

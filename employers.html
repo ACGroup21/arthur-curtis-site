@@ -1,130 +1,263 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>For employers — Arthur Curtis</title>
-<meta name="description" content="Turn your apprenticeship levy into a workforce, not a write-off. A funded plan, month-by-month visibility, and provable ROI — for levy and non-levy employers alike.">
+<title>Arthur Curtis &mdash; For employers</title>
+<meta name="description" content="Turn your apprenticeship levy into a funded workforce. A guided path from unused funds to a first cohort — every step a free, self-serve tool.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=4">
-<link rel="icon" type="image/png" href="assets/favicon-hummingbird.png?v=3">
-</head>
-<body>
-<a class="skip-link" href="#main">Skip to content</a>
-<canvas id="bgCanvas"></canvas>
-<div class="grain"></div>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="ac.css?v=4">
+<style>
+  /* ---- hero ---- */
+  .hero{position:relative;overflow:hidden;padding-block:clamp(50px,8vw,92px) clamp(30px,5vw,54px)}
+  .hero::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+    background:radial-gradient(120% 90% at 74% 16%,rgba(0,184,192,.15),transparent 55%),radial-gradient(90% 80% at 10% 92%,rgba(47,125,156,.16),transparent 60%)}
+  .hero .ac-wrap{position:relative;z-index:1}
+  .hero h1{max-width:16ch;margin-top:20px}
+  .hero .ac-lead{margin-top:22px}
+  .hero .cta{display:flex;gap:14px;flex-wrap:wrap;margin-top:32px}
 
-<nav id="nav">
-  <a href="index.html"><img src="assets/ac-education-mark.svg" class="logo" alt="Arthur Curtis Education"></a>
-  <div class="links">
-    <a href="approach.html">Approach</a>
-    <a href="tools.html">Tools</a>
-    <a href="employers.html">For employers</a>
-    <a href="about.html">About</a>
-    <a href="methodology.html">Methodology</a>
-    <a class="btn btn-primary" href="contact.html">Book a call</a>
-  </div>
-</nav>
+  /* ---- proof band ---- */
+  .proof{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:rgba(6,11,24,.5)}
+  .proof .row{display:grid;grid-template-columns:repeat(4,1fr)}
+  @media(max-width:760px){.proof .row{grid-template-columns:1fr 1fr}}
+  .stat{padding:24px 22px;border-right:1px solid var(--line)}
+  .stat:last-child{border-right:none}
+  @media(max-width:760px){.stat:nth-child(2){border-right:none}.stat:nth-child(1),.stat:nth-child(2){border-bottom:1px solid var(--line)}}
+  .stat .n{font-family:var(--mono);font-weight:600;font-size:clamp(23px,2.8vw,31px);line-height:1;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+  .stat:first-child .n{color:var(--accent);text-shadow:0 0 22px rgba(0,184,192,.5)}
+  .stat .n .u{color:var(--accent)}
+  .stat .l{font-size:12.5px;color:var(--muted);margin-top:10px;line-height:1.45;max-width:26ch}
 
-<main id="main" tabindex="-1">
+  /* ---- energised route ---- */
+  .route{margin-top:40px;position:relative}
+  .route::before{content:"";position:absolute;left:27px;top:38px;bottom:38px;width:2px;border-radius:2px;z-index:0;
+    background:linear-gradient(180deg,transparent,var(--line-2) 6%,var(--line-2) 94%,transparent)}
+  .route::after{content:"";position:absolute;left:24px;top:38px;width:6px;height:110px;border-radius:6px;z-index:0;pointer-events:none;
+    background:linear-gradient(180deg,transparent,var(--accent) 42%,#8ef0f4,var(--accent) 58%,transparent);filter:blur(1.4px);
+    animation:spark 5.2s cubic-bezier(.5,0,.5,1) infinite}
+  @keyframes spark{0%{top:22px;opacity:0}9%{opacity:.95}90%{opacity:.95}100%{top:calc(100% - 140px);opacity:0}}
+  @media(prefers-reduced-motion:reduce){.route::after{display:none}}
+  .step{display:grid;grid-template-columns:46px 1fr auto;gap:22px;align-items:center;padding:26px 8px;border-bottom:1px solid var(--line);position:relative;color:inherit;overflow:hidden;text-decoration:none;
+    opacity:0;transform:translateY(18px);transition:opacity .6s cubic-bezier(.2,.7,.2,1),transform .6s cubic-bezier(.2,.7,.2,1),background .25s}
+  .step.lit{opacity:1;transform:none}
+  @media(prefers-reduced-motion:reduce){.step{opacity:1;transform:none}}
+  .step:last-child{border-bottom:none}
+  .step:hover{background:rgba(0,184,192,.055)}
+  .step:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:14px}
+  .step .num{position:relative;z-index:1;width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    font-family:var(--mono);font-weight:600;font-size:18px;color:var(--muted);border:1px solid var(--line-2);background:var(--ground);
+    transition:color .45s,border-color .45s,box-shadow .45s}
+  .step.lit .num{color:var(--accent);border-color:rgba(0,184,192,.55);box-shadow:0 0 0 5px rgba(0,184,192,.06),0 0 24px -4px rgba(0,184,192,.5)}
+  .step:hover .num{color:#8ef0f4;border-color:var(--accent);box-shadow:0 0 0 6px rgba(0,184,192,.1),0 0 34px -2px rgba(0,184,192,.7)}
+  .step .sc{position:relative;z-index:1}
+  .step .sc .h{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .step .sc h3{font-size:19.5px;font-weight:700;letter-spacing:-.01em;margin:0}
+  .step .sc .tag{font-family:var(--mono);font-size:9.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted-2);border:1px solid var(--line);border-radius:20px;padding:3px 9px;transition:color .45s,border-color .45s}
+  .step.lit .sc .tag{color:var(--accent);border-color:rgba(0,184,192,.35)}
+  .step .sc p{color:var(--muted);font-size:14.5px;line-height:1.5;margin:6px 0 0;max-width:56ch}
+  .step .chev{position:relative;z-index:1;flex:none;color:var(--accent);transition:transform .25s}
+  .step:hover .chev{transform:translateX(5px)}
+  .step .ghost{position:absolute;right:58px;top:50%;transform:translateY(-50%) scale(.9);width:72px;height:72px;color:var(--accent);opacity:0;pointer-events:none;z-index:0;transition:opacity .55s,transform .55s}
+  .step .ghost svg{width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.25}
+  .step.lit .ghost{opacity:.09;transform:translateY(-50%) scale(1)}
+  .step:hover .ghost{opacity:.17}
+  @media(max-width:680px){.step .ghost{display:none}.step .chev{display:none}}
+  @media(max-width:560px){.step{grid-template-columns:40px 1fr;gap:15px;padding:22px 6px}.route::before{left:24px}.route::after{left:21px}.step .num{width:40px;height:40px;font-size:15px}}
 
-<header class="page-hero">
-  <div class="wrap">
-    <span class="eyebrow"><span class="dot"></span>For employers</span>
-    <h1>Turn your levy into a workforce,<br>not a <span class="grad">write-off.</span></h1>
-    <p class="sub">If you pay the apprenticeship levy, you're funding training whether you use it or not. We make sure you use it — deliberately, before it expires, on the people who move the business.</p>
-  </div>
-</header>
+  /* ---- who / features / faq ---- */
+  .who{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:34px}
+  @media(max-width:760px){.who{grid-template-columns:1fr}}
+  .who .item{display:flex;gap:14px;padding:20px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface-2)}
+  .who .mk{flex:none;width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;background:rgba(0,184,192,.1);border:1px solid rgba(0,184,192,.3);color:var(--accent);font-weight:700}
+  .who .it{font-size:15px;line-height:1.5;color:var(--muted)}
+  .who .it b{color:var(--ink);font-weight:600}
+  .feats{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:34px}
+  @media(max-width:820px){.feats{grid-template-columns:1fr}}
+  .feature{border:1px solid var(--line);border-radius:var(--r);padding:26px;background:var(--surface-2);position:relative;overflow:hidden;transition:transform .3s,border-color .3s}
+  .feature:hover{transform:translateY(-5px);border-color:rgba(0,184,192,.35)}
+  .feature::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,184,192,.55),transparent)}
+  .feature .fi{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;background:linear-gradient(140deg,rgba(76,168,235,.22),rgba(95,120,190,.12));border:1px solid rgba(0,184,192,.24);margin-bottom:16px}
+  .feature .fi svg{width:20px;height:20px;stroke:var(--accent);fill:none;stroke-width:1.6}
+  .feature h3{font-size:18px;font-weight:700;margin:0}
+  .feature p{color:var(--muted);font-size:14px;line-height:1.55;margin:8px 0 0}
+  .faq{margin-top:28px;border-top:1px solid var(--line)}
+  .faq details{border-bottom:1px solid var(--line)}
+  .faq summary{list-style:none;cursor:pointer;padding:20px 2px;display:flex;justify-content:space-between;align-items:center;gap:16px;font-size:17px;font-weight:600}
+  .faq summary::-webkit-details-marker{display:none}
+  .faq summary .pl{flex:none;width:24px;height:24px;border-radius:50%;border:1px solid var(--line-2);display:flex;align-items:center;justify-content:center;color:var(--accent);transition:transform .25s,border-color .25s}
+  .faq details[open] summary .pl{transform:rotate(45deg);border-color:var(--accent)}
+  .faq .a{padding:0 2px 22px;color:var(--muted);font-size:15px;line-height:1.6;max-width:68ch}
+  .faq summary:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
 
-<div class="proof">
-  <div class="wrap row">
-    <div class="stat"><div class="n">£3bn+</div><div class="l">of levy lost to the Treasury unspent</div></div>
-    <div class="stat"><div class="n">12 mo</div><div class="l">before unspent levy is lost (from Aug 2026)</div></div>
-    <div class="stat"><div class="n">0.5%</div><div class="l">of pay bill, already leaving your account</div></div>
-    <div class="stat"><div class="n">+10%</div><div class="l">government top-up on every pound</div></div>
-  </div>
-</div>
+  /* ---- cta band ---- */
+  .cta-band{text-align:center;padding-block:clamp(64px,9vw,100px);position:relative;overflow:hidden;border-bottom:none}
+  .cta-band::before{content:"";position:absolute;inset:0;z-index:0;background:radial-gradient(70% 120% at 50% 120%,rgba(76,168,235,.16),transparent 60%)}
+  .cta-band .ac-wrap{position:relative;z-index:1}
+  .cta-band h2{margin:0 auto;max-width:16ch}
+  .cta-band .ac-lead{margin:16px auto 0;text-align:center}
+  .cta-band .cta{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:30px}
+</style>
 
-<section class="block">
-  <div class="wrap">
-    <div class="reveal">
-      <div class="kicker">The problem</div>
-      <h2 class="h2">The money's already gone. The question is whether it works for you.</h2>
-      <div class="prose">
-        <p>The levy leaves your payroll every month at 0.5% of your pay bill. Government adds 10% on top. Then a clock starts — tightened to just 12 months from August 2026 (down from 24) — and anything you don't spend simply expires back to the Treasury.</p>
-        <p>Most employers under-use it, not because they don't care, but because the rules are genuinely hard: co-investment, transfers, age gates, band caps, defunding dates. We turn that complexity into <b>a plan you can act on</b> — and a number you can defend.</p>
+<main>
+  <section class="hero">
+    <div class="ac-wrap">
+      <span class="ac-eyebrow">For employers</span>
+      <h1 class="ac-h1">Turn your levy into a workforce, not a <span class="ac-grad">write-off.</span></h1>
+      <p class="ac-lead">If you pay the apprenticeship levy, you&rsquo;re funding training whether you use it or not. We make sure you use it &mdash; deliberately, before it expires, on the people who move the business.</p>
+      <div class="cta">
+        <a class="ac-btn ac-btn-primary" href="#route">See what your levy can build &rarr;</a>
+        <a class="ac-btn ac-btn-ghost" href="contact.html">Book a call</a>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section class="block">
-  <div class="wrap">
-    <div class="reveal">
-      <div class="kicker">Who it's for</div>
-      <h2 class="h2">Built for the people who own the spend.</h2>
-    </div>
-    <ul class="checks reveal">
-      <li><span class="ck">✓</span><span class="t"><b>Levy-paying employers</b> who know they're leaving money on the table but can't see how much.</span></li>
-      <li><span class="ck">✓</span><span class="t"><b>HR &amp; L&amp;D leads</b> who need a defensible plan, not a provider's sales pitch.</span></li>
-      <li><span class="ck">✓</span><span class="t"><b>Finance teams</b> who want month-by-month visibility of a spend they're accountable for.</span></li>
-      <li><span class="ck">✓</span><span class="t"><b>Non-levy employers</b> too — we model the co-investment so you know exactly what the government covers and what you pay.</span></li>
-    </ul>
+  <div class="proof">
+    <div class="ac-wrap"><div class="row">
+      <div class="stat"><div class="n">&pound;3bn<span class="u">+</span></div><div class="l">of UK levy funding lost to the Treasury unspent</div></div>
+      <div class="stat"><div class="n">12<span class="u"> mo</span></div><div class="l">before unspent levy expires, from Aug 2026</div></div>
+      <div class="stat"><div class="n">0.5<span class="u">%</span></div><div class="l">of pay bill, already leaving your account</div></div>
+      <div class="stat"><div class="n">&pound;15k</div><div class="l">annual levy allowance before you pay a penny</div></div>
+    </div></div>
   </div>
-</section>
 
-<section class="block">
-  <div class="wrap">
-    <div class="reveal">
-      <div class="kicker">What you get</div>
-      <h2 class="h2">A plan, the visibility to run it, and proof it worked.</h2>
-    </div>
-    <div class="grid-3">
-      <div class="feature reveal"><div class="glow"></div><h3>A funded plan</h3><p>Roles matched to standards, sequenced against your levy so the funding actually covers it — before it expires.</p></div>
-      <div class="feature reveal"><div class="glow"></div><h3>Month-by-month visibility</h3><p>See your pot, your commitments and your headroom over a rolling 36 months — no surprises at year end.</p></div>
-      <div class="feature reveal"><div class="glow"></div><h3>Provable ROI</h3><p>Honest cost-per-learner and real money saved — no fabricated multipliers — in reporting leadership will trust.</p></div>
-    </div>
-  </div>
-</section>
+  <section class="ac-section" id="route-sec">
+    <div class="ac-wrap">
+      <span class="ac-eyebrow">Your route</span>
+      <h2 class="ac-h2 ac-section-t">From unused levy to a funded cohort &mdash; one step at a time.</h2>
+      <p class="ac-lead" style="margin-top:16px">Each step is a free, self-serve tool. Your figures carry across as you move through them, so by the last step you&rsquo;ve built a real scenario &mdash; not just read about one.</p>
+      <div class="route" id="route">
 
-<section class="block">
-  <div class="wrap">
-    <div class="reveal">
-      <div class="kicker">Questions</div>
-      <h2 class="h2">The things employers actually ask.</h2>
-    </div>
-    <div class="faq reveal">
-      <details><summary>Do we have to use apprenticeships? <span class="pl">+</span></summary><div class="a">No. Apprenticeships are usually the most funding-efficient route, so we start there — but the plan is built around your goal. Where a short course or CPD fits better, we say so.</div></details>
-      <details><summary>What if we're not a levy payer? <span class="pl">+</span></summary><div class="a">You're still covered. For non-levy employers the government pays the large majority of training costs through co-investment — we model exactly what that means for your headcount and budget so there are no surprises.</div></details>
-      <details><summary>Will our levy really expire? <span class="pl">+</span></summary><div class="a">Yes — and faster than before. As of August 2026 new funds expire just 12 months after they enter your account, oldest first (funds banked before then keep the old 24-month clock). That tighter clock is the whole reason a plan matters. We schedule spend against it so you use what you've earned.</div></details>
-      <details><summary>How is this different from a training provider? <span class="pl">+</span></summary><div class="a">A provider's advice points at the courses they deliver. We're independent — we don't sell training — so the plan is built around your goal, and every figure is traceable to the funding rules, not a catalogue.</div></details>
-      <details><summary>Do you deliver the training yourselves? <span class="pl">+</span></summary><div class="a">No. We plan, fund and prove it — then help you choose and manage the right providers. That independence is the point.</div></details>
-    </div>
-  </div>
-</section>
+        <a class="step" href="tools/app.html#/is-levy-working">
+          <span class="num">1</span>
+          <span class="sc"><span class="h"><h3>Is your levy working?</h3><span class="tag">Diagnostic</span></span>
+            <p>A 60-second health check: are you leaving apprenticeship funding unused right now?</p></span>
+          <svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+        </a>
 
-<section class="cta-band">
-  <div class="wrap">
-    <h2>Find out what you're leaving unused.</h2>
-    <p>Two minutes with the calculator, or a call to build the plan properly.</p>
-    <a class="btn btn-primary btn-lg" href="tools.html">Try the calculator →</a>
-  </div>
-</section>
+        <a class="step" href="tools/app.html#/what-can-you-claim">
+          <span class="num">2</span>
+          <span class="sc"><span class="h"><h3>What can you claim?</h3><span class="tag">Estimate</span></span>
+            <p>Estimate what the funding covers for a role &mdash; and, if you&rsquo;re non-levy, exactly what the government pays versus what you do.</p></span>
+          <svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+        </a>
 
+        <a class="step" href="tools/app.html#/jd-matcher">
+          <span class="num">3</span>
+          <span class="sc"><span class="h"><h3>Find the right standard</h3><span class="tag">Match</span></span>
+            <p>Paste a job description and see which apprenticeship standards actually fit the role &mdash; ranked, not guessed.</p></span>
+          <svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+        </a>
+
+        <a class="step" href="tools/app.html#/status-checker">
+          <span class="num">4</span>
+          <span class="sc"><span class="h"><h3>Check it&rsquo;s still funded</h3><span class="tag">Check</span></span>
+            <p>Confirm the standard is approved for funding and at what band &mdash; before you commit to it.</p></span>
+          <svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+        </a>
+
+        <a class="step" href="tools/app.html#/first-cohort">
+          <span class="num">5</span>
+          <span class="sc"><span class="h"><h3>Build your first cohort</h3><span class="tag">Plan</span></span>
+            <p>Turn the numbers into a sequenced, funded plan you can take to leadership &mdash; or hand to us to build properly.</p></span>
+          <svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="ac-section">
+    <div class="ac-wrap">
+      <span class="ac-eyebrow">The problem</span>
+      <h2 class="ac-h2 ac-section-t">The money&rsquo;s already gone. The question is whether it works for you.</h2>
+      <div class="ac-lead" style="margin-top:20px">
+        <p>The levy leaves your payroll every month at 0.5% of your pay bill, above a &pound;15,000 allowance. Then a clock starts &mdash; tightened to just <b>12 months from August 2026</b> (down from 24) &mdash; and anything you don&rsquo;t spend simply expires back to the Treasury.</p>
+        <p style="margin-top:16px">Most employers under-use it, not because they don&rsquo;t care, but because the rules are genuinely hard: co-investment, transfers, age gates, band caps, defunding dates. We turn that complexity into <b>a plan you can act on</b> &mdash; and a number you can defend.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="ac-section">
+    <div class="ac-wrap">
+      <span class="ac-eyebrow">Who it&rsquo;s for</span>
+      <h2 class="ac-h2 ac-section-t">Built for the people who own the spend.</h2>
+      <div class="who">
+        <div class="item"><span class="mk">&checkmark;</span><span class="it"><b>Levy-paying employers</b> who know they&rsquo;re leaving money on the table but can&rsquo;t see how much.</span></div>
+        <div class="item"><span class="mk">&checkmark;</span><span class="it"><b>HR &amp; L&amp;D leads</b> who need a defensible plan, not a provider&rsquo;s sales pitch.</span></div>
+        <div class="item"><span class="mk">&checkmark;</span><span class="it"><b>Finance teams</b> who want month-by-month visibility of a spend they&rsquo;re accountable for.</span></div>
+        <div class="item"><span class="mk">&checkmark;</span><span class="it"><b>Non-levy employers</b> too &mdash; we model the co-investment so you know exactly what the government covers and what you pay.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ac-section">
+    <div class="ac-wrap">
+      <span class="ac-eyebrow">What you get</span>
+      <h2 class="ac-h2 ac-section-t">A plan, the visibility to run it, and proof it worked.</h2>
+      <div class="feats">
+        <div class="feature">
+          <div class="fi"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h10M4 18h7"/><circle cx="19" cy="15" r="3"/></svg></div>
+          <h3>A funded plan</h3><p>Roles matched to standards, sequenced against your levy so the funding actually covers it &mdash; before it expires.</p>
+        </div>
+        <div class="feature">
+          <div class="fi"><svg viewBox="0 0 24 24"><path d="M3 17l5-5 4 4 8-9"/><path d="M3 21h18"/></svg></div>
+          <h3>Month-by-month visibility</h3><p>See your pot, commitments and headroom over a rolling 36 months &mdash; no surprises at year end.</p>
+        </div>
+        <div class="feature">
+          <div class="fi"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg></div>
+          <h3>Provable ROI</h3><p>Honest cost-per-learner and real money saved &mdash; no fabricated multipliers &mdash; in reporting leadership will trust.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ac-section">
+    <div class="ac-wrap">
+      <span class="ac-eyebrow">Questions</span>
+      <h2 class="ac-h2 ac-section-t">The things employers actually ask.</h2>
+      <div class="faq">
+        <details open><summary>Do we have to use apprenticeships? <span class="pl">+</span></summary><div class="a">No. Apprenticeships are usually the most funding-efficient route, so we start there &mdash; but the plan is built around your goal. Where a short course or CPD fits better, we say so.</div></details>
+        <details><summary>What if we&rsquo;re not a levy payer? <span class="pl">+</span></summary><div class="a">You&rsquo;re still covered. For non-levy employers the government pays the large majority of training costs through co-investment &mdash; we model exactly what that means for your headcount and budget so there are no surprises.</div></details>
+        <details><summary>Will our levy really expire? <span class="pl">+</span></summary><div class="a">Yes &mdash; and faster than before. As of August 2026 new funds expire just 12 months after they enter your account, oldest first (funds banked before then keep the old 24-month clock). That tighter clock is the whole reason a plan matters.</div></details>
+        <details><summary>How is this different from a training provider? <span class="pl">+</span></summary><div class="a">A provider&rsquo;s advice points at the courses they deliver. We&rsquo;re independent &mdash; we don&rsquo;t sell training &mdash; so the plan is built around your goal, and every figure is traceable to the funding rules, not a catalogue.</div></details>
+        <details><summary>Do you deliver the training yourselves? <span class="pl">+</span></summary><div class="a">No. We plan, fund and prove it &mdash; then help you choose and manage the right providers. That independence is the point.</div></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-band">
+    <div class="ac-wrap">
+      <span class="ac-eyebrow" style="justify-content:center">Find out what you&rsquo;re leaving unused</span>
+      <h2 class="ac-h2 ac-section-t">Turn a wasted budget into <span class="ac-grad">living energy.</span></h2>
+      <p class="ac-lead">Two minutes with the tools, or a call to build the plan properly. Either works.</p>
+      <div class="cta">
+        <a class="ac-btn ac-btn-primary" href="#route">See what your levy can build &rarr;</a>
+        <a class="ac-btn ac-btn-ghost" href="contact.html">Book a call</a>
+      </div>
+    </div>
+  </section>
 </main>
 
-<footer>
-  <div class="wrap row">
-    <div class="foot-brands"><img src="assets/viral-white-accent.png?v=1" alt="viral by arthur curtis" width="505" height="160" loading="lazy" decoding="async" style="height:36px;width:auto;opacity:1"><span class="foot-by"><img class="acd-mark" src="assets/ac-a-logo-white.svg" alt="AC Digital"><span class="acd-txt">Built&nbsp;by <strong>AC&nbsp;<span class="acd-blue">Digital</span></strong></span></span></div>
-    <span>© 2026 Arthur Curtis · Making people better</span>
-    <span><a href="contact.html">hello@arthurcurtis.com</a> · <a href="https://www.linkedin.com/company/arthur-curtis-education/" target="_blank" rel="noopener">LinkedIn</a></span>
-  </div>
-</footer>
-
-<script src="site.js"></script>
-<script src="mobilenav.js?v=1"></script>
-<script src="comfort.js?v=3"></script>
-</body>
-</html>
+<script>
+/* energise the route: inject per-step glyphs + light each node as it enters view */
+(function(){
+  var route=document.getElementById('route'); if(!route) return;
+  var ICONS=[
+    '<path d="M3 12h4l2-7 4 14 3-10 2 3h4"/>',
+    '<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/>',
+    '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 1v3M12 20v3M1 12h3M20 12h3"/>',
+    '<path d="M12 3l7 3v5c0 4-3 7-7 9-4-2-7-5-7-9V6z"/><path d="M9 12l2 2 4-4"/>',
+    '<path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/>'
+  ];
+  var steps=[].slice.call(route.querySelectorAll('.step'));
+  steps.forEach(function(s,i){
+    var g=document.createElement('span'); g.className='ghost'; g.setAttribute('aria-hidden','true');
+    g.innerHTML='<svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">'+(ICONS[i]||ICONS[0])+'</svg>';
+    s.insertBefore(g,s.firstChild);
+  });
+  var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  if(reduce || !('IntersectionObserver' in window)){ steps.forEach(function(s){s.classList.add('lit');}); return; }
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('lit'); io.unobserve(e.target); } });},{threshold:.3,rootMargin:'0px 0px -6% 0px'});
+  steps.forEach(function(s){io.observe(s);});
+})();
+</script>
+<script>window.AC_PAGE='employers';</script>
+<script src="ac-shell.js?v=4"></script>

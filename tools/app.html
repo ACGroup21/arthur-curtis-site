@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fundable — the tools</title>
+<title>Arthur Curtis — Tools</title>
 <meta name="description" content="The self-serve levy and apprenticeship tools, in one place — your details carry across every tool as you go.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="lite.css?v=3">
+<link rel="stylesheet" href="lite.css?v=4">
 <link rel="icon" type="image/svg+xml" href="../assets/fundable-favicon.svg">
 <style>
   /* app-shell: the nav + the "your details" bar are persistent chrome;
@@ -40,16 +40,6 @@
 <style id="tool-style"></style>
 </head>
 <body>
-<div id="tsplash">
-  <div class="tsi">
-    <svg viewBox="0 0 304 297" aria-hidden="true">
-      <g class="ic-w"><path d="M 15 212 L 10 217 L 8 221 L 8 278 L 10 282 L 14 286 L 18 287 L 19 288 L 73 288 L 74 287 L 78 286 L 82 282 L 83 280 L 83 277 L 84 276 L 84 222 L 83 221 L 82 217 L 78 213 L 74 211 L 18 211 L 17 212 Z M 13 111 L 9 116 L 9 118 L 8 119 L 8 175 L 9 176 L 10 180 L 16 185 L 75 185 L 80 182 L 83 178 L 83 175 L 84 174 L 84 120 L 83 119 L 82 115 L 77 110 L 75 110 L 74 109 L 17 109 Z M 115 9 L 110 14 L 109 16 L 109 20 L 108 21 L 108 72 L 109 73 L 109 76 L 111 78 L 111 79 L 114 82 L 118 83 L 119 84 L 173 84 L 174 83 L 178 82 L 182 78 L 183 74 L 184 73 L 184 18 L 183 17 L 182 13 L 176 8 L 117 8 Z M 13 10 L 10 13 L 8 17 L 8 74 L 9 75 L 9 77 L 14 82 L 18 83 L 19 84 L 73 84 L 79 81 L 82 78 L 83 74 L 84 73 L 84 19 L 81 12 L 79 10 L 75 8 L 17 8 Z" fill="#e8eef7" fill-rule="evenodd"/></g>
-      <path class="ar" d="M 295 119 L 292 113 L 290 111 L 286 109 L 229 109 L 223 113 L 220 119 L 220 140 L 219 141 L 114 141 L 113 142 L 111 142 L 109 144 L 108 148 L 109 150 L 113 153 L 219 153 L 220 154 L 220 175 L 221 176 L 222 180 L 228 185 L 286 185 L 290 183 L 293 180 L 295 176 Z" fill="#00C8D0" fill-rule="evenodd"/>
-    </svg>
-    <div class="slogan">It's a <span class="fw">Fundable</span> World</div>
-    <div class="hint">click to enter</div>
-  </div>
-</div>
 <div class="app">
   <div class="lite-head"></div>
   <div id="spine"></div>
@@ -59,17 +49,10 @@
 <script src="../atmos.js?v=2"></script>
 <script src="engine.js?v=5"></script>
 <script src="spine.js?v=3"></script>
-<script src="nav.js?v=9"></script>
+<script src="nav.js?v=12"></script>
 <script src="../comfort.js?v=3"></script>
 <script>if(window.AC&&AC.spine)AC.spine.mount();</script>
 <script src="shell.js?v=2"></script>
-<script>
-(function(){ var s=document.getElementById('tsplash'); if(!s) return;
-  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if(reduce || sessionStorage.getItem('fundable_tools_entered')){ s.classList.add('gone'); setTimeout(function(){ s && s.remove(); },40); return; }
-  function go(){ if(!s) return; s.classList.add('gone'); try{ sessionStorage.setItem('fundable_tools_entered','1'); }catch(e){} var x=s; s=null; setTimeout(function(){ x.remove(); },700); }
-  s.addEventListener('click', go); setTimeout(go, 3000);
-})();
-</script>
+
 </body>
 </html>
