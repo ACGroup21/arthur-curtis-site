@@ -110,14 +110,27 @@
   input[type=range]::-moz-range-thumb{width:22px;height:22px;border:none;border-radius:50%;background:#fff;cursor:pointer;box-shadow:0 0 0 5px rgba(34,211,238,.25)}
   .range-ticks{display:flex;justify-content:space-between;font-size:11px;color:var(--muted-2);font-family:var(--mono);margin-bottom:12px}
   .lc-stream{display:block;width:100%;height:190px;margin:6px 0 18px}
-  .cohort-box{margin-top:16px;padding:15px 17px;border-radius:14px;border:1px solid rgba(34,211,238,.3);background:linear-gradient(160deg,rgba(34,211,238,.10),rgba(37,99,235,.05))}
+  .cohort-box{margin-top:16px;padding:7px 9px;border-radius:14px;border:1px solid rgba(34,211,238,.3);background:linear-gradient(160deg,rgba(34,211,238,.10),rgba(37,99,235,.05))}
   .cohort-box .cb-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--cyan)}
-  .cohort-box .cb-fig{font-size:15px;color:var(--muted);margin:5px 0 6px;font-variant-numeric:tabular-nums}
+  .cohort-box .cb-fig{font-size:13px;color:var(--muted);margin:2px 2px 8px;font-variant-numeric:tabular-nums}
   .cohort-box .cb-fig b{font-size:22px;color:var(--ink);font-family:var(--mono);font-weight:800}
   .cohort-box .cb-note{font-size:11px;color:var(--muted-2);line-height:1.4;margin:0 0 13px}
   .cohort-box .cb-cta{display:flex;justify-content:center;width:100%;gap:8px}
   .cohort-box .cb-cta:hover{gap:12px}
-  .cohort-box .cb-stage{position:relative;height:200px;margin:6px 0 13px;border-radius:11px;overflow:hidden;background:radial-gradient(120% 130% at 50% 0%,rgba(20,40,70,.35),rgba(6,14,26,.5));border:1px solid rgba(120,160,220,.14)}
+  /* collapsed-by-default badge */
+  .cb-badge{display:flex;align-items:center;gap:10px;width:100%;cursor:pointer;background:none;border:none;color:var(--ink);font-family:var(--sans);font-size:14px;font-weight:600;text-align:left;padding:8px 8px;border-radius:10px;transition:background .2s}
+  .cb-badge:hover{background:rgba(34,211,238,.06)}
+  .cb-badge:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+  .cb-badge .cb-spark{width:9px;height:9px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan);flex:none}
+  .cb-badge .cb-badge-t{flex:1}
+  .cb-badge .cb-badge-meta{font-family:var(--mono);font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+  .cb-badge .cb-badge-meta b{color:var(--cyan);font-weight:700}
+  .cb-badge .cb-chev{color:var(--muted-2);font-size:11px;transition:transform .3s}
+  .cohort-box.open .cb-chev{transform:rotate(180deg)}
+  .cb-reveal{max-height:0;opacity:0;visibility:hidden;overflow:hidden;padding:0 8px;transition:max-height .42s cubic-bezier(.2,.7,.2,1),opacity .3s ease,visibility 0s linear .42s}
+  .cohort-box.open .cb-reveal{max-height:520px;opacity:1;visibility:visible;padding:4px 8px 8px;transition:max-height .42s cubic-bezier(.2,.7,.2,1),opacity .3s ease,visibility 0s}
+  @media(prefers-reduced-motion:reduce){.cb-reveal,.cb-chev{transition:none}}
+  .cohort-box .cb-stage{position:relative;height:240px;margin:6px 0 13px;border-radius:11px;overflow:hidden;background:radial-gradient(120% 130% at 50% 0%,rgba(20,40,70,.35),rgba(6,14,26,.5));border:1px solid rgba(120,160,220,.14)}
   .cohort-box .cb-stage canvas{display:block;width:100%;height:100%}
   .cb-stage .cp-hint{position:absolute;right:10px;bottom:8px;font-family:var(--mono);font-size:9px;letter-spacing:.06em;color:var(--muted-2);opacity:.7;pointer-events:none}
   .cb-stage .cp-pop{position:absolute;z-index:6;width:210px;max-width:82%;background:rgba(9,18,34,.97);border:1px solid rgba(34,211,238,.4);border-radius:10px;padding:11px 13px;box-shadow:0 14px 40px -12px rgba(0,0,0,.85);opacity:0;transform:translateY(6px) scale(.98);transform-origin:top left;pointer-events:none;transition:opacity .18s,transform .18s}
@@ -455,12 +468,18 @@
         </div>
       </div>
 
-      <div class="cohort-box">
-        <div class="cb-label">Your first cohort</div>
-        <div class="cb-fig"><b id="cohortN">0</b> people · ~£<span id="cohortSpend">0</span> levy spend</div>
-        <div class="cb-note">Average estimate — an indicative starter cohort at ~£9k per apprenticeship.</div>
-        <div class="cb-stage"><canvas id="cohortCanvas"></canvas><div class="cp-hint">▸ tap a stage</div><div class="cp-pop" id="cohortPop"></div></div>
-        <a class="btn btn-primary cb-cta" href="tools/app.html#/first-cohort">Select your first cohort →</a>
+      <div class="cohort-box" id="cohortBox">
+        <button class="cb-badge" id="cbToggle" aria-expanded="false" aria-controls="cbReveal">
+          <span class="cb-spark" aria-hidden="true"></span>
+          <span class="cb-badge-t">See your first cohort</span>
+          <span class="cb-badge-meta"><b id="cohortN">0</b> people</span>
+          <span class="cb-chev" aria-hidden="true">▾</span>
+        </button>
+        <div class="cb-reveal" id="cbReveal">
+          <div class="cb-fig">~£<span id="cohortSpend">0</span> levy spend · indicative starter cohort at ~£9k each</div>
+          <div class="cb-stage"><canvas id="cohortCanvas"></canvas><div class="cp-hint">▸ tap a stage</div><div class="cp-pop" id="cohortPop"></div></div>
+          <a class="btn btn-primary cb-cta" href="tools/app.html#/first-cohort">Select your first cohort →</a>
+        </div>
       </div>
 
       <div class="lc-foot">
@@ -699,12 +718,25 @@ requestAnimationFrame(()=>{
       var up=i%2===0?-1:1, ly=p.y+(up<0?-11*DPR:17*DPR);
       cx.fillStyle='rgba(238,244,252,.95)';cx.font='700 '+(9.5*DPR)+'px '+SANS;cx.fillText(m.tt,p.x,ly);
       cx.fillStyle=last?'rgba(240,198,90,.9)':'rgba(150,170,200,.8)';cx.font=(7.5*DPR)+'px '+MONO;cx.fillText(m.s,p.x,ly+(up<0?-10*DPR:11*DPR)); });
-    var tp=pathPt(travel,W,H); var g=cx.createRadialGradient(tp.x,tp.y,1,tp.x,tp.y,15*DPR); g.addColorStop(0,'rgba(240,198,90,.8)');g.addColorStop(1,'rgba(240,198,90,0)'); cx.fillStyle=g;cx.beginPath();cx.arc(tp.x,tp.y,15*DPR,0,7);cx.fill(); cx.fillStyle=GOLD;cx.beginPath();cx.arc(tp.x,tp.y,4*DPR,0,7);cx.fill();
-    cx.strokeStyle='rgba(120,160,220,.14)';cx.lineWidth=1*DPR;cx.beginPath();cx.moveTo(W*0.05,H*0.68);cx.lineTo(W*0.95,H*0.68);cx.stroke();
-    var ry0=H*0.75,ry1=H*0.96; cx.textAlign='left'; cx.fillStyle='rgba(150,170,200,.85)';cx.font='600 '+(8*DPR)+'px '+MONO; cx.fillText(cohN+' start \u00b7 '+poolN+' in pool',W*0.05,ry0-2*DPR);
-    var per=poolN,cols=per>0?per:1,gx0=W*0.05,gx1=W*0.97,gw=gx1-gx0,sw=gw/cols,fs=Math.min(sw*0.5,(ry1-ry0)*0.7);
+    var tp=pathPt(travel,W,H); var g=cx.createRadialGradient(tp.x,tp.y,1,tp.x,tp.y,16*DPR); g.addColorStop(0,'rgba(240,198,90,.55)');g.addColorStop(1,'rgba(240,198,90,0)'); cx.fillStyle=g;cx.beginPath();cx.arc(tp.x,tp.y,16*DPR,0,7);cx.fill();
+    var mrad=(cohN>0?12:4)*DPR; cx.beginPath();cx.arc(tp.x,tp.y,mrad,0,7);cx.fillStyle=GOLD;cx.shadowColor='rgba(240,198,90,.6)';cx.shadowBlur=7*DPR;cx.fill();cx.shadowBlur=0;
+    if(cohN>0){ cx.fillStyle='#1a1405';cx.font='700 '+(11*DPR)+'px '+MONO;cx.textAlign='center';cx.textBaseline='middle';cx.fillText(String(cohN),tp.x,tp.y+0.5*DPR);cx.textBaseline='alphabetic'; }
+    cx.strokeStyle='rgba(120,160,220,.14)';cx.lineWidth=1*DPR;cx.beginPath();cx.moveTo(W*0.05,H*0.66);cx.lineTo(W*0.95,H*0.66);cx.stroke();
+    var ry0=H*0.72,ry1=H*0.985;
+    cx.textAlign='left';cx.fillStyle='rgba(150,170,200,.8)';cx.font='600 '+(7.5*DPR)+'px '+MONO; cx.fillText('COHORT',W*0.05,ry0+4*DPR);
+    cx.fillStyle=GOLD;cx.fillText(cohN+' start',W*0.05,ry0+16*DPR); cx.fillStyle=CYAN;cx.fillText(poolN+' pool',W*0.05,ry0+28*DPR);
+    var per=poolN,cols=Math.min(per>0?per:1,8),rowsN=Math.ceil(per/cols);
+    var gx0=W*0.28,gx1=W*0.97,gw=gx1-gx0,sw=gw/cols,fs=Math.min(sw*0.46,(ry1-ry0)/Math.max(rowsN,1)*0.6);
+    cx.textAlign='center';cx.textBaseline='middle';
     for(var i=0;i<per;i++){ var f=figs[i]; if(f&&f.delay>0)f.delay-=dt; var e=1; if(f){ if(f.delay<=0)f.pop=Math.min(1,f.pop+(reduce?1:dt*0.006)); e=f.delay>0?0:f.pop; }
-      var x=gx0+sw*(i+0.5),y=(ry0+ry1)/2+8*DPR,sel=i<cohN; cx.fillStyle=sel?GOLD:CYAN;cx.shadowColor=sel?'rgba(240,198,90,.6)':'rgba(34,211,238,.5)';cx.shadowBlur=4*DPR; person(x,y,fs*(0.6+0.4*e),e); cx.shadowBlur=0; }
+      var c=i%cols,rw=Math.floor(i/cols),x=gx0+sw*(c+0.5),y=ry0+(ry1-ry0)*(rowsN<2?0.5:(rw+0.5)/rowsN),sel=i<cohN,sz=fs*(0.62+0.38*e),dr=sz*0.84;
+      if(e<=0.02) continue; cx.globalAlpha=e;
+      cx.beginPath();cx.arc(x,y,dr,0,7);
+      if(sel){ cx.fillStyle=GOLD;cx.shadowColor='rgba(240,198,90,.55)';cx.shadowBlur=4*DPR;cx.fill();cx.shadowBlur=0; }
+      else { cx.fillStyle='rgba(34,211,238,.1)';cx.fill();cx.lineWidth=1.3*DPR;cx.strokeStyle='rgba(34,211,238,.55)';cx.stroke(); }
+      cx.fillStyle=sel?'#12100a':'rgba(175,225,238,.92)';cx.font='700 '+(dr*1.02)+'px '+MONO;cx.fillText(String(i+1),x,y+0.5*DPR);
+      cx.globalAlpha=1; }
+    cx.textBaseline='alphabetic';
   }
   var pop=document.getElementById('cohortPop');
   var INFO=[ {c:'#7fdbe8',h:'Start \u00b7 Junior (Year 0)',b:'They join and begin training \u2014 levy-funded from day one, no upfront cost. Off-the-job learning runs alongside real work.'},
@@ -716,9 +748,26 @@ requestAnimationFrame(()=>{
   if(pop){ cv.addEventListener('click',function(e){ var r=cv.getBoundingClientRect(),i=hitMile(e.clientX-r.left,e.clientY-r.top); if(i>=0){ if(pop.classList.contains('on')&&+pop.dataset.i===i)pop.classList.remove('on'); else showPop(i); e.stopPropagation(); } else pop.classList.remove('on'); });
     cv.addEventListener('mousemove',function(e){ var r=cv.getBoundingClientRect(); cv.style.cursor=hitMile(e.clientX-r.left,e.clientY-r.top)>=0?'pointer':'default'; });
     document.addEventListener('click',function(e){ if(!pop.contains(e.target)) pop.classList.remove('on'); }); }
-  fit(); addEventListener('resize',fit); rebuild();
-  if(reduce){ draw(16); }
-  else { var last=performance.now(); (function loop(now){ if(!document.body.contains(cv)) return; var dt=Math.min(48,now-last); last=now; draw(dt); requestAnimationFrame(loop); })(performance.now()); }
+  rebuild();
+  var running=false, rafId=0, last=0;
+  function loop(now){ if(!running) return; if(!document.body.contains(cv)){ running=false; return; } var dt=Math.min(48,now-last); last=now; draw(dt); rafId=requestAnimationFrame(loop); }
+  addEventListener('resize',function(){ fit(); if(reduce && running) draw(16); });
+  // lazy: only size + animate once the cohort panel is opened (keeps the homepage light)
+  window.__cohortViz={
+    reveal:function(){ fit(); rebuild(); if(reduce){ draw(16); } else if(!running){ running=true; last=performance.now(); rafId=requestAnimationFrame(loop); } },
+    hide:function(){ running=false; if(rafId) cancelAnimationFrame(rafId); }
+  };
+})();
+
+/* ---------- cohort panel: collapsed behind a "See your first cohort" badge ---------- */
+(function(){
+  var box=document.getElementById('cohortBox'), btn=document.getElementById('cbToggle');
+  if(!box||!btn) return;
+  btn.addEventListener('click',function(){
+    var open=box.classList.toggle('open');
+    btn.setAttribute('aria-expanded', open?'true':'false');
+    if(window.__cohortViz){ open ? window.__cohortViz.reveal() : window.__cohortViz.hide(); }
+  });
 })();
 
 /* ============================================================
