@@ -53,7 +53,7 @@
     +     '<a href="ourway.html">Our Way</a><a href="faq.html">FAQs</a><a href="partners.html">Partners</a><a href="blog.html">Blog</a><a href="contact.html">Contact</a>'
     +   '</div>'
     +   '<div class="ac-foot-in">'
-    +     '<span class="ac-wordmark">'+WORDMARK+'</span>'
+    +     '<img class="ac-foot-logo" src="assets/viral-white-accent.png" alt="Arthur Curtis Education" style="height:30px;width:auto;display:block">'
     +     '<span class="ac-mono" style="font-size:12px">&copy; '+(new Date().getFullYear())+' &middot; Making people better</span>'
     +     '<span class="ac-credit">'+ACD+'<span>Built&nbsp;by <b>AC&nbsp;<span class="blue">Digital</span></b></span></span>'
     +     '<span class="ac-mono" style="font-size:12px">hello@arthurcurtis.com</span>'

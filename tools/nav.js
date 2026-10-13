@@ -106,7 +106,7 @@
     if(document.querySelector('.lite-foot')) return;
     var app=document.querySelector('.app'); if(!app) return;
     var f=el('footer','lite-foot');
-    f.innerHTML='<div class="ff-brand"><span class="lnav-wm" style="font-size:14px">Arthur&nbsp;Curtis<span class="ed">Education</span></span><span class="ff-by"><img class="acd-mark" src="../assets/ac-a-logo-white.svg" alt="AC Digital"><span class="acd-txt">Built&nbsp;by <strong>AC&nbsp;<span class="acd-blue">Digital</span></strong></span></span></div>'+
+    f.innerHTML='<div class="ff-brand"><img class="ff-logo-img" src="../assets/viral-white-accent.png" alt="Arthur Curtis Education" style="height:26px;width:auto;display:block"><span class="ff-by"><img class="acd-mark" src="../assets/ac-a-logo-white.svg" alt="AC Digital"><span class="acd-txt">Built&nbsp;by <strong>AC&nbsp;<span class="acd-blue">Digital</span></strong></span></span></div>'+
       '<div class="ff-links"><a href="'+SITE+'">arthurcurtis.com &rarr;</a></div>';
     app.appendChild(f);
   }
