@@ -314,9 +314,14 @@
     background:radial-gradient(95% 95% at 50% 42%,#0e2c46,#06121f 72%)}
   #splash.gone{opacity:0;pointer-events:none}
   #sp-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:0;transition:opacity .5s ease}
-  #sp-wm{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:min(66vw,720px);height:auto;z-index:1;
-    opacity:0;transition:opacity .5s ease;filter:drop-shadow(0 6px 30px rgba(4,12,28,.5))}
+  #sp-lock{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:1;display:flex;align-items:center;gap:clamp(14px,2.6vw,30px)}
+  #sp-bird{height:clamp(50px,7.6vw,84px);width:auto;opacity:0;transition:opacity .5s ease;transform:translateY(-13%);filter:drop-shadow(0 6px 22px rgba(0,184,192,.42))}
+  #sp-bird.show{opacity:1}
+  #sp-wm{width:min(54vw,540px);height:auto;opacity:0;transition:opacity .5s ease;filter:drop-shadow(0 6px 30px rgba(4,12,28,.5))}
   #sp-wm.show{opacity:1}
+  #tpCanvas{position:fixed;inset:0;z-index:10001;pointer-events:none}
+  .sp-navbird{height:32px;width:auto;display:block;margin-right:9px;transform:translateY(-6px);filter:drop-shadow(0 4px 12px rgba(0,184,192,.3));opacity:0;transition:opacity .45s ease}
+  @media(max-width:820px){.sp-navbird{display:none}}
   .sp-enter{position:absolute;bottom:12%;left:50%;transform:translateX(-50%);z-index:2;
     font-size:12.5px;letter-spacing:.3em;text-transform:uppercase;color:rgba(226,240,255,.62);opacity:0}
   .sp-enter.show{animation:sp-fade .9s ease forwards}
@@ -352,13 +357,22 @@
 
 <div id="splash">
   <canvas id="sp-canvas"></canvas>
-  <img id="sp-wm" src="assets/wordmark-white.svg" alt="Arthur Curtis Education">
+  <div id="sp-lock">
+    <img id="sp-bird" src="assets/hummingbird-white.png" alt="">
+    <img id="sp-wm" src="assets/wordmark-white.svg" alt="Arthur Curtis Education">
+  </div>
   <div class="sp-enter">click to enter</div>
 </div>
+<canvas id="tpCanvas"></canvas>
 <script>
   (function(){
-    var sp=document.getElementById('splash');if(!sp)return;
-    if(sessionStorage.getItem('ac_entered')){sp.parentNode.removeChild(sp);return;}
+    var sp=document.getElementById('splash');
+    var spBird=document.getElementById('sp-bird');
+    function ensureNavBird(){ var brand=document.querySelector('.ac-brand'); if(!brand) return null;
+      var nb=brand.querySelector('.sp-navbird'); if(!nb){ nb=document.createElement('img'); nb.className='sp-navbird'; nb.src='assets/hummingbird-white.png'; nb.alt=''; brand.insertBefore(nb,brand.firstChild); } return nb; }
+    function showNavBirdWhenReady(){ var n=0; (function p(){ var nb=ensureNavBird(); if(nb){ nb.style.opacity='1'; return; } if(n++<80) setTimeout(p,50); })(); }
+    if(!sp){ showNavBirdWhenReady(); return; }
+    if(sessionStorage.getItem('ac_entered')){ if(sp.parentNode)sp.parentNode.removeChild(sp); showNavBirdWhenReady(); return; }
     document.documentElement.style.overflow='hidden';
     var cv=document.getElementById('sp-canvas'), ctx=cv.getContext('2d'), img=document.getElementById('sp-wm'), enterEl=sp.querySelector('.sp-enter');
     var DPR=Math.min(1.75,devicePixelRatio||1), W,H, raf=0, entered=false;
@@ -367,7 +381,6 @@
     function begin(){
       var bcr=img.getBoundingClientRect();
       if(!bcr.width){ setTimeout(begin,30); return; }
-      // sample the wordmark exactly where the crisp logo sits, so particles land on it
       var off=document.createElement('canvas'); off.width=W; off.height=H; var ox=off.getContext('2d');
       ox.drawImage(img, bcr.left*DPR, bcr.top*DPR, bcr.width*DPR, bcr.height*DPR);
       var d=ox.getImageData(0,0,W,H).data, P=[], step=Math.max(3,Math.round(bcr.width*DPR/220));
@@ -378,19 +391,45 @@
       function draw(u){ ctx.clearRect(0,0,W,H);
         for(var k=0;k<P.length;k++){ var p=P[k], t=(u-p.dl)/(1-p.dl); t=t<0?0:t>1?1:t; var e=1-Math.pow(1-t,3);
           ctx.fillStyle=p.teal?'#16C8C3':'#eaf2fb'; ctx.beginPath(); ctx.arc(p.x+(p.tx-p.x)*e,p.y+(p.ty-p.y)*e,rad,0,7); ctx.fill(); } }
-      function settle(){ img.classList.add('show'); cv.style.opacity='0'; setTimeout(function(){enterEl.classList.add('show');},480); } // particles resolve into the crisp logo
+      function settle(){ img.classList.add('show'); if(spBird)spBird.classList.add('show'); cv.style.opacity='0'; setTimeout(function(){enterEl.classList.add('show');},480); }
       if(reduce){ draw(1); settle(); return; }
       var T=2100, t0=performance.now();
       (function fr(now){ var u=Math.min(1,(now-t0)/T); draw(u); if(u<1)raf=requestAnimationFrame(fr); else settle(); })(t0);
     }
     if(img.complete && img.naturalWidth) requestAnimationFrame(begin); else img.onload=function(){requestAnimationFrame(begin);};
+
+    /* ---- teleport: swirl the bird to dust, re-form in the header ---- */
+    var tp=document.getElementById('tpCanvas'), tctx=tp?tp.getContext('2d'):null, TDPR=Math.min(2,devicePixelRatio||1);
+    function tpFit(){ if(!tctx)return; tp.width=Math.floor(innerWidth*TDPR); tp.height=Math.floor(innerHeight*TDPR); tctx.setTransform(TDPR,0,0,TDPR,0,0); }
+    function sampleAt(rect){ var sdpr=2, ow=Math.max(1,Math.round(rect.width*sdpr)), oh=Math.max(1,Math.round(rect.height*sdpr)); var o=document.createElement('canvas'); o.width=ow; o.height=oh; var oc=o.getContext('2d'); try{ oc.drawImage(spBird,0,0,ow,oh); }catch(e){ return []; } var dd; try{ dd=oc.getImageData(0,0,ow,oh).data; }catch(e){ return []; } var pts=[],s=Math.max(2,Math.round(ow/46)); for(var y=0;y<oh;y+=s)for(var x=0;x<ow;x+=s){var i=(y*ow+x)*4; if(dd[i+3]>110) pts.push({hx:rect.left+x/sdpr, hy:rect.top+y/sdpr, c:'rgba('+dd[i]+','+dd[i+1]+','+dd[i+2]+','});} return pts; }
+    function dissolve(rect, done){ var pts=sampleAt(rect); var P=pts.map(function(p){ return {hx:p.hx,hy:p.hy,x:p.hx,y:p.hy,a:Math.random()*6.28,s:1.0+Math.random()*1.6,c:p.c}; });
+      var t0=performance.now(),D=720; (function st(now){ var e=Math.min(1,(now-t0)/D); tctx.clearRect(0,0,innerWidth,innerHeight);
+        for(var i=0;i<P.length;i++){var pp=P[i]; pp.a+=0.12; pp.x+=Math.cos(pp.a)*pp.s*0.5; pp.y+=Math.sin(pp.a)*pp.s*0.5-0.3; var al=1-e; if(al<=0)continue; tctx.fillStyle=pp.c+(al*0.92)+')'; tctx.fillRect(pp.x,pp.y,1.8,1.8);}
+        if(e<1)requestAnimationFrame(st); else { tctx.clearRect(0,0,innerWidth,innerHeight); done&&done(); } })(t0); }
+    function materialize(rect, done){ var pts=sampleAt(rect); var P=pts.map(function(p){ var a=Math.random()*6.28,dd2=24+Math.random()*70; return {hx:p.hx,hy:p.hy,x:p.hx+Math.cos(a)*dd2,y:p.hy+Math.sin(a)*dd2-16,c:p.c}; });
+      var t0=performance.now(),D=720; (function st(now){ var e=Math.min(1,(now-t0)/D),ez=1-Math.pow(1-e,3); tctx.clearRect(0,0,innerWidth,innerHeight);
+        for(var i=0;i<P.length;i++){var pp=P[i]; var x=pp.x+(pp.hx-pp.x)*ez,y=pp.y+(pp.hy-pp.y)*ez; tctx.fillStyle=pp.c+(Math.min(1,e*1.3)*0.9)+')'; tctx.fillRect(x,y,1.8,1.8);}
+        if(e<1)requestAnimationFrame(st); else { tctx.clearRect(0,0,innerWidth,innerHeight); done&&done(); } })(t0); }
+
+    function destBird(){ if(innerWidth>820) return ensureNavBird(); return document.querySelector('.ac-brand-bird'); }
     function enter(){ if(entered)return; entered=true; cancelAnimationFrame(raf);
-      sp.classList.add('gone'); document.documentElement.style.overflow='';
+      document.documentElement.style.overflow='';
       try{sessionStorage.setItem('ac_entered','1');}catch(e){}
-      setTimeout(function(){if(sp.parentNode)sp.parentNode.removeChild(sp);},650);
+      ensureNavBird();
+      var navBird=destBird();
+      var canTp = !reduce && navBird && tctx && spBird && spBird.classList.contains('show') && spBird.complete && spBird.naturalWidth && navBird.getBoundingClientRect().width>0;
+      if(!canTp){ if(navBird) navBird.style.opacity='1'; sp.classList.add('gone'); setTimeout(function(){if(sp.parentNode)sp.parentNode.removeChild(sp);},650); return; }
+      navBird.style.opacity='0';
+      tpFit();
+      var fromRect=spBird.getBoundingClientRect();
+      spBird.style.transition='none'; spBird.style.opacity='0'; img.style.transition='opacity .4s'; img.style.opacity='0'; enterEl.style.opacity='0';
+      sp.classList.add('gone');
+      dissolve(fromRect, function(){ var toRect=navBird.getBoundingClientRect(); materialize(toRect, function(){ navBird.style.transition='opacity .35s'; navBird.style.opacity='1'; }); });
+      setTimeout(function(){if(sp.parentNode)sp.parentNode.removeChild(sp);},1950);
     }
     sp.addEventListener('click',enter);
     window.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key==='Escape'||e.key===' ')enter();},{once:true});
+    addEventListener('resize',tpFit);
   })();
 </script>
 
