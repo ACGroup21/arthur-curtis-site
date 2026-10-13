@@ -65,12 +65,7 @@
     if(document.querySelector('.ac-nav')) return;             // idempotent
     document.body.insertAdjacentHTML('afterbegin', navHTML());
     document.body.insertAdjacentHTML('beforeend', footHTML());
-    // hummingbird mascot (corner) + favicon
-    if(!document.querySelector('.ac-mascot')){
-      var m=document.createElement('a'); m.className='ac-mascot'; m.href='index.html'; m.setAttribute('aria-label','Arthur Curtis Education — home');
-      m.innerHTML='<img src="assets/hummingbird-white.png" alt="">';
-      document.body.appendChild(m);
-    }
+    // favicon (the floating corner mascot was retired — the bird now lives in the header/footer lockups)
     var fav=document.querySelector('link[rel="icon"]'); if(!fav){ fav=document.createElement('link'); fav.rel='icon'; document.head.appendChild(fav); } fav.href='assets/favicon-hummingbird.png';
     var burger = document.getElementById('acBurger');
     var links  = document.getElementById('acNavLinks');

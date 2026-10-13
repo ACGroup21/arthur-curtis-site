@@ -104,6 +104,22 @@
   .feature h3{font-size:18px;font-weight:700}
   .feature p{color:var(--muted);font-size:14px;line-height:1.55;margin-top:8px}
 
+  /* route — numbered journey into the tools */
+  .route{margin-top:40px;position:relative}
+  .route::before{content:"";position:absolute;left:28px;top:46px;bottom:46px;width:1px;background:var(--line-2);z-index:0}
+  .step{display:grid;grid-template-columns:44px 1fr auto;gap:20px;align-items:center;padding:22px 6px;border-bottom:1px solid var(--line);position:relative;color:inherit;transition:background .25s}
+  .step:last-child{border-bottom:none}
+  .step:hover{background:rgba(0,184,192,.05)}
+  .step:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:12px}
+  .step .num{position:relative;z-index:1;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-weight:600;font-size:17px;color:var(--accent);border:1px solid rgba(0,184,192,.4);background:var(--ground)}
+  .step .sc .h{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .step .sc h3{font-size:18.5px;font-weight:700;letter-spacing:-.01em}
+  .step .sc .tag{font-family:var(--mono);font-size:9.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted-2);border:1px solid var(--line);border-radius:20px;padding:3px 9px}
+  .step .sc p{color:var(--muted);font-size:14.5px;line-height:1.5;margin-top:6px;max-width:58ch}
+  .step .chev{flex:none;color:var(--accent);transition:transform .25s}
+  .step:hover .chev{transform:translateX(4px)}
+  @media(max-width:560px){.step{grid-template-columns:38px 1fr;gap:15px}.step .chev{display:none}.route::before{left:25px}.step .num{width:38px;height:38px;font-size:15px}}
+
   /* faq */
   .faq{margin-top:30px;border-top:1px solid var(--line)}
   .faq details{border-bottom:1px solid var(--line)}
@@ -142,7 +158,7 @@
 
 <nav>
   <a class="brand" href="#" aria-label="Arthur Curtis"><svg class="mark" viewBox="155 272 930 560" aria-hidden="true"><use href="#ac-mark"></use></svg></a>
-  <div class="nlinks"><a href="#">Vision</a><a href="#">Platform</a><a href="#">Tools</a><a href="#" aria-current="page">Employers</a><a class="book" href="#">Book a call</a></div>
+  <div class="nlinks"><a href="index.html">Vision</a><a href="methodology-future.html">Platform</a><a href="tools.html">Tools</a><a href="employers-future.html" aria-current="page">Employers</a><a class="book" href="contact.html">Book a call</a></div>
 </nav>
 
 <header class="hero">
@@ -152,8 +168,8 @@
     <h1 class="r d2">Turn your levy into a workforce, not a <span class="g">write-off.</span></h1>
     <p class="lead r d3">If you pay the apprenticeship levy, you're funding training whether you use it or not. We make sure you use it — deliberately, before it expires, on the people who move the business.</p>
     <div class="cta r d4">
-      <a class="btn btn-primary" href="#">See what your levy can build →</a>
-      <a class="btn btn-ghost" href="#">Book a call</a>
+      <a class="btn btn-primary" href="#route">See what your levy can build →</a>
+      <a class="btn btn-ghost" href="contact.html">Book a call</a>
     </div>
   </div>
 </header>
@@ -163,7 +179,7 @@
     <div class="stat"><div class="n">£3bn<span class="u">+</span></div><div class="l">of UK levy funding lost to the Treasury unspent</div></div>
     <div class="stat"><div class="n">12<span class="u"> mo</span></div><div class="l">before unspent levy expires, from Aug 2026</div></div>
     <div class="stat"><div class="n">0.5<span class="u">%</span></div><div class="l">of pay bill, already leaving your account</div></div>
-    <div class="stat"><div class="n">+10<span class="u">%</span></div><div class="l">government top-up on every pound</div></div>
+    <div class="stat"><div class="n">£15k</div><div class="l">annual levy allowance before you pay a penny</div></div>
   </div></div>
 </div>
 
@@ -172,7 +188,7 @@
   <span class="eb">The problem</span>
   <h2 class="s-title">The money's already gone. The question is whether it works for you.</h2>
   <div class="prose">
-    <p>The levy leaves your payroll every month at 0.5% of your pay bill. Government adds 10% on top. Then a clock starts — tightened to just <b>12 months from August 2026</b> (down from 24) — and anything you don't spend simply expires back to the Treasury.</p>
+    <p>The levy leaves your payroll every month at 0.5% of your pay bill, above a £15,000 allowance. Then a clock starts — tightened to just <b>12 months from August 2026</b> (down from 24) — and anything you don't spend simply expires back to the Treasury.</p>
     <p>Most employers under-use it, not because they don't care, but because the rules are genuinely hard: co-investment, transfers, age gates, band caps, defunding dates. We turn that complexity into <b>a plan you can act on</b> — and a number you can defend.</p>
   </div>
 </div></section>
@@ -207,6 +223,50 @@
   </div>
 </div></section>
 
+<section class="block" id="route"><div class="wrap">
+  <span class="eb">Your route</span>
+  <h2 class="s-title">From unused levy to a funded cohort — one step at a time.</h2>
+  <div class="prose"><p>Each step is a free, self-serve tool. Your figures carry across as you move through them, so by the last step you've built a real scenario — not just read about one.</p></div>
+  <div class="route">
+
+    <a class="step" href="tools/app.html#/is-levy-working">
+      <span class="num">1</span>
+      <span class="sc"><span class="h"><h3>Is your levy working?</h3><span class="tag">Diagnostic</span></span>
+        <p>A 60-second health check: are you leaving apprenticeship funding unused right now?</p></span>
+      <svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+    </a>
+
+    <a class="step" href="tools/app.html#/what-can-you-claim">
+      <span class="num">2</span>
+      <span class="sc"><span class="h"><h3>What can you claim?</h3><span class="tag">Estimate</span></span>
+        <p>Estimate what the funding covers for a role — and, if you're non-levy, exactly what the government pays versus what you do.</p></span>
+      <svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+    </a>
+
+    <a class="step" href="tools/app.html#/jd-matcher">
+      <span class="num">3</span>
+      <span class="sc"><span class="h"><h3>Find the right standard</h3><span class="tag">Match</span></span>
+        <p>Paste a job description and see which apprenticeship standards actually fit the role — ranked, not guessed.</p></span>
+      <svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+    </a>
+
+    <a class="step" href="tools/app.html#/status-checker">
+      <span class="num">4</span>
+      <span class="sc"><span class="h"><h3>Check it's still funded</h3><span class="tag">Check</span></span>
+        <p>Confirm the standard is approved for funding and at what band — before you commit to it.</p></span>
+      <svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+    </a>
+
+    <a class="step" href="tools/app.html#/first-cohort">
+      <span class="num">5</span>
+      <span class="sc"><span class="h"><h3>Build your first cohort</h3><span class="tag">Plan</span></span>
+        <p>Turn the numbers into a sequenced, funded plan you can take to leadership — or hand to us to build properly.</p></span>
+      <svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+    </a>
+
+  </div>
+</div></section>
+
 <section class="block"><div class="wrap">
   <span class="eb">Questions</span>
   <h2 class="s-title">The things employers actually ask.</h2>
@@ -226,8 +286,8 @@
     <h2 style="margin-top:18px">Turn a wasted budget into <span class="g">living energy.</span></h2>
     <p>Two minutes with the calculator, or a call to build the plan properly. Either works.</p>
     <div class="cta" style="justify-content:center;margin-top:30px">
-      <a class="btn btn-primary" href="#">See what your levy can build →</a>
-      <a class="btn btn-ghost" href="#">Book a call</a>
+      <a class="btn btn-primary" href="tools/app.html#/what-can-you-claim">See what your levy can build →</a>
+      <a class="btn btn-ghost" href="contact.html">Book a call</a>
     </div>
   </div>
 </section>

@@ -117,11 +117,6 @@
     }
     build();
     buildFooter();
-    if(!document.querySelector('.ac-mascot')){
-      var m=el('a','ac-mascot'); m.href=SITE; m.setAttribute('aria-label','Arthur Curtis Education');
-      m.innerHTML='<img src="../assets/hummingbird-white.png" alt="">';
-      document.body.appendChild(m);
-    }
   }
   window.ACnav={ mount:mount };
   if(document.readyState!=='loading') mount(); else document.addEventListener('DOMContentLoaded', mount);
