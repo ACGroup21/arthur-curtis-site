@@ -62,7 +62,10 @@
     +   '</div>'
     +   '<div class="ac-foot-bar">'
     +     '<span class="ac-mono ac-foot-cc">&copy; '+(new Date().getFullYear())+' Arthur Curtis Education &middot; Making people better</span>'
-    +     '<span class="ac-credit">'+ACD+'<span>Built&nbsp;by <b>AC&nbsp;<span class="blue">Digital</span></b></span></span>'
+    +     '<span class="ac-foot-bar-end">'
+    +       '<img class="ac-foot-viral" src="assets/viral-white-accent.png" alt="Viral by Arthur Curtis">'
+    +       '<span class="ac-credit">'+ACD+'<span>Built&nbsp;by <b>AC&nbsp;<span class="blue">Digital</span></b></span></span>'
+    +     '</span>'
     +   '</div>'
     + '</footer>';
   }
