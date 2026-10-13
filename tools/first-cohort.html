@@ -56,7 +56,7 @@
   .fc-row{display:flex;align-items:center;gap:12px;padding:10px 13px;border:1px solid var(--line);border-radius:11px;background:rgba(255,255,255,.015);transition:border-color .15s,background .15s}
   .fc-row.has{border-color:rgba(240,198,90,.45);background:rgba(240,198,90,.05)}
   .fc-row .nm{flex:1;font-size:13.5px;font-weight:600}
-  .fc-row .nm .sub{font-family:var(--mono);font-size:10px;color:var(--muted-2);font-weight:400;margin-left:7px}
+  .fc-row .nm .sub{display:block;font-family:var(--mono);font-size:10px;color:var(--muted-2);font-weight:400;margin-top:3px}
   .fc-row .ct2{display:flex;align-items:center;gap:9px}
   .fc-rbtn{width:30px;height:30px;border-radius:8px;border:1px solid rgba(120,160,220,.26);background:rgba(255,255,255,.03);color:var(--ink);cursor:pointer;font-size:17px;line-height:1;display:flex;align-items:center;justify-content:center}
   .fc-rbtn:hover:not(:disabled){border-color:var(--cyan);color:var(--cyan)}
@@ -110,7 +110,7 @@
         <div class="fc-usage-t" aria-live="polite">Cohort fills <b id="fcUseN">0</b> of <b id="fcUseM">0</b> funded places <span class="left" id="fcUseLeft"></span></div>
         <div class="fc-usebar"><i id="fcUseBar"></i></div>
       </div>
-      <p class="fc-roles-note">Roles and levels are examples — your real mix follows the apprenticeship standards you choose.</p>
+      <p class="fc-roles-note">Real, currently-funded standards (L2&ndash;L5, verified against Skills England). The mix shown is an example &mdash; yours depends on your workforce.</p>
     </div>
 
     <div class="fc-cta">
@@ -157,8 +157,11 @@
   var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
   var cap=16, funded=0, cohN=0;
   var ROLES=[
-    {n:'Management',s:'L5',c:0},{n:'Finance',s:'L4',c:1},{n:'Data / digital',s:'L4',c:1},
-    {n:'Operations',s:'L2',c:2},{n:'Customer service',s:'L2',c:1}
+    {n:'Operations manager',s:'L5 · ST0385',c:0},
+    {n:'Professional accounting technician',s:'L4 · ST0003',c:1},
+    {n:'Data analyst',s:'L4 · ST0118',c:1},
+    {n:'Team leader',s:'L3 · ST0384',c:2},
+    {n:'Customer service practitioner',s:'L2 · ST0072',c:1}
   ];
   var MILES=[{t:0,tt:'Start',s:'Junior'},{t:1/3,tt:'Yr 2',s:'Competent'},{t:2/3,tt:'Yr 3',s:'Applying'},{t:1,tt:'Yr 5',s:'Senior'}];
   var stageIdx=0, markerT=MILES[0].t, targetT=MILES[0].t;

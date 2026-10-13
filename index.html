@@ -128,7 +128,7 @@
   .cb-badge .cb-chev{color:var(--muted-2);font-size:11px;transition:transform .3s}
   .cohort-box.open .cb-chev{transform:rotate(180deg)}
   .cb-reveal{max-height:0;opacity:0;visibility:hidden;overflow:hidden;padding:0 8px;transition:max-height .5s cubic-bezier(.2,.7,.2,1),opacity .3s ease,visibility 0s linear .5s}
-  .cohort-box.open .cb-reveal{max-height:860px;opacity:1;visibility:visible;padding:4px 8px 8px;transition:max-height .5s cubic-bezier(.2,.7,.2,1),opacity .3s ease,visibility 0s}
+  .cohort-box.open .cb-reveal{max-height:1140px;opacity:1;visibility:visible;padding:4px 8px 8px;transition:max-height .55s cubic-bezier(.2,.7,.2,1),opacity .3s ease,visibility 0s}
   @media(prefers-reduced-motion:reduce){.cb-reveal,.cb-chev{transition:none}}
   .cohort-box .cb-stage{position:relative;height:180px;margin:6px 0 4px;border-radius:11px;overflow:hidden;background:radial-gradient(120% 130% at 50% 0%,rgba(20,40,70,.35),rgba(6,14,26,.5));border:1px solid rgba(120,160,220,.14)}
   .cb-stepper{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:2px 0 7px}
@@ -149,7 +149,7 @@
   .cb-row{display:flex;align-items:center;gap:10px;padding:8px 11px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.015)}
   .cb-row.has{border-color:rgba(240,198,90,.45);background:rgba(240,198,90,.05)}
   .cb-row .nm{flex:1;font-size:12.5px;font-weight:600}
-  .cb-row .nm .sub{font-family:var(--mono);font-size:9.5px;color:var(--muted-2);font-weight:400;margin-left:6px}
+  .cb-row .nm .sub{display:block;font-family:var(--mono);font-size:9.5px;color:var(--muted-2);font-weight:400;margin-top:3px}
   .cb-row .ct2{display:flex;align-items:center;gap:8px}
   .cb-rbtn{width:27px;height:27px;border-radius:7px;border:1px solid rgba(120,160,220,.26);background:rgba(255,255,255,.03);color:var(--ink);cursor:pointer;font-size:15px;line-height:1;display:flex;align-items:center;justify-content:center}
   .cb-rbtn:hover:not(:disabled){border-color:var(--cyan);color:var(--cyan)}
@@ -519,7 +519,7 @@
           <div class="cb-roleshead"><span class="t">Choose your cohort by role</span><span class="fn"><b id="cohFundN">0</b> funded</span></div>
           <div class="cb-rows" id="cbRows" role="group" aria-label="Choose your cohort by role"></div>
           <div class="cb-usage"><div class="cb-usage-t" aria-live="polite">Fills <b id="cohUseN">0</b> of <b id="cohUseM">0</b> funded <span class="left" id="cohUseLeft"></span></div><div class="cb-usebar"><i id="cohUseBar"></i></div></div>
-          <p class="cb-roles-note">Roles &amp; levels are examples — your mix follows the standards you choose.</p>
+          <p class="cb-roles-note">Real, currently-funded standards (L2&ndash;L5, verified vs Skills England) &mdash; the mix shown is an example.</p>
           <a class="btn btn-primary cb-cta" href="tools/app.html#/first-cohort">Open the full tool →</a>
         </div>
       </div>
@@ -741,8 +741,11 @@ requestAnimationFrame(()=>{
   var CYAN='#22d3ee', GOLD='#f0c65a', reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
   var cap=16, funded=0, cohN=0, running=false;
   var ROLES=[
-    {n:'Management',s:'L5',c:0},{n:'Finance',s:'L4',c:1},{n:'Data / digital',s:'L4',c:1},
-    {n:'Operations',s:'L2',c:2},{n:'Customer service',s:'L2',c:1}
+    {n:'Operations manager',s:'L5 · ST0385',c:0},
+    {n:'Professional accounting technician',s:'L4 · ST0003',c:1},
+    {n:'Data analyst',s:'L4 · ST0118',c:1},
+    {n:'Team leader',s:'L3 · ST0384',c:2},
+    {n:'Customer service practitioner',s:'L2 · ST0072',c:1}
   ];
   var MILES=[{t:0,tt:'Start',s:'Junior'},{t:1/3,tt:'Yr 2',s:'Competent'},{t:2/3,tt:'Yr 3',s:'Applying'},{t:1,tt:'Yr 5',s:'Senior'}];
   var stageIdx=0, markerT=MILES[0].t, targetT=MILES[0].t;
