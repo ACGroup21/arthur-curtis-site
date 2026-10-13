@@ -46,6 +46,9 @@ h1.title{font-size:clamp(26px,4vw,38px);font-weight:800;letter-spacing:-.02em;li
 input[type=range]{-webkit-appearance:none;width:100%;height:6px;border-radius:6px;background:linear-gradient(90deg,var(--cyan),var(--blue));outline:none;margin:14px 0 4px}
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:#fff;cursor:pointer;box-shadow:0 0 0 5px rgba(34,211,238,.25),0 4px 12px rgba(0,0,0,.4)}
 input[type=range]::-moz-range-thumb{width:22px;height:22px;border:none;border-radius:50%;background:#fff;cursor:pointer;box-shadow:0 0 0 5px rgba(34,211,238,.25)}
+/* keyboard focus visibility (a11y) — applies across all lite tools */
+a:focus-visible,button:focus-visible,[tabindex]:focus-visible,summary:focus-visible,[contenteditable="true"]:focus-visible{outline:2px solid var(--cyan);outline-offset:2px;border-radius:6px}
+input[type=range]:focus-visible{outline:2px solid var(--cyan);outline-offset:4px;border-radius:8px}
 .ticks{display:flex;justify-content:space-between;font-size:11px;color:var(--muted-2);font-family:var(--mono);margin-top:2px}
 .bigval{font-size:30px;font-weight:800;font-family:var(--mono);letter-spacing:-.02em;margin-top:4px}
 .bigval .cur{color:var(--muted);font-weight:500}
