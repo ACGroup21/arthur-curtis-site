@@ -46,6 +46,7 @@
   .lite-foot{margin-top:48px;padding:24px 22px;border-top:1px solid var(--line);border-radius:16px 16px 0 0;display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;background:linear-gradient(180deg,#0a1a30,#060f1d)}\
   .lite-foot .ff-brand{display:flex;align-items:center;gap:14px;flex-wrap:wrap}\
   .lite-foot .ff-logo{height:24px;width:auto;display:block}\
+  .lite-foot .ff-viral{height:20px;width:auto;display:block;opacity:.92}\
   .lite-foot .ff-by{display:flex;align-items:center;gap:8px;color:var(--muted-2);padding-left:14px;border-left:1px solid var(--line)}\
   .lite-foot .ff-by .acd-mark{height:16px;width:auto;display:block;flex:none}\
   .lite-foot .ff-by .acd-txt{font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:.11em;text-transform:uppercase;line-height:1.35}\
@@ -106,7 +107,7 @@
     if(document.querySelector('.lite-foot')) return;
     var app=document.querySelector('.app'); if(!app) return;
     var f=el('footer','lite-foot');
-    f.innerHTML='<div class="ff-brand"><span style="display:inline-flex;align-items:center;gap:9px"><img src="../assets/hummingbird-white.png" alt="" style="height:27px;width:auto;display:block;transform:translateY(-30%);filter:drop-shadow(0 4px 12px rgba(0,184,192,.3))"><img class="ff-logo-img" src="../assets/wordmark-white.svg" alt="Arthur Curtis Education" style="height:26px;width:auto;display:block"></span><span class="ff-by"><img class="acd-mark" src="../assets/ac-a-logo-white.svg" alt="AC Digital"><span class="acd-txt">Built&nbsp;by <strong>AC&nbsp;<span class="acd-blue">Digital</span></strong></span></span></div>'+
+    f.innerHTML='<div class="ff-brand"><span style="display:inline-flex;align-items:center;gap:9px"><img src="../assets/hummingbird-white.png" alt="" style="height:27px;width:auto;display:block;transform:translateY(-30%);filter:drop-shadow(0 4px 12px rgba(0,184,192,.3))"><img class="ff-logo-img" src="../assets/wordmark-white.svg" alt="Arthur Curtis Education" style="height:26px;width:auto;display:block"></span><img class="ff-viral" src="../assets/viral-white-accent.png" alt="Viral by Arthur Curtis"><span class="ff-by"><img class="acd-mark" src="../assets/ac-a-logo-white.svg" alt="AC Digital"><span class="acd-txt">Built&nbsp;by <strong>AC&nbsp;<span class="acd-blue">Digital</span></strong></span></span></div>'+
       '<div class="ff-links"><a href="'+SITE+'">arthurcurtis.com &rarr;</a></div>';
     app.appendChild(f);
   }
