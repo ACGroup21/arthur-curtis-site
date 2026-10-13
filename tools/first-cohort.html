@@ -231,7 +231,9 @@
   ];
   function hitMile(cxp,cyp){ var W=cv.width,H=cv.height,hit=-1,best=1e9; MILES.forEach(function(m,i){ var p=pathPt(m.t,W,H),px=p.x/DPR,py=p.y/DPR,dd=Math.hypot(cxp-px,cyp-py); if(dd<18&&dd<best){best=dd;hit=i;} }); return hit; }
   function showPop(i){ var p=pathPt(MILES[i].t,cv.width,cv.height),px=p.x/DPR,py=p.y/DPR,sw=cv.getBoundingClientRect().width;
-    pop.innerHTML='<div class="ph" style="color:'+INFO[i].c+'">'+INFO[i].h+'</div><div class="pb">'+INFO[i].b+'</div>';
+    var body=INFO[i].b;
+    if(i===MILES.length-1 && cohN>0) body='A further training block takes your '+cohN+' junior &rarr; senior on ~5 years of contextual experience. You grew '+cohN+' senior'+(cohN>1?'s':'')+' instead of hiring '+(cohN>1?'them':'one')+' &mdash; retention, automated.';
+    pop.innerHTML='<div class="ph" style="color:'+INFO[i].c+'">'+INFO[i].h+'</div><div class="pb">'+body+'</div>';
     pop.classList.add('on'); pop.dataset.i=i; var pw=pop.offsetWidth||220;
     pop.style.left=Math.max(6,Math.min(px-pw*0.12,sw-pw-6))+'px'; pop.style.top=(py+14)+'px'; }
   cv.addEventListener('click',function(e){ var r=cv.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top;
