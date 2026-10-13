@@ -508,7 +508,7 @@
           <span class="cb-chev" aria-hidden="true">▾</span>
         </button>
         <div class="cb-reveal" id="cbReveal">
-          <div class="cb-fig">~£<span id="cohortSpend">0</span> levy spend · ~£9k each, levy-funded</div>
+          <div class="cb-fig">&pound;<span id="cohortSpend">0</span> of your levy &middot; costed at each standard&rsquo;s real band</div>
           <div class="cb-stepper">
             <button class="cb-stepbtn" id="cbBack" aria-label="Previous stage">&larr;</button>
             <div class="cb-stepmid"><span id="cbStageName">Start · Junior</span> <span id="cbStageYr">1 of 4</span></div>
@@ -516,10 +516,10 @@
           </div>
           <div class="cb-progress" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
           <div class="cb-stage"><canvas id="cohortCanvas"></canvas><div class="cp-hint">▸ tap a stage</div><div class="cp-pop" id="cohortPop"></div></div>
-          <div class="cb-roleshead"><span class="t">Choose your cohort by role</span><span class="fn"><b id="cohFundN">0</b> funded</span></div>
+          <div class="cb-roleshead"><span class="t">Choose your cohort by role</span><span class="fn">&pound;<b id="cohFundN">0</b> to spend</span></div>
           <div class="cb-rows" id="cbRows" role="group" aria-label="Choose your cohort by role"></div>
-          <div class="cb-usage"><div class="cb-usage-t" aria-live="polite">Fills <b id="cohUseN">0</b> of <b id="cohUseM">0</b> funded <span class="left" id="cohUseLeft"></span></div><div class="cb-usebar"><i id="cohUseBar"></i></div></div>
-          <p class="cb-roles-note">Real, currently-funded standards (L2&ndash;L5, verified vs Skills England) &mdash; the mix shown is an example.</p>
+          <div class="cb-usage"><div class="cb-usage-t" aria-live="polite">Uses <b>&pound;<span id="cohUseCost">0</span></b> of <b>&pound;<span id="cohUsePot">0</span></b> <span class="left" id="cohUseLeft"></span></div><div class="cb-usebar"><i id="cohUseBar"></i></div></div>
+          <p class="cb-roles-note">Each standard has its own funding band (&pound;3.5k&ndash;&pound;15k here), so the cost follows your mix &mdash; not a flat average.</p>
           <a class="btn btn-primary cb-cta" href="tools/app.html#/first-cohort">Open the full tool →</a>
         </div>
       </div>
@@ -739,30 +739,34 @@ requestAnimationFrame(()=>{
   var cv=document.getElementById('cohortCanvas'); if(!cv||!window.AC) return;
   var cx=cv.getContext('2d'), DPR=Math.min(2,devicePixelRatio||1), MONO="'JetBrains Mono',monospace", SANS="'Inter',sans-serif";
   var CYAN='#22d3ee', GOLD='#f0c65a', reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var cap=16, funded=0, cohN=0, running=false;
+  var cap=16, pot=0, cohN=0, running=false;
   var ROLES=[
-    {n:'Operations manager',s:'L5 · ST0385',c:0},
-    {n:'Professional accounting technician',s:'L4 · ST0003',c:1},
-    {n:'Data analyst',s:'L4 · ST0118',c:1},
-    {n:'Team leader',s:'L3 · ST0384',c:2},
-    {n:'Customer service practitioner',s:'L2 · ST0072',c:1}
+    {n:'Operations manager',s:'L5 · ST0385 · £9k',band:9000,c:0},
+    {n:'Professional accounting technician',s:'L4 · ST0003 · £12k',band:12000,c:1},
+    {n:'Data analyst',s:'L4 · ST0118 · £15k',band:15000,c:1},
+    {n:'Team leader',s:'L3 · ST0384 · £5k',band:5000,c:2},
+    {n:'Customer service practitioner',s:'L2 · ST0072 · £3.5k',band:3500,c:1}
   ];
   var MILES=[{t:0,tt:'Start',s:'Junior'},{t:1/3,tt:'Yr 2',s:'Competent'},{t:2/3,tt:'Yr 3',s:'Applying'},{t:1,tt:'Yr 5',s:'Senior'}];
   var stageIdx=0, markerT=MILES[0].t, targetT=MILES[0].t;
   function fit(){ var r=cv.getBoundingClientRect(); if(!r.width) return; cv.width=Math.floor(r.width*DPR); cv.height=Math.floor(r.height*DPR); }
   function appN(){ try{ return AC.levy(currentPB).apprentices||0; }catch(e){ return 0; } }
   function roleTotal(){ var t=0; for(var i=0;i<ROLES.length;i++) t+=ROLES[i].c; return t; }
-  function updateFunded(){ funded=Math.min(appN(),cap); var over=roleTotal()-funded; for(var i=ROLES.length-1;i>=0&&over>0;i--){ var take=Math.min(ROLES[i].c,over); ROLES[i].c-=take; over-=take; } var fn=document.getElementById('cohFundN'); if(fn) fn.textContent=funded; }
-  function syncCohort(){ cohN=roleTotal(); var cn=document.getElementById('cohortN'); if(cn) cn.textContent=cohN; var cs=document.getElementById('cohortSpend'); if(cs) cs.textContent=Math.round(cohN*9000).toLocaleString('en-GB');
-    var un=document.getElementById('cohUseN'), um=document.getElementById('cohUseM'), ub=document.getElementById('cohUseBar'), ul=document.getElementById('cohUseLeft');
-    if(un) un.textContent=cohN; if(um) um.textContent=funded;
-    if(ub) ub.style.width=(funded>0?Math.min(100,cohN/funded*100):0)+'%';
-    if(ul) ul.textContent=funded>0?('· '+Math.max(0,funded-cohN)+' left'):''; }
-  function renderRows(){ var w=document.getElementById('cbRows'); if(!w) return; w.innerHTML=''; var full=roleTotal()>=funded;
-    ROLES.forEach(function(r,i){ var el=document.createElement('div'); el.className='cb-row'+(r.c>0?' has':'');
-      el.innerHTML='<div class="nm">'+r.n+'<span class="sub">'+r.s+'</span></div><div class="ct2"><button class="cb-rbtn" data-m="'+i+'" aria-label="Remove one '+r.n+'"'+(r.c<=0?' disabled':'')+'>&minus;</button><span class="cb-rnum" aria-label="'+r.c+' '+r.n+'">'+r.c+'</span><button class="cb-rbtn" data-p="'+i+'" aria-label="Add one '+r.n+'"'+(full?' disabled':'')+'>+</button></div>';
+  function cohortCost(){ var c=0; for(var i=0;i<ROLES.length;i++) c+=ROLES[i].c*ROLES[i].band; return c; }
+  function gbp(n){ return Math.round(n).toLocaleString('en-GB'); }
+  function updateFunded(){ try{ pot=AC.levy(currentPB).pot||0; }catch(e){ pot=0; }
+    while(cohortCost()>pot){ var rm=false; for(var i=ROLES.length-1;i>=0;i--){ if(ROLES[i].c>0){ ROLES[i].c--; rm=true; break; } } if(!rm) break; }
+    var fn=document.getElementById('cohFundN'); if(fn) fn.textContent=gbp(pot); }
+  function syncCohort(){ cohN=roleTotal(); var cost=cohortCost(); var cn=document.getElementById('cohortN'); if(cn) cn.textContent=cohN; var cs=document.getElementById('cohortSpend'); if(cs) cs.textContent=gbp(cost);
+    var uc=document.getElementById('cohUseCost'), up=document.getElementById('cohUsePot'), ub=document.getElementById('cohUseBar'), ul=document.getElementById('cohUseLeft');
+    if(uc) uc.textContent=gbp(cost); if(up) up.textContent=gbp(pot);
+    if(ub) ub.style.width=(pot>0?Math.min(100,cost/pot*100):0)+'%';
+    if(ul) ul.textContent=pot>0?('· £'+gbp(Math.max(0,pot-cost))+' left'):''; }
+  function renderRows(){ var w=document.getElementById('cbRows'); if(!w) return; w.innerHTML=''; var cost=cohortCost();
+    ROLES.forEach(function(r,i){ var el=document.createElement('div'); el.className='cb-row'+(r.c>0?' has':''); var canAdd=cost+r.band<=pot;
+      el.innerHTML='<div class="nm">'+r.n+'<span class="sub">'+r.s+'</span></div><div class="ct2"><button class="cb-rbtn" data-m="'+i+'" aria-label="Remove one '+r.n+'"'+(r.c<=0?' disabled':'')+'>&minus;</button><span class="cb-rnum" aria-label="'+r.c+' '+r.n+'">'+r.c+'</span><button class="cb-rbtn" data-p="'+i+'" aria-label="Add one '+r.n+'"'+(canAdd?'':' disabled')+'>+</button></div>';
       w.appendChild(el); });
-    w.querySelectorAll('[data-p]').forEach(function(b){ b.onclick=function(){ if(roleTotal()<funded){ ROLES[+b.dataset.p].c++; renderRows(); syncCohort(); repaint(); } }; });
+    w.querySelectorAll('[data-p]').forEach(function(b){ b.onclick=function(){ var r=ROLES[+b.dataset.p]; if(cohortCost()+r.band<=pot){ r.c++; renderRows(); syncCohort(); repaint(); } }; });
     w.querySelectorAll('[data-m]').forEach(function(b){ b.onclick=function(){ var rr=ROLES[+b.dataset.m]; if(rr.c>0){ rr.c--; renderRows(); syncCohort(); repaint(); } }; }); }
   function repaint(){ if(reduce && running) draw(0); }
   function pathPt(t,W,H){ var mx=W*0.08,myT=H*0.15,myB=H*0.07,pH=H*0.56; var x=mx+t*(W-2*mx); var y=(pH-myB)-t*(pH-myT-myB); y+=Math.sin(t*Math.PI*2.6+0.5)*pH*0.15*(1-t*0.35); return {x:x,y:y}; }
