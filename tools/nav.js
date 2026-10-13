@@ -106,7 +106,7 @@
     if(document.querySelector('.lite-foot')) return;
     var app=document.querySelector('.app'); if(!app) return;
     var f=el('footer','lite-foot');
-    f.innerHTML='<div class="ff-brand"><span style="display:inline-flex;align-items:center;gap:9px"><img src="../assets/hummingbird-white.png" alt="" style="height:27px;width:auto;display:block;transform:translateY(-13%);filter:drop-shadow(0 4px 12px rgba(0,184,192,.3))"><img class="ff-logo-img" src="../assets/wordmark-white.svg" alt="Arthur Curtis Education" style="height:26px;width:auto;display:block"></span><span class="ff-by"><img class="acd-mark" src="../assets/ac-a-logo-white.svg" alt="AC Digital"><span class="acd-txt">Built&nbsp;by <strong>AC&nbsp;<span class="acd-blue">Digital</span></strong></span></span></div>'+
+    f.innerHTML='<div class="ff-brand"><span style="display:inline-flex;align-items:center;gap:9px"><img src="../assets/hummingbird-white.png" alt="" style="height:27px;width:auto;display:block;transform:translateY(-23%);filter:drop-shadow(0 4px 12px rgba(0,184,192,.3))"><img class="ff-logo-img" src="../assets/wordmark-white.svg" alt="Arthur Curtis Education" style="height:26px;width:auto;display:block"></span><span class="ff-by"><img class="acd-mark" src="../assets/ac-a-logo-white.svg" alt="AC Digital"><span class="acd-txt">Built&nbsp;by <strong>AC&nbsp;<span class="acd-blue">Digital</span></strong></span></span></div>'+
       '<div class="ff-links"><a href="'+SITE+'">arthurcurtis.com &rarr;</a></div>';
     app.appendChild(f);
   }

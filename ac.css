@@ -105,9 +105,9 @@ img{max-width:100%}
 .ac-foot{border-top:1px solid var(--line);color:var(--muted-2);position:relative;z-index:2;background:linear-gradient(180deg,rgba(12,28,52,.34),rgba(6,15,29,0))}
 .ac-foot-grid{max-width:1160px;margin:0 auto;padding:56px 40px 36px;display:flex;justify-content:space-between;gap:46px 72px;flex-wrap:wrap}
 .ac-foot-brand{display:flex;flex-direction:column;align-items:flex-start;gap:16px;max-width:360px}
-/* lockup mirrors the splash: bird ~= wordmark height, raised translateY(-13%), gap scaled from splash */
+/* lockup mirrors the splash: bird ~= wordmark height, raised so its centre sits on the middle of the "A" (translateY(-23%)) */
 .ac-foot-lock{display:inline-flex;align-items:center;gap:10px}
-.ac-foot-lock img:first-child{height:29px;width:auto;display:block;transform:translateY(-13%);filter:drop-shadow(0 4px 14px rgba(0,184,192,.32))}
+.ac-foot-lock img:first-child{height:29px;width:auto;display:block;transform:translateY(-23%);filter:drop-shadow(0 4px 14px rgba(0,184,192,.32))}
 .ac-foot-logo{height:28px;width:auto;display:block}
 .ac-foot-tag{margin:0;font-size:14px;line-height:1.6;color:var(--muted)}
 .ac-foot-mail{font-family:var(--mono);font-size:12.5px;letter-spacing:.02em;color:var(--muted-2);text-decoration:none;border-bottom:1px solid transparent;transition:color .2s,border-color .2s}
