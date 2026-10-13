@@ -53,7 +53,7 @@
     +     '<a href="ourway.html">Our Way</a><a href="faq.html">FAQs</a><a href="partners.html">Partners</a><a href="blog.html">Blog</a><a href="contact.html">Contact</a>'
     +   '</div>'
     +   '<div class="ac-foot-in">'
-    +     '<img class="ac-foot-logo" src="assets/viral-white-accent.png" alt="Arthur Curtis Education" style="height:30px;width:auto;display:block">'
+    +     '<span class="ac-foot-lock" style="display:inline-flex;align-items:center;gap:10px"><img src="assets/hummingbird-white.png" alt="" style="height:30px;width:auto;display:block;filter:drop-shadow(0 4px 12px rgba(0,184,192,.3))"><img class="ac-foot-logo" src="assets/wordmark-white.svg" alt="Arthur Curtis Education" style="height:30px;width:auto;display:block"></span>'
     +     '<span class="ac-mono" style="font-size:12px">&copy; '+(new Date().getFullYear())+' &middot; Making people better</span>'
     +     '<span class="ac-credit">'+ACD+'<span>Built&nbsp;by <b>AC&nbsp;<span class="blue">Digital</span></b></span></span>'
     +     '<span class="ac-mono" style="font-size:12px">hello@arthurcurtis.com</span>'
