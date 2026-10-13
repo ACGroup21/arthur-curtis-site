@@ -128,7 +128,7 @@
   .cb-badge .cb-chev{color:var(--muted-2);font-size:11px;transition:transform .3s}
   .cohort-box.open .cb-chev{transform:rotate(180deg)}
   .cb-reveal{max-height:0;opacity:0;visibility:hidden;overflow:hidden;padding:0 8px;transition:max-height .5s cubic-bezier(.2,.7,.2,1),opacity .3s ease,visibility 0s linear .5s}
-  .cohort-box.open .cb-reveal{max-height:760px;opacity:1;visibility:visible;padding:4px 8px 8px;transition:max-height .5s cubic-bezier(.2,.7,.2,1),opacity .3s ease,visibility 0s}
+  .cohort-box.open .cb-reveal{max-height:860px;opacity:1;visibility:visible;padding:4px 8px 8px;transition:max-height .5s cubic-bezier(.2,.7,.2,1),opacity .3s ease,visibility 0s}
   @media(prefers-reduced-motion:reduce){.cb-reveal,.cb-chev{transition:none}}
   .cohort-box .cb-stage{position:relative;height:180px;margin:6px 0 4px;border-radius:11px;overflow:hidden;background:radial-gradient(120% 130% at 50% 0%,rgba(20,40,70,.35),rgba(6,14,26,.5));border:1px solid rgba(120,160,220,.14)}
   .cb-stepper{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:2px 0 7px}
@@ -156,6 +156,13 @@
   .cb-rbtn:disabled{opacity:.25;cursor:not-allowed}
   .cb-rnum{font-family:var(--mono);font-size:14px;font-weight:700;min-width:16px;text-align:center;font-variant-numeric:tabular-nums}
   .cb-row.has .cb-rnum{color:var(--gold)}
+  .cb-usage{margin-top:11px}
+  .cb-usage-t{font-size:12px;color:var(--muted);margin-bottom:6px}
+  .cb-usage-t b{color:var(--gold);font-weight:700;font-variant-numeric:tabular-nums}
+  .cb-usage-t .left{color:var(--muted-2);font-size:11px}
+  .cb-usebar{height:8px;border-radius:5px;background:rgba(120,160,220,.12);overflow:hidden}
+  .cb-usebar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),#ffd97a);transition:width .3s}
+  .cb-roles-note{font-size:10.5px;color:var(--muted-2);line-height:1.4;margin:10px 2px 0}
   .cohort-box .cb-stage canvas{display:block;width:100%;height:100%}
   .cb-stage .cp-hint{position:absolute;right:10px;top:6px;font-family:var(--mono);font-size:9px;letter-spacing:.06em;color:var(--muted-2);opacity:.7;pointer-events:none}
   .cb-stage .cp-pop{position:absolute;z-index:6;width:210px;max-width:82%;background:rgba(9,18,34,.97);border:1px solid rgba(34,211,238,.4);border-radius:10px;padding:11px 13px;box-shadow:0 14px 40px -12px rgba(0,0,0,.85);opacity:0;transform:translateY(6px) scale(.98);transform-origin:top left;pointer-events:none;transition:opacity .18s,transform .18s}
@@ -510,7 +517,9 @@
           <div class="cb-progress" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
           <div class="cb-stage"><canvas id="cohortCanvas"></canvas><div class="cp-hint">▸ tap a stage</div><div class="cp-pop" id="cohortPop"></div></div>
           <div class="cb-roleshead"><span class="t">Choose your cohort by role</span><span class="fn"><b id="cohFundN">0</b> funded</span></div>
-          <div class="cb-rows" id="cbRows"></div>
+          <div class="cb-rows" id="cbRows" role="group" aria-label="Choose your cohort by role"></div>
+          <div class="cb-usage"><div class="cb-usage-t" aria-live="polite">Fills <b id="cohUseN">0</b> of <b id="cohUseM">0</b> funded <span class="left" id="cohUseLeft"></span></div><div class="cb-usebar"><i id="cohUseBar"></i></div></div>
+          <p class="cb-roles-note">Roles &amp; levels are examples — your mix follows the standards you choose.</p>
           <a class="btn btn-primary cb-cta" href="tools/app.html#/first-cohort">Open the full tool →</a>
         </div>
       </div>
@@ -741,10 +750,14 @@ requestAnimationFrame(()=>{
   function appN(){ try{ return AC.levy(currentPB).apprentices||0; }catch(e){ return 0; } }
   function roleTotal(){ var t=0; for(var i=0;i<ROLES.length;i++) t+=ROLES[i].c; return t; }
   function updateFunded(){ funded=Math.min(appN(),cap); var over=roleTotal()-funded; for(var i=ROLES.length-1;i>=0&&over>0;i--){ var take=Math.min(ROLES[i].c,over); ROLES[i].c-=take; over-=take; } var fn=document.getElementById('cohFundN'); if(fn) fn.textContent=funded; }
-  function syncCohort(){ cohN=roleTotal(); var cn=document.getElementById('cohortN'); if(cn) cn.textContent=cohN; var cs=document.getElementById('cohortSpend'); if(cs) cs.textContent=Math.round(cohN*9000).toLocaleString('en-GB'); }
+  function syncCohort(){ cohN=roleTotal(); var cn=document.getElementById('cohortN'); if(cn) cn.textContent=cohN; var cs=document.getElementById('cohortSpend'); if(cs) cs.textContent=Math.round(cohN*9000).toLocaleString('en-GB');
+    var un=document.getElementById('cohUseN'), um=document.getElementById('cohUseM'), ub=document.getElementById('cohUseBar'), ul=document.getElementById('cohUseLeft');
+    if(un) un.textContent=cohN; if(um) um.textContent=funded;
+    if(ub) ub.style.width=(funded>0?Math.min(100,cohN/funded*100):0)+'%';
+    if(ul) ul.textContent=funded>0?('· '+Math.max(0,funded-cohN)+' left'):''; }
   function renderRows(){ var w=document.getElementById('cbRows'); if(!w) return; w.innerHTML=''; var full=roleTotal()>=funded;
     ROLES.forEach(function(r,i){ var el=document.createElement('div'); el.className='cb-row'+(r.c>0?' has':'');
-      el.innerHTML='<div class="nm">'+r.n+'<span class="sub">'+r.s+'</span></div><div class="ct2"><button class="cb-rbtn" data-m="'+i+'"'+(r.c<=0?' disabled':'')+'>&minus;</button><span class="cb-rnum">'+r.c+'</span><button class="cb-rbtn" data-p="'+i+'"'+(full?' disabled':'')+'>+</button></div>';
+      el.innerHTML='<div class="nm">'+r.n+'<span class="sub">'+r.s+'</span></div><div class="ct2"><button class="cb-rbtn" data-m="'+i+'" aria-label="Remove one '+r.n+'"'+(r.c<=0?' disabled':'')+'>&minus;</button><span class="cb-rnum" aria-label="'+r.c+' '+r.n+'">'+r.c+'</span><button class="cb-rbtn" data-p="'+i+'" aria-label="Add one '+r.n+'"'+(full?' disabled':'')+'>+</button></div>';
       w.appendChild(el); });
     w.querySelectorAll('[data-p]').forEach(function(b){ b.onclick=function(){ if(roleTotal()<funded){ ROLES[+b.dataset.p].c++; renderRows(); syncCohort(); repaint(); } }; });
     w.querySelectorAll('[data-m]').forEach(function(b){ b.onclick=function(){ var rr=ROLES[+b.dataset.m]; if(rr.c>0){ rr.c--; renderRows(); syncCohort(); repaint(); } }; }); }

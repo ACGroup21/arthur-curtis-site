@@ -63,6 +63,13 @@
   .fc-rbtn:disabled{opacity:.25;cursor:not-allowed}
   .fc-rnum{font-family:var(--mono);font-size:16px;font-weight:700;min-width:18px;text-align:center;font-variant-numeric:tabular-nums}
   .fc-row.has .fc-rnum{color:var(--gold)}
+  .fc-usage{margin-top:16px}
+  .fc-usage-t{font-size:12.5px;color:var(--muted);margin-bottom:7px}
+  .fc-usage-t b{color:var(--gold);font-weight:700;font-variant-numeric:tabular-nums}
+  .fc-usage-t .left{color:var(--muted-2);font-size:11.5px}
+  .fc-usebar{height:9px;border-radius:6px;background:rgba(120,160,220,.12);overflow:hidden}
+  .fc-usebar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),#ffd97a);transition:width .3s}
+  .fc-roles-note{font-size:11px;color:var(--muted-2);line-height:1.45;margin:12px 0 0}
 </style>
 </head>
 <body>
@@ -98,7 +105,12 @@
 
     <div class="fc-roles">
       <div class="fc-roles-head"><span class="t">Choose your cohort by role</span><span class="fn"><b id="fcFundN">0</b> funded places</span></div>
-      <div class="fc-rows" id="fcRows"></div>
+      <div class="fc-rows" id="fcRows" role="group" aria-label="Choose your cohort by role"></div>
+      <div class="fc-usage">
+        <div class="fc-usage-t" aria-live="polite">Cohort fills <b id="fcUseN">0</b> of <b id="fcUseM">0</b> funded places <span class="left" id="fcUseLeft"></span></div>
+        <div class="fc-usebar"><i id="fcUseBar"></i></div>
+      </div>
+      <p class="fc-roles-note">Roles and levels are examples — your real mix follows the apprenticeship standards you choose.</p>
     </div>
 
     <div class="fc-cta">
@@ -153,10 +165,14 @@
   function fit(){var r=cv.getBoundingClientRect();if(!r.width)return;cv.width=Math.floor(r.width*DPR);cv.height=Math.floor(r.height*DPR);}
   function roleTotal(){ var t=0; for(var i=0;i<ROLES.length;i++) t+=ROLES[i].c; return t; }
   function updateFunded(){ var r=levy(currentPB); funded=Math.min(r.app,cap); var over=roleTotal()-funded; for(var i=ROLES.length-1;i>=0&&over>0;i--){ var take=Math.min(ROLES[i].c,over); ROLES[i].c-=take; over-=take; } var fn=$('fcFundN'); if(fn) fn.textContent=funded; }
-  function syncCohort(){ cohN=roleTotal(); $('fcCohN').textContent=cohN; anim($('fcCohSpend'),cohN*9000); }
+  function syncCohort(){ cohN=roleTotal(); $('fcCohN').textContent=cohN; anim($('fcCohSpend'),cohN*9000);
+    var un=$('fcUseN'), um=$('fcUseM'), ub=$('fcUseBar'), ul=$('fcUseLeft');
+    if(un) un.textContent=cohN; if(um) um.textContent=funded;
+    if(ub) ub.style.width=(funded>0?Math.min(100,cohN/funded*100):0)+'%';
+    if(ul){ var left=Math.max(0,funded-cohN); ul.textContent=funded>0?('· '+left+(left===1?' place':' places')+' still available'):'· set your pay bill above'; } }
   function renderRows(){ var w=$('fcRows'); if(!w) return; w.innerHTML=''; var full=roleTotal()>=funded;
     ROLES.forEach(function(r,i){ var el=document.createElement('div'); el.className='fc-row'+(r.c>0?' has':'');
-      el.innerHTML='<div class="nm">'+r.n+'<span class="sub">'+r.s+'</span></div><div class="ct2"><button class="fc-rbtn" data-m="'+i+'"'+(r.c<=0?' disabled':'')+'>&minus;</button><span class="fc-rnum">'+r.c+'</span><button class="fc-rbtn" data-p="'+i+'"'+(full?' disabled':'')+'>+</button></div>';
+      el.innerHTML='<div class="nm">'+r.n+'<span class="sub">'+r.s+'</span></div><div class="ct2"><button class="fc-rbtn" data-m="'+i+'" aria-label="Remove one '+r.n+'"'+(r.c<=0?' disabled':'')+'>&minus;</button><span class="fc-rnum" aria-label="'+r.c+' '+r.n+'">'+r.c+'</span><button class="fc-rbtn" data-p="'+i+'" aria-label="Add one '+r.n+'"'+(full?' disabled':'')+'>+</button></div>';
       w.appendChild(el); });
     w.querySelectorAll('[data-p]').forEach(function(b){ b.onclick=function(){ if(roleTotal()<funded){ ROLES[+b.dataset.p].c++; renderRows(); syncCohort(); repaint(); } }; });
     w.querySelectorAll('[data-m]').forEach(function(b){ b.onclick=function(){ var rr=ROLES[+b.dataset.m]; if(rr.c>0){ rr.c--; renderRows(); syncCohort(); repaint(); } }; }); }
