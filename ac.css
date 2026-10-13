@@ -136,3 +136,18 @@ img{max-width:100%}
 /* utility */
 .ac-rule{height:1px;background:linear-gradient(90deg,transparent,var(--energy),var(--indigo),transparent);opacity:.55;border:0}
 [hidden]{display:none !important}
+
+/* ---------- motion language (injected + observed by ac-shell.js) ----------
+   Restraint over ambience: a gentle scroll fade-rise, and one deliberate
+   "trace" line that draws in under each section title. Heroes are left to
+   show at rest; the homepage keeps its own bespoke reveal system. */
+.ac-reveal{opacity:0;transform:translateY(16px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1);will-change:opacity,transform}
+.ac-reveal.in{opacity:1;transform:none}
+/* the trace: hairline accent drawn under section titles when the section enters */
+.ac-section-t,section.block .s-title,section.cta-band .s-title{position:relative}
+.ac-section-t::after,section.block .s-title::after,section.cta-band .s-title::after{content:"";position:absolute;left:0;bottom:-11px;height:2px;width:54px;border-radius:2px;background:linear-gradient(90deg,var(--accent),transparent);transform:scaleX(0);transform-origin:left;transition:transform .85s cubic-bezier(.2,.7,.2,1) .18s}
+.ac-section.in .ac-section-t::after,section.block.in .s-title::after,section.cta-band.in .s-title::after{transform:scaleX(1)}
+@media(prefers-reduced-motion:reduce){
+  .ac-reveal{opacity:1 !important;transform:none !important;transition:none !important}
+  .ac-section-t::after,section.block .s-title::after,section.cta-band .s-title::after{transform:scaleX(1)}
+}

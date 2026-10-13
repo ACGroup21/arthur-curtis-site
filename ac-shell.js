@@ -67,6 +67,31 @@
     + '</footer>';
   }
 
+  // ---- motion language: gentle scroll reveal + the title "trace" ----
+  function initMotion(){
+    // honour reduced-motion, skip the homepage (it has its own .reveal system), need IO
+    if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if(document.querySelector('.reveal')) return;
+    if(!('IntersectionObserver' in window)) return;
+    var sections = document.querySelectorAll('section.ac-section, section.block, section.cta-band, main.wrap');
+    if(!sections.length) return;
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { rootMargin:'0px 0px -8% 0px', threshold:0.12 });
+    sections.forEach(function(sec){
+      io.observe(sec);                                          // drives the title trace
+      var wrap = sec.querySelector(':scope > .ac-wrap, :scope > .wrap') || sec;
+      var i = 0;
+      Array.prototype.forEach.call(wrap.children, function(k){
+        if(k.classList.contains('ac-reveal') || k.tagName==='SCRIPT' || k.tagName==='STYLE' || k.tagName==='BR') return;
+        k.classList.add('ac-reveal');
+        k.style.transitionDelay = Math.min(i*70, 350)+'ms';
+        io.observe(k);
+        i++;
+      });
+    });
+  }
+
   function mount(){
     if(document.querySelector('.ac-nav')) return;             // idempotent
     document.body.insertAdjacentHTML('afterbegin', navHTML());
@@ -84,6 +109,7 @@
         if(e.target.tagName === 'A'){ links.classList.remove('open'); burger.setAttribute('aria-expanded','false'); }
       });
     }
+    initMotion();
   }
 
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mount);
