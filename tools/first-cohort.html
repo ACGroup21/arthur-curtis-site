@@ -157,17 +157,19 @@
   var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
   var cap=16, pot=0, cohN=0;
   var ROLES=[
-    {n:'Operations manager',s:'L5 · ST0385 · £9k band',band:9000,c:0},
-    {n:'Professional accounting technician',s:'L4 · ST0003 · £12k band',band:12000,c:1},
-    {n:'Data analyst',s:'L4 · ST0118 · £15k band',band:15000,c:1},
-    {n:'Team leader',s:'L3 · ST0384 · £5k band',band:5000,c:2},
-    {n:'Customer service practitioner',s:'L2 · ST0072 · £3.5k band',band:3500,c:1}
+    {n:'Operations manager',ref:'ST0385',level:5,s:'L5 · ST0385 · £9k band',band:9000,c:0},
+    {n:'Professional accounting technician',ref:'ST0003',level:4,s:'L4 · ST0003 · £12k band',band:12000,c:1},
+    {n:'Data analyst',ref:'ST0118',level:4,s:'L4 · ST0118 · £15k band',band:15000,c:1},
+    {n:'Team leader',ref:'ST0384',level:3,s:'L3 · ST0384 · £5k band',band:5000,c:2},
+    {n:'Customer service practitioner',ref:'ST0072',level:2,s:'L2 · ST0072 · £3.5k band',band:3500,c:1}
   ];
   var MILES=[{t:0,tt:'Start',s:'Junior'},{t:1/3,tt:'Yr 2',s:'Competent'},{t:2/3,tt:'Yr 3',s:'Applying'},{t:1,tt:'Yr 5',s:'Senior'}];
   var stageIdx=0, markerT=MILES[0].t, targetT=MILES[0].t;
   function fit(){var r=cv.getBoundingClientRect();if(!r.width)return;cv.width=Math.floor(r.width*DPR);cv.height=Math.floor(r.height*DPR);}
   function roleTotal(){ var t=0; for(var i=0;i<ROLES.length;i++) t+=ROLES[i].c; return t; }
   function cohortCost(){ var c=0; for(var i=0;i<ROLES.length;i++) c+=ROLES[i].c*ROLES[i].band; return c; }
+  function persistCohort(){ try{ if(!(window.AC&&AC.scenario)) return; var roles=[]; for(var i=0;i<ROLES.length;i++){ var r=ROLES[i]; if(r.c>0) roles.push({name:r.n,ref:r.ref,level:r.level,band:r.band,count:r.c}); } AC.scenario.set({cohort:{people:roleTotal(),cost:cohortCost(),roles:roles}}); }catch(e){} }
+  function restoreCohort(){ try{ if(!(window.AC&&AC.scenario)) return; var s=AC.scenario.get(); if(!s.cohort||!s.cohort.roles||!s.cohort.roles.length) return; for(var i=0;i<ROLES.length;i++) ROLES[i].c=0; s.cohort.roles.forEach(function(sr){ for(var j=0;j<ROLES.length;j++){ if(ROLES[j].ref===sr.ref) ROLES[j].c=Math.max(0,sr.count|0); } }); }catch(e){} }
   function updateFunded(){ pot=levy(currentPB).pot;
     while(cohortCost()>pot){ var rm=false; for(var i=ROLES.length-1;i>=0;i--){ if(ROLES[i].c>0){ ROLES[i].c--; rm=true; break; } } if(!rm) break; }
     var fn=$('fcFundN'); if(fn) fn.textContent=fmt(pot); }
@@ -175,7 +177,7 @@
     var uc=$('fcUseCost'), up=$('fcUsePot'), ub=$('fcUseBar'), ul=$('fcUseLeft');
     if(uc) uc.textContent=fmt(cost); if(up) up.textContent=fmt(pot);
     if(ub) ub.style.width=(pot>0?Math.min(100,cost/pot*100):0)+'%';
-    if(ul){ var left=Math.max(0,pot-cost); ul.textContent=pot>0?('· £'+fmt(left)+' left'):'· set your pay bill above'; } }
+    if(ul){ var left=Math.max(0,pot-cost); ul.textContent=pot>0?('· £'+fmt(left)+' left'):'· set your pay bill above'; } persistCohort(); }
   function renderRows(){ var w=$('fcRows'); if(!w) return; w.innerHTML=''; var cost=cohortCost();
     ROLES.forEach(function(r,i){ var el=document.createElement('div'); el.className='fc-row'+(r.c>0?' has':''); var canAdd=cost+r.band<=pot;
       el.innerHTML='<div class="nm">'+r.n+'<span class="sub">'+r.s+'</span></div><div class="ct2"><button class="fc-rbtn" data-m="'+i+'" aria-label="Remove one '+r.n+'"'+(r.c<=0?' disabled':'')+'>&minus;</button><span class="fc-rnum" aria-label="'+r.c+' '+r.n+'">'+r.c+'</span><button class="fc-rbtn" data-p="'+i+'" aria-label="Add one '+r.n+'"'+(canAdd?'':' disabled')+'>+</button></div>';
@@ -249,7 +251,7 @@
   cv.addEventListener('mousemove',function(e){ var r=cv.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top; cv.style.cursor=hitMile(mx,my)>=0?'pointer':'default'; });
   document.addEventListener('click',function(e){ if(!pop.contains(e.target)) pop.classList.remove('on'); });
 
-  fit(); addEventListener('resize',function(){fit();repaint();}); refresh(); updateStepUI();
+  fit(); addEventListener('resize',function(){fit();repaint();}); restoreCohort(); refresh(); updateStepUI();
   if(reduce){ draw(16); }
   else { var last=performance.now();
     (function loop(n){ if(!document.body.contains(cv)) return; var dt=Math.min(48,n-last); last=n; draw(dt); requestAnimationFrame(loop); })(performance.now()); }
