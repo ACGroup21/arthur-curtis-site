@@ -58,6 +58,10 @@ img{max-width:100%}
 .ac-btn:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 /* keyboard focus — a visible ring on every interactive element */
 a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
+/* skip link (injected by ac-shell.js) — off-screen until focused */
+.ac-skip{position:fixed;top:-64px;left:12px;z-index:200;background:var(--accent);color:#04121f;padding:11px 18px;border-radius:9px;font-weight:700;font-size:14px;text-decoration:none;box-shadow:0 8px 24px rgba(2,10,26,.5);transition:top .2s}
+.ac-skip:focus{top:12px;outline:2px solid #fff;outline-offset:2px}
+main[tabindex="-1"]:focus,main[tabindex="-1"]:focus-visible{outline:none}
 .ac-btn-primary{color:#04141c;background:linear-gradient(100deg,var(--accent),var(--accent-2));box-shadow:0 0 0 1px rgba(0,184,192,.36),0 14px 40px -14px rgba(0,184,192,.6)}
 .ac-btn-primary:hover{box-shadow:0 0 0 1px rgba(0,184,192,.5),0 18px 50px -12px rgba(0,184,192,.7);transform:translateY(-1px)}
 .ac-btn-ghost{color:var(--ink);background:rgba(8,16,32,.5);border:1px solid var(--line-2)}

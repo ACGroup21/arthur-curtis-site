@@ -99,6 +99,15 @@
     if(document.querySelector('.ac-nav')) return;             // idempotent
     document.body.insertAdjacentHTML('afterbegin', navHTML());
     document.body.insertAdjacentHTML('beforeend', footHTML());
+    // skip link (bypass blocks) — unless the page already ships its own
+    if(!document.querySelector('.skip-link, .ac-skip')){
+      var main = document.querySelector('main') || document.querySelector('section');
+      if(main){
+        if(!main.id) main.id = 'ac-main';
+        if(!main.hasAttribute('tabindex')) main.setAttribute('tabindex','-1');
+        document.body.insertAdjacentHTML('afterbegin', '<a class="ac-skip" href="#'+main.id+'">Skip to content</a>');
+      }
+    }
     // favicon (the floating corner mascot was retired — the bird now lives in the header/footer lockups)
     var fav=document.querySelector('link[rel="icon"]'); if(!fav){ fav=document.createElement('link'); fav.rel='icon'; document.head.appendChild(fav); } fav.href='assets/favicon-hummingbird.png';
     var burger = document.getElementById('acBurger');
