@@ -120,7 +120,7 @@ img{max-width:100%}
 .ac-foot-cc{color:var(--muted-2);font-size:12px}
 .ac-foot-bar-end{display:inline-flex;align-items:center;gap:20px;flex-wrap:wrap}
 .ac-foot-viral{height:20px;width:auto;display:block;opacity:.92}
-@media(max-width:640px){.ac-foot-grid{padding:40px 20px 28px;gap:34px}.ac-foot-bar{padding:16px 20px 4px}}
+@media(max-width:640px){.ac-foot-grid{padding:40px 20px 28px;gap:30px;flex-direction:column}.ac-foot-brand{max-width:none}.ac-foot-bar{padding:16px 20px 4px}}
 .ac-credit{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:9px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted-2)}
 .ac-credit b{color:#fff;font-weight:600;letter-spacing:.07em}
 .ac-credit .blue{color:var(--acd-blue)}
