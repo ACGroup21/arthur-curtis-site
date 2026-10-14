@@ -6,7 +6,7 @@
 :root{
   --navy:#0b1426; --bg:#04070f; --bg-2:#0a1120;
   --blue:#2f7d9c; --cyan:#00B8C0; --cyan-soft:#5fe0e6; --ink:#eef4fc;
-  --muted:#9fb1ca; --muted-2:#6b7c98; --line:rgba(120,160,220,0.14);
+  --muted:#9fb1ca; --muted-2:#74859f; --line:rgba(120,160,220,0.14);
   --glass:rgba(255,255,255,0.035); --warm:#f0c65a;
   --sans:'Inter',system-ui,-apple-system,sans-serif; --mono:'JetBrains Mono',monospace;
 }
