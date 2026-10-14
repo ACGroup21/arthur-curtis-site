@@ -66,7 +66,7 @@
 </div>
 
 <script src="engine.js?v=5"></script>
-<script src="spine.js?v=4"></script>
+<script src="spine.js?v=5"></script>
 <script src="nav.js?v=20"></script>
 <script src="../comfort.js?v=3"></script>
 <script>
@@ -149,7 +149,7 @@
 
     $('result').style.display='block';
     setTimeout(function(){ $('meterFill').style.width=pct+'%'; },60);
-    AC.scenario.set({diagnosticScore:score, diagnosticBand:band, nonLevy:isNonLevy});
+    AC.scenario.set({diagnosticScore:score, diagnosticBand:band, nonLevy:isNonLevy, health:score+' / '+max}); if(AC.spine) AC.spine.refresh();
     $('result').scrollIntoView({behavior:'smooth', block:'nearest'});
   }
 </script>

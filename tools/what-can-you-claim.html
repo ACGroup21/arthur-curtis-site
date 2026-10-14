@@ -116,7 +116,7 @@
 </div>
 
 <script src="engine.js?v=5"></script>
-<script src="spine.js?v=4"></script>
+<script src="spine.js?v=5"></script>
 <script src="nav.js?v=20"></script>
 <script src="../comfort.js?v=3"></script>
 <script>
@@ -184,7 +184,7 @@
       wrap.appendChild(row);
     });
 
-    AC.scenario.set({salary:c.salary, ageBand:c.ageBand, careLeaver:c.careLeaver, ehcp:c.ehcp, levyPayer:c.levyPayer, newHire:c.newHire, level7:c.level7});
+    AC.scenario.set({salary:c.salary, ageBand:c.ageBand, careLeaver:c.careLeaver, ehcp:c.ehcp, levyPayer:c.levyPayer, newHire:c.newHire, level7:c.level7, claimable:(oneoff+ni)});
     if(AC.spine) AC.spine.refresh();
   }
 

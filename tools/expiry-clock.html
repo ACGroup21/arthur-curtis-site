@@ -69,7 +69,7 @@
 </div>
 
 <script src="engine.js?v=5"></script>
-<script src="spine.js?v=4"></script>
+<script src="spine.js?v=5"></script>
 <script src="nav.js?v=20"></script>
 <script src="../comfort.js?v=3"></script>
 <script>
@@ -119,7 +119,7 @@
       segs[i].classList.toggle('expiring', i >= (EM-expiring));
     }
 
-    AC.scenario.set({payBill:pb, levyMaturity:mat}); if(AC.spine) AC.spine.refresh();
+    AC.scenario.set({payBill:pb, levyMaturity:mat, atRisk:m.annual}); if(AC.spine) AC.spine.refresh();
   }
   /* (no internal-app link — lite apps funnel to a plan / sibling tools only) */
 

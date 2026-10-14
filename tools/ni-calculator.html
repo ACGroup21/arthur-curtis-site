@@ -79,7 +79,7 @@
 </div>
 
 <script src="engine.js?v=5"></script>
-<script src="spine.js?v=4"></script>
+<script src="spine.js?v=5"></script>
 <script src="nav.js?v=20"></script>
 <script src="../comfort.js?v=3"></script>
 <script>
@@ -129,7 +129,7 @@
       flag.style.display='none';
     }
 
-    AC.scenario.set({salary:salary, ageBand:band}); if(AC.spine) AC.spine.refresh();
+    AC.scenario.set({salary:salary, ageBand:band, niSaving:perYear}); if(AC.spine) AC.spine.refresh();
   }
 
   prefill();

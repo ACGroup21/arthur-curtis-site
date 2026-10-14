@@ -78,7 +78,7 @@
   .dc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line)}\
   .dc-cell{background:#0c1526;padding:12px 14px;display:flex;flex-direction:column;gap:6px;min-width:0;position:relative;transition:background .25s}\
   .dc-k{font-family:var(--mono);font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}\
-  .dc-v{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--ink);letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}\
+  .dc-v{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--ink);letter-spacing:-.01em;line-height:1.25;overflow-wrap:break-word}\
   .dc-cell.key .dc-v{color:var(--cyan)}\
   .dc-cell.pending{background:repeating-linear-gradient(135deg,rgba(10,18,32,.6),rgba(10,18,32,.6) 7px,rgba(13,22,38,.6) 7px,rgba(13,22,38,.6) 14px)}\
   .dc-cell.pending .dc-k{color:var(--muted-2);opacity:.75}\

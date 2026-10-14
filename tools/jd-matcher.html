@@ -81,7 +81,7 @@
 </div>
 
 <script src="engine.js?v=5"></script>
-<script src="spine.js?v=4"></script>
+<script src="spine.js?v=5"></script>
 <script src="nav.js?v=20"></script>
 <script src="../comfort.js?v=3"></script>
 <script>
@@ -138,7 +138,7 @@
         '<div class="mbar"><div class="f" style="width:'+bar+'%"></div></div>'+
         '<div class="terms">Matched <b>'+x.m+'</b> of your '+total+' key terms · '+cov+'% overlap · '+s.route+'</div></div>';
     }).join('');
-    if(AC.scenario){ AC.scenario.set({jdTopStandard:top[0].s.ref}); if(AC.spine)AC.spine.refresh(); }
+    if(AC.scenario){ AC.scenario.set({jdTopStandard:top[0].s.ref, bestStandard:top[0].s.name}); if(AC.spine)AC.spine.refresh(); }
   }
 
   $('go').addEventListener('click',run);

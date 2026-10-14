@@ -84,7 +84,7 @@
 </div>
 
 <script src="engine.js?v=5"></script>
-<script src="spine.js?v=4"></script>
+<script src="spine.js?v=5"></script>
 <script src="nav.js?v=20"></script>
 <script src="../comfort.js?v=3"></script>
 <script>
@@ -146,6 +146,7 @@
     $('dSrc').innerHTML='Source: <a href="https://skillsengland.education.gov.uk/apprenticeships/'+s.ref.toLowerCase()+'" target="_blank" rel="noopener" style="color:var(--muted)">Skills England · '+s.ref+'</a> · accurate as of 28 June 2026';
     $('detail').style.display='block';
     $('detail').scrollIntoView({behavior:'smooth',block:'nearest'});
+    if(AC.scenario){ var fsShort=(s.status==='ApprovedForDelivery'?'Funded':bd.label); AC.scenario.set({fundingStatus:fsShort+(s.band?' · £'+AC.fmt(s.band):'')}); if(AC.spine) AC.spine.refresh(); }
   }
 
   $('q').addEventListener('input',function(){ search(this.value); });
