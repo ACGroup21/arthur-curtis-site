@@ -61,6 +61,20 @@
   @keyframes dc-confirm{0%{box-shadow:inset 0 0 0 2px var(--cyan)}100%{box-shadow:inset 0 0 0 0 rgba(0,184,192,0)}}
   .dc-cell.just{animation:dc-confirm 1s ease-out}
 
+  /* final cell — reads as a sentence with a readout box, spans full width */
+  .dc-sentence{grid-column:1 / -1;flex-direction:row;align-items:center;justify-content:space-between;gap:18px;padding:17px 18px}
+  .dcs-text{font-family:var(--sans);font-size:15px;font-weight:500;color:var(--ink);line-height:1.4}
+  .dcs-text b{color:var(--cyan);font-weight:700}
+  .dcs-readout{font-family:var(--mono);font-size:21px;font-weight:800;letter-spacing:-.01em;color:#02101e;background:linear-gradient(120deg,var(--blue),var(--cyan));border-radius:11px;padding:8px 18px;white-space:nowrap;box-shadow:0 0 22px rgba(0,184,192,.28);flex:0 0 auto}
+  .dc-sentence.pending .dcs-text{color:var(--muted-2)}
+  .dc-sentence.pending .dcs-readout{background:none;color:var(--muted-2);border:1px dashed var(--line-2);box-shadow:none;font-weight:700;opacity:.7}
+  @keyframes dcs-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  @keyframes dcs-pop{0%{transform:scale(.6);opacity:0}60%{transform:scale(1.1)}100%{transform:scale(1);opacity:1}}
+  .dc-sentence.just-confirm .dcs-text{animation:dcs-in .5s cubic-bezier(.2,.7,.2,1) both}
+  .dc-sentence.just-confirm .dcs-readout{animation:dcs-pop .6s cubic-bezier(.2,.9,.3,1.5) .12s both}
+  @media(prefers-reduced-motion:reduce){.dc-sentence.just-confirm .dcs-text,.dc-sentence.just-confirm .dcs-readout{animation:none}}
+  @media(max-width:460px){.dc-sentence{flex-direction:column;align-items:flex-start;gap:11px}}
+
   .dc-foot{display:flex;gap:7px;flex-wrap:wrap;padding:13px 18px;border-top:1px solid var(--line);background:rgba(4,9,18,.3)}
   .spine-btn{font-family:var(--sans);font-size:12px;font-weight:600;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--muted);border-radius:8px;padding:6px 11px;cursor:pointer;transition:border-color .15s,color .15s}
   .spine-btn:hover{border-color:var(--cyan);color:var(--cyan)}
@@ -111,10 +125,16 @@
     {id:'match',   k:'Best-fit standard', v:'Data analyst',           key:false, on:false},
     {id:'status',  k:'Funding status',    v:'Funded · £15k',key:false, on:false},
     {id:'risk',    k:'At risk if unspent',v:'£27,500',           key:false, on:false},
-    {id:'health',  k:'Levy health',       v:'6 / 10',                 key:false, on:false}
+    {id:'health',  k:'Levy health', kind:'sentence', lead:'Overall, right now, your levy is working at', v:'6 / 10', on:false}
   ];
 
   function cellHTML(c){
+    if(c.kind==='sentence'){
+      var scls='dc-cell dc-sentence'+(c.on?'':' pending');
+      var txt=c.on?c.lead:'Finish the levy health check to see how well your levy is working';
+      var rd=c.on?c.v:'— / 10';
+      return '<div class="'+scls+'" data-id="'+c.id+'"><span class="dcs-text">'+txt+'</span><span class="dcs-readout">'+rd+'</span></div>';
+    }
     var cls='dc-cell'+(c.key&&c.on?' key':'')+(c.on?'':' pending');
     var val=c.on?c.v:'—';
     return '<div class="'+cls+'" data-id="'+c.id+'"><span class="dc-k">'+c.k+'</span><span class="dc-v">'+val+'</span></div>';
@@ -139,7 +159,7 @@
         '<button class="spine-btn">Copy link</button>'+
         '<button class="spine-btn">Clear</button>'+
       '</div>';
-    if(flash){ var el=card.querySelector('[data-id="'+flash+'"]'); if(el) el.classList.add('just'); }
+    if(flash){ var el=card.querySelector('[data-id="'+flash+'"]'); if(el) el.classList.add(el.classList.contains('dc-sentence')?'just-confirm':'just'); }
     card.querySelectorAll('.dc-cell').forEach(function(el){
       el.addEventListener('click', function(){ toggle(el.getAttribute('data-id')); });
     });
