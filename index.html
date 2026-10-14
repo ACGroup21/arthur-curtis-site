@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="ac.css?v=11">
+<link rel="stylesheet" href="ac.css?v=12">
 <style>
   :root{
     --navy:#0b1426;        /* deep brand navy */
@@ -41,20 +41,8 @@
   /* film-grain texture so the gradient reads premium, not flat */
   .grain{position:fixed;inset:0;z-index:6;pointer-events:none;opacity:.06;mix-blend-mode:soft-light;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 
-  /* ---------- NAV ---------- */
-  nav{
-    position:fixed;top:0;left:0;right:0;z-index:50;
-    display:flex;align-items:center;justify-content:space-between;
-    padding:18px 32px;
-    backdrop-filter:blur(14px);
-    background:linear-gradient(180deg,rgba(5,16,31,0.85),rgba(5,16,31,0));
-    transition:background .3s;
-  }
-  nav.scrolled{background:rgba(5,16,31,0.92);border-bottom:1px solid var(--line)}
-  nav .logo{height:38px}
-  nav .links{display:flex;gap:34px;align-items:center}
-  nav .links a{font-size:14.5px;color:var(--muted);font-weight:500;transition:color .2s}
-  nav .links a:hover{color:var(--ink)}
+  /* ---------- (bespoke nav removed — the shell injects .ac-nav. The old bare
+     nav{position:fixed} rules were dead here and hijacked the footer's <nav>) ---------- */
   .btn{
     font-family:var(--sans);font-weight:600;font-size:14.5px;cursor:pointer;
     border:none;border-radius:10px;padding:11px 20px;transition:transform .15s,box-shadow .25s,background .2s;
@@ -63,7 +51,6 @@
   .btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 34px rgba(34,211,238,.4)}
   .btn-ghost{background:transparent;border:1px solid var(--line);color:var(--ink)}
   .btn-ghost:hover{border-color:var(--cyan);color:var(--cyan)}
-  @media(max-width:820px){nav .links{display:none}}
 
   /* ---------- HERO ---------- */
   .hero{position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden}
